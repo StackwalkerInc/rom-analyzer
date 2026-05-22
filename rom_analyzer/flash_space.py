@@ -10,7 +10,13 @@ def find_free_blocks(
     alignment: int = 16,
     pad_value: int = 0xFF,
 ) -> list[FlashFreeBlock]:
-    """Find aligned runs of `pad_value` of length >= min_length.
+    """Find runs of `pad_value` of length >= min_length, with end aligned down to `alignment`.
+
+    `run_start` is preserved as-is; only `run_end` is rounded down to the
+    nearest multiple of `alignment`. Reported block.length = aligned_end - run_start,
+    which may exceed pure alignment-trimmed length. Consumers wanting an
+    aligned starting point should round `block.start` up themselves when
+    emitting (e.g., when building free_space_start for a linker script).
 
     Returns blocks classified into three CRC-coverage bands:
         partial_crc:    [crc.partial_start, crc.partial_end)

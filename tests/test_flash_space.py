@@ -14,10 +14,7 @@ def test_finds_aligned_ff_runs_meeting_min_length():
     crc = CrcRegion(0x0, 0x80000, 0x10000, 0x80000)
     blocks = find_free_blocks(rom, crc, min_length=64, alignment=16)
 
-    by_start = {b.start: b for b in blocks}
-    assert FlashFreeBlock("unprotected", 0x4f9a8, 0x4fa00, 88) in blocks or (
-        any(b.start <= 0x4f9a8 and b.end >= 0x4fa00 for b in blocks)
-    )
+    assert FlashFreeBlock("partial_crc", 0x4f9a8, 0x4fa00, 88) in blocks
     assert FlashFreeBlock("full_crc_only", 0x100, 0x140, 64) in blocks
 
 
