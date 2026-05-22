@@ -215,9 +215,9 @@ def apply_symbols_to_project(
     and applies createLabel / createFunction for each PropagatedSymbol.
     Returns the number of labels successfully applied.
     """
-    if not (project_dir / project_name).exists():
+    if not (project_dir / f"{project_name}.gpr").exists():
         raise FileNotFoundError(
-            f"Ghidra project not found at {project_dir / project_name}; "
+            f"Ghidra project not found at {project_dir / f'{project_name}.gpr'}; "
             "run without --enrich-project first to import the ROM"
         )
 
