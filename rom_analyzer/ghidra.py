@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from rom_analyzer.data_refs import DataRef, collect_data_refs_within
-from rom_analyzer.types import ReferenceSymbol
+from rom_analyzer.types import PropagatedSymbol, ReferenceSymbol
 
 
 @dataclass
@@ -199,3 +199,58 @@ def import_and_dump(
             crc_step_address=crc_step_address,
             collect_data_refs_flag=collect_data_refs_flag,
         )
+
+
+def apply_symbols_to_project(
+    ghidra_home: Path,
+    project_dir: Path,
+    project_name: str,
+    input_path: Path,
+    language_id: str,
+    symbols: list[PropagatedSymbol],
+) -> int:
+    """Apply propagated symbols to an already-imported Ghidra program.
+
+    Opens the existing program by ghidriff_program_name (analyze=False — already done)
+    and applies createLabel / createFunction for each PropagatedSymbol.
+    Returns the number of labels successfully applied.
+    """
+    project_dir.mkdir(parents=True, exist_ok=True)
+
+    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
+    java_home = _resolve_java_home()
+    if java_home:
+        os.environ.setdefault("JAVA_HOME", java_home)
+
+    import pyghidra
+    pyghidra.start()
+
+    prog_name = ghidriff_program_name(input_path)
+
+    with pyghidra.open_program(
+        binary_path=str(input_path),
+        project_location=str(project_dir),
+        project_name=project_name,
+        language=language_id,
+        loader="ghidra.app.util.opinion.BinaryLoader",
+        analyze=False,
+        program_name=prog_name,
+    ) as flat_api:
+        from ghidra.program.model.symbol import SourceType
+
+        count = 0
+        for s in symbols:
+            addr = flat_api.toAddr(s.new_address)
+            if addr is None:
+                continue
+            try:
+                flat_api.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
+                count += 1
+            except Exception:
+                pass
+            if s.category == "function":
+                try:
+                    flat_api.createFunction(addr, s.name)
+                except Exception:
+                    pass
+        return count
