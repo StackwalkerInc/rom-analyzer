@@ -55,6 +55,28 @@ def _collect_imm_pairs(instrs: list[Instruction]) -> list[tuple[int, int]]:
 
 
 def extract_crc_region(instrs: list[Instruction]) -> CrcRegion:
+    """Extract CrcRegion from a flat instruction stream of rom_crc_check_step.
+
+    Algorithm: collect all (seth/add3) pair-constructed constants in order.
+    The first appearance of 0x80000 is the shared end; the next two distinct
+    constants stored via `st ...,@(...,fp)` are the wrap-around starts for
+    full and partial modes. In rom_crc_check_step the full-flash branch
+    appears first (flag-true / non-zero path of the byte flag), so the first
+    wrap-around start is the full-mode start (0x00000) and the second is
+    the partial-mode start (0x10000).
+
+    Caveats:
+    - "First st wins" — for each non-0x80000 pair, the very next `st`
+      instruction in source order is assumed to be the fp-slot store for
+      that constant. An unrelated spill `st` between the pair and the
+      intended store would silently capture the wrong value. This holds
+      for the Z27AG rom_crc_check_step but a future ROM with reordered
+      compilation may need tighter recognition (e.g., filter to `st`
+      ops with operand `@(-NNNN,fp)`).
+    - Branch ordering assumption — Ghidra's default decoded order is
+      expected to place the full-flash branch before the partial branch.
+      See `extract_crc_region` for a runtime sanity check.
+    """
     pairs = _collect_imm_pairs(instrs)
     end_values = [v for _, v in pairs if v == 0x80000]
     if len(end_values) < 2:
@@ -77,6 +99,12 @@ def extract_crc_region(instrs: list[Instruction]) -> CrcRegion:
         )
 
     full_start, partial_start = starts[0], starts[1]
+    if not (full_start < partial_start):
+        raise CrcExtractionError(
+            f"Branch ordering sanity check failed: expected full_start "
+            f"({full_start:#x}) < partial_start ({partial_start:#x}); "
+            f"Ghidra may have decoded branches in reverse order."
+        )
     return CrcRegion(
         full_start=full_start, full_end=0x80000,
         partial_start=partial_start, partial_end=0x80000,
