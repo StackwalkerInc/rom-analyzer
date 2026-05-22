@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<PROGRAM NAME="tiny" EXE_FORMAT="Raw Binary" IMAGE_BASE="00000000">
+    <PROCESSOR NAME="M32R" LANGUAGE_PROVIDER="m32r:2:fp8000:default" ENDIAN="big" />
+    <SYMBOL_TABLE>
+        <SYMBOL ADDRESS="0001533c" NAME="adc_run" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y" />
+        <SYMBOL ADDRESS="0000b2fa" NAME="flash_fuel_map_rpm_axis" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y" />
+        <SYMBOL ADDRESS="00804e5c" NAME="engine_rpm" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y" />
+        <SYMBOL ADDRESS="00000000" NAME="RI" NAMESPACE="" TYPE="global" SOURCE_TYPE="IMPORTED" PRIMARY="y" />
+    </SYMBOL_TABLE>
+    <FUNCTIONS>
+        <FUNCTION ENTRY_POINT="0001533c" NAME="adc_run">
+            <ADDRESS_RANGE START="0001533c" END="00015370" />
+        </FUNCTION>
+        <FUNCTION ENTRY_POINT="0001524c" NAME="rom_crc_check_step">
+            <ADDRESS_RANGE START="0001524c" END="000152f8" />
+        </FUNCTION>
+    </FUNCTIONS>
+</PROGRAM>
