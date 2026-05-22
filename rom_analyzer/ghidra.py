@@ -215,7 +215,11 @@ def apply_symbols_to_project(
     and applies createLabel / createFunction for each PropagatedSymbol.
     Returns the number of labels successfully applied.
     """
-    project_dir.mkdir(parents=True, exist_ok=True)
+    if not (project_dir / project_name).exists():
+        raise FileNotFoundError(
+            f"Ghidra project not found at {project_dir / project_name}; "
+            "run without --enrich-project first to import the ROM"
+        )
 
     os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
     java_home = _resolve_java_home()
