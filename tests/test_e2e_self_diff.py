@@ -59,6 +59,12 @@ def test_self_diff_matches_goldens(tmp_path):
         actual = (out_dir / filename).read_text()
         assert expected == actual, f"{filename} drift; diff via local pytest output"
 
+    # CRC detection: verify the CRC region was actually detected (not a stub comment)
+    crc_content = (out_dir / "crc-region.toml").read_text()
+    assert "CRC region not detected" not in crc_content, (
+        "CRC region should be detected with enriched symbols"
+    )
+
     # v0.2: verify enriched description.ld contains colt_flash data labels and functions
     content = (out_dir / "description.ld").read_text()
     assert "rom_crc_check_step" in content, (
