@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "rom-analyzer"
-version = "0.1.0"
+version = "0.2.0"
 description = "M32R ROM analyzer: headless Ghidra + ghidriff producing linker fragments for mmc-patches"
 authors = [{ name = "Aleksei Markelov", email = "markelovai@gmail.com" }]
 requires-python = ">=3.11"
