@@ -85,10 +85,7 @@ def run_ghidriff(
 
 
 def _parse_addr(s: str) -> int:
-    s = s.strip()
-    if s.startswith(("0x", "0X")):
-        return int(s, 16)
-    return int(s, 16)
+    return int(s.strip(), 16)
 
 
 def _matches_from_payload(payload: dict) -> list[MatchedFunction]:
@@ -129,7 +126,7 @@ def _matches_from_payload(payload: dict) -> list[MatchedFunction]:
             continue
         new_addr_str = new_list[0][0]
         results.append(MatchedFunction(
-            ref_name="",
+            ref_name="",  # name not available in address_matches payload
             ref_address=ref_addr,
             new_address=_parse_addr(new_addr_str),
             similarity=1.0,
