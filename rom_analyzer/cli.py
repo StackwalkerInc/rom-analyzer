@@ -21,7 +21,7 @@ from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import import_and_dump
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_space import find_free_ram_blocks
-from rom_analyzer.types import PropagatedSymbol
+from rom_analyzer.types import MatchedFunction, PropagatedSymbol
 from rom_analyzer.xml_io import load_reference_symbols
 
 
@@ -45,7 +45,7 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
 @click.option("--map-txt", type=click.Path(exists=True, dir_okay=False, path_type=Path),
               default=_REFERENCE_DIR / "colt_map.txt",
               help="colt_map.txt RAM symbol table for enrichment (vendored in reference/)")
-@click.option("--reference-rom", type=click.Path(exists=True, dir_okay=False, path_type=Path),
+@click.option("--reference-rom", type=click.Path(dir_okay=False, path_type=Path),
               default=Path(__file__).parent.parent / "roms" / "Z27AG_JDM_5MT_1860B104.bin",
               help="The ROM bin that the reference XML was generated from (user-supplied at roms/)")
 @click.option("--ghidra-home", type=click.Path(exists=True, file_okay=False, path_type=Path),
@@ -74,7 +74,7 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     project_dir = Path(project_dir)
-    is_self_diff = rom_path.resolve() == reference_rom.resolve()
+    is_self_diff = rom_path.resolve() == reference_rom.resolve()  # True implies reference_rom exists (rom_path has exists=True)
 
     language_id = VARIANT_TO_LANGUAGE[variant]
 
@@ -118,12 +118,14 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     # [4/7] Diff (identity or ghidriff)
     if is_self_diff:
         click.echo(f"[4/7] Self-diff detected; using identity matches")
-        from rom_analyzer.types import MatchedFunction
         matches = [
             MatchedFunction(ref_name=s.name, ref_address=s.address,
                             new_address=s.address, similarity=1.0)
             for s in ref_symbols if s.category == "function"
         ]
+    elif ref_run is None:
+        click.echo("[4/7] Skipping diff — reference ROM unavailable")
+        matches = []
     else:
         click.echo(f"[4/7] Diffing via ghidriff ({diff_engine})")
         matches = run_ghidriff(
