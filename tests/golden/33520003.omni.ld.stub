@@ -1,0 +1,35 @@
+INCLUDE ../m32170.ld
+INCLUDE ../math.ld
+INCLUDE description.ld
+
+/* RAM globals (auto-propagated from reference) */
+decays_x1_ignition = 0x804950;
+engine_rpm = 0x804e5c;
+engine_rpm_delayed = 0x804e5e;
+engine_rpm_delta_neg = 0x804e60;
+engine_rpm_prevx100 = 0x804e62;
+engine_rpm_2kmax = 0x804e64;
+engine_rpm_8kmax = 0x804e66;
+engine_rpm_8kmax_prevx20 = 0x804e68;
+engine_rpm_8kmax_deltax20 = 0x804e6a;
+engine_rpm_avg1 = 0x804e6c;
+running_spark_assist_engine_rpm = 0x804e6e;
+engine_rpm_avg3 = 0x804e70;
+engine_rpm_avg1_rate = 0x804e72;
+engine_rpm_direct = 0x804e74;
+engine_rpm_direct_delayed = 0x804e76;
+ecu_load8 = 0x804e78;
+vehicle_speed = 0x804ef4;
+run_state_flags = 0x804f22;
+
+/* === BELOW: human-curated placeholders === */
+
+/* Free space region (auto-filled when unambiguous) */
+/* TODO: free_space_start = ???; */
+/* TODO: free_space_end   = ???; */
+
+/* Per-ROM patch parameters (compare against mmc-patches/m32r/) */
+/* TODO: post_fuel_cut_enrichment = ???; */
+
+/* Call-site hook locations (extract from match-report.md) */
+/* TODO: load400 bindings */
