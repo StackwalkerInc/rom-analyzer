@@ -6,10 +6,12 @@ shape.
 """
 
 import json
+import os
 import subprocess
 import tempfile
 from pathlib import Path
 
+from rom_analyzer.ghidra import _resolve_java_home
 from rom_analyzer.types import MatchedFunction
 
 
@@ -44,7 +46,12 @@ def run_ghidriff(
             str(reference_input),
             str(new_input),
         ]
-        result = subprocess.run(cmd, check=False, capture_output=True, text=True)
+        env = os.environ.copy()
+        java_home = _resolve_java_home()
+        if java_home:
+            env["JAVA_HOME"] = java_home
+
+        result = subprocess.run(cmd, env=env, check=False, capture_output=True, text=True)
         if result.returncode != 0:
             raise RuntimeError(
                 f"ghidriff failed (exit {result.returncode}):\n"

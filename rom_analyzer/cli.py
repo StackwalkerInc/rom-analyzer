@@ -25,8 +25,8 @@ from rom_analyzer.xml_io import load_reference_symbols
 
 
 VARIANT_TO_LANGUAGE = {
-    "fp8000": "m32r:BE:32:fp8000:default",
-    "fpc000": "m32r:BE:32:default",
+    "fp8000": "m32r:2:fp8000",
+    "fpc000": "m32r:2:default",
 }
 
 
@@ -35,18 +35,21 @@ VARIANT_TO_LANGUAGE = {
 @click.option("--variant", type=click.Choice(["fp8000", "fpc000"]), required=True)
 @click.option("--reference", type=click.Path(exists=True, dir_okay=False, path_type=Path),
               default=Path(__file__).parent.parent / "reference" / "33520003.xml",
-              help="Reference Ghidra XML")
+              help="Reference Ghidra XML (metadata-only; used as a name lookup, not loaded into Ghidra)")
+@click.option("--reference-rom", type=click.Path(exists=True, dir_okay=False, path_type=Path),
+              default=Path(__file__).parent.parent / "roms" / "Z27AG_JDM_5MT_1860B104.bin",
+              help="The ROM bin that the reference XML was generated from (user-supplied at roms/)")
 @click.option("--ghidra-home", type=click.Path(exists=True, file_okay=False, path_type=Path),
               default=os.environ.get("GHIDRA_HOME", "/opt/homebrew/opt/ghidra/libexec"))
 @click.option("--project-dir", type=click.Path(path_type=Path),
-              default=Path.home() / ".cache" / "rom-analyzer" / "proj",
-              help="Persistent Ghidra project dir")
+              default=Path.home() / "rom-analyzer-projects",
+              help="Persistent Ghidra project dir (no path element may start with '.')")
 @click.option("--out", "out_dir", type=click.Path(path_type=Path), required=True,
               help="Output directory for emitted files")
 @click.option("--min-flash-block", type=int, default=64)
 @click.option("--min-ram-block", type=int, default=4)
 @click.option("--reference-name", default="33520003")
-def main(rom_path, variant, reference, ghidra_home, project_dir, out_dir,
+def main(rom_path, variant, reference, reference_rom, ghidra_home, project_dir, out_dir,
          min_flash_block, min_ram_block, reference_name):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
@@ -60,22 +63,35 @@ def main(rom_path, variant, reference, ghidra_home, project_dir, out_dir,
 
     language_id = VARIANT_TO_LANGUAGE[variant]
 
-    click.echo(f"[1/6] Importing reference XML: {reference}")
-    ref_run = import_and_dump(ghidra_home, project_dir, "rom-analyzer",
-                              reference, language_id)
+    click.echo(f"[1/5] Loading reference XML symbols from {reference}")
     ref_symbols = load_reference_symbols(reference)
 
-    click.echo(f"[2/6] Importing new ROM: {rom_path}")
-    new_run = import_and_dump(ghidra_home, project_dir, "rom-analyzer",
-                              rom_path, language_id)
+    crc_step_addr = next(
+        (s.address for s in ref_symbols if s.name == "rom_crc_check_step"),
+        None,
+    )
 
-    click.echo("[3/6] Diffing via ghidriff")
-    matches = run_ghidriff(ghidra_home, reference, rom_path, project_dir, language_id)
+    click.echo(f"[2/5] Importing new ROM into Ghidra: {rom_path}")
+    new_run = import_and_dump(ghidra_home, project_dir, "rom-analyzer",
+                              rom_path, language_id,
+                              crc_step_address=crc_step_addr)
+
+    if rom_path.resolve() == reference_rom.resolve():
+        click.echo(f"[3/5] Self-diff detected (reference_rom == rom_path); using identity match")
+        from rom_analyzer.types import MatchedFunction
+        matches = [
+            MatchedFunction(ref_name=s.name, ref_address=s.address,
+                            new_address=s.address, similarity=1.0)
+            for s in ref_symbols if s.category == "function"
+        ]
+    else:
+        click.echo(f"[3/5] Diffing via ghidriff (reference: {reference_rom}, new: {rom_path})")
+        matches = run_ghidriff(ghidra_home, reference_rom, rom_path, project_dir, language_id)
     matched_count = len(matches)
     total_ref = sum(1 for s in ref_symbols if s.category == "function")
     match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
 
-    click.echo("[4/6] Propagating symbols")
+    click.echo("[4/5] Propagating symbols")
     propagated_fns = propagate_function_labels(ref_symbols, matches)
     # RAM globals propagate when the same RAM address is referenced in the new ROM
     new_ram_refs = set(new_run.ram_refs)
@@ -86,7 +102,7 @@ def main(rom_path, variant, reference, ghidra_home, project_dir, out_dir,
     ]
     propagated_all = propagated_fns + ram_globals
 
-    click.echo("[5/6] Detecting CRC region")
+    click.echo("[5/5] Detecting CRC, scanning free space, emitting outputs")
     if new_run.rom_crc_check_step:
         instrs = [Instruction(i["mnemonic"], tuple(i["operands"]))
                   for i in new_run.rom_crc_check_step["instructions"]]
@@ -99,7 +115,6 @@ def main(rom_path, variant, reference, ghidra_home, project_dir, out_dir,
         click.echo("   warning: rom_crc_check_step not located; emitting empty crc-region.toml")
         crc = None
 
-    click.echo("[6/6] Scanning free space and emitting outputs")
     rom_bytes = rom_path.read_bytes()
     if crc is not None:
         flash_blocks = find_free_blocks(rom_bytes, crc, min_length=min_flash_block)

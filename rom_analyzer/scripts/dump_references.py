@@ -12,6 +12,7 @@ def _hex(addr):
 
 
 def main(output_path):
+    print("[dump_references] writing JSON to %s" % output_path)
     program = getCurrentProgram()  # type: ignore[name-defined] — provided by Ghidra
     listing = program.getListing()
     symbol_table = program.getSymbolTable()
@@ -74,9 +75,10 @@ def main(output_path):
         json.dump(payload, f)
 
 
-if __name__ == "__main__":
-    # Ghidra passes -postScript arguments via the script's argv.
-    if len(getScriptArgs()) < 1:  # type: ignore[name-defined]
-        print("usage: dump_references.py <output.json>")
-        sys.exit(2)
-    main(getScriptArgs()[0])  # type: ignore[name-defined]
+# Ghidra Jython scripts run as top-level code; __name__ is not "__main__".
+# Ghidra passes -postScript arguments via getScriptArgs().
+_args = getScriptArgs()  # type: ignore[name-defined]
+if len(_args) < 1:
+    print("usage: dump_references.py <output.json>")
+    sys.exit(2)
+main(_args[0])
