@@ -1,0 +1,8 @@
+Address		Size	Name				Notes
+/*Data area*/
+0x000084	0x10	uint8_t flash_password[16];
+0x000110	0xf0	/*Unused area*/			-
+0x000200	1	uint8_t flash_default_mut_enabled_flags	= 0;
+0x01524c	0xb0	void rom_crc_check_step();
+0x01533c	0x38	void adc_run(int ch, uint16_t *result);
+0x0000b2fa	2	uint16_t flash_fuel_map_rpm_axis;

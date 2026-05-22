@@ -69,3 +69,31 @@ def test_extract_crc_region_raises_on_swapped_branch_order():
 
     with pytest.raises(CrcExtractionError):
         extract_crc_region(instrs)
+
+
+def test_extract_crc_region_uppercase_mnemonics():
+    """Ghidra returns uppercase mnemonics (SETH, ADD3, ST); extraction must work case-insensitively."""
+    instrs = [
+        _instr("SETH", "R4", "0x8"),
+        _instr("ADD3", "R4", "R4", "0x0"),
+        _instr("CMPU", "R2", "R4"),
+        _instr("BC", "LAB_END"),
+        _instr("SETH", "R5", "0x0"),
+        _instr("ADD3", "R5", "R5", "0x0"),
+        _instr("ST", "R5", "@(-8360,fp)"),
+        _instr("BRA", "LAB_OUT"),
+        _instr("SETH", "R0", "0x8"),
+        _instr("ADD3", "R0", "R0", "0x0"),
+        _instr("CMPU", "R1", "R0"),
+        _instr("BC", "LAB_END2"),
+        _instr("SETH", "R1", "0x1"),
+        _instr("ADD3", "R1", "R1", "0x0"),
+        _instr("ST", "R1", "@(-8360,fp)"),
+    ]
+
+    region = extract_crc_region(instrs)
+
+    assert region == CrcRegion(
+        full_start=0x00000, full_end=0x80000,
+        partial_start=0x10000, partial_end=0x80000,
+    )

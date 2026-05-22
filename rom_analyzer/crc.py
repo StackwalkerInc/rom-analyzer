@@ -39,7 +39,7 @@ def _collect_imm_pairs(instrs: list[Instruction]) -> list[tuple[int, int]]:
     pairs: list[tuple[int, int]] = []
     for i in range(len(instrs) - 1):
         a, b = instrs[i], instrs[i + 1]
-        if a.mnemonic != "seth" or b.mnemonic != "add3":
+        if a.mnemonic.lower() != "seth" or b.mnemonic.lower() != "add3":
             continue
         if len(a.operands) < 2 or len(b.operands) < 3:
             continue
@@ -89,7 +89,7 @@ def extract_crc_region(instrs: list[Instruction]) -> CrcRegion:
         if v == 0x80000:
             continue
         for j in range(i + 2, len(instrs)):
-            if instrs[j].mnemonic == "st":
+            if instrs[j].mnemonic.lower() == "st":
                 starts.append(v)
                 break
 
