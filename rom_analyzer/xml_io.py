@@ -12,7 +12,11 @@ from lxml import etree
 from rom_analyzer.types import ReferenceSymbol, SymbolCategory
 
 
-def load_reference_symbols(xml_path: Path) -> list[ReferenceSymbol]:
+def load_reference_symbols(
+    xml_path: Path,
+    flash_txt: Path | None = None,
+    map_txt: Path | None = None,
+) -> list[ReferenceSymbol]:
     tree = etree.parse(str(xml_path))
     root = tree.getroot()
 
@@ -23,6 +27,9 @@ def load_reference_symbols(xml_path: Path) -> list[ReferenceSymbol]:
             function_entries.add(int(ep, 16))
 
     results: list[ReferenceSymbol] = []
+    seen_addresses: set[int] = set()
+
+    # Parse XML first — these entries "win" on address conflict
     for sym in root.iterfind(".//SYMBOL"):
         source = sym.get("SOURCE_TYPE", "")
         if source == "IMPORTED":
@@ -34,6 +41,28 @@ def load_reference_symbols(xml_path: Path) -> list[ReferenceSymbol]:
         addr = int(addr_str, 16)
         cat = _categorize(addr, function_entries)
         results.append(ReferenceSymbol(name, addr, cat))
+        seen_addresses.add(addr)
+
+    # Merge flash_txt entries if provided
+    if flash_txt is not None:
+        from rom_analyzer.parsers import parse_colt_flash
+
+        for entry in parse_colt_flash(flash_txt):
+            if entry.address not in seen_addresses:
+                cat: SymbolCategory = "function" if entry.is_function else "data"
+                results.append(ReferenceSymbol(entry.name, entry.address, cat))
+                seen_addresses.add(entry.address)
+
+    # Merge map_txt entries if provided
+    if map_txt is not None:
+        from rom_analyzer.parsers import parse_colt_map
+
+        for entry in parse_colt_map(map_txt):
+            if entry.address not in seen_addresses:
+                results.append(
+                    ReferenceSymbol(entry.name, entry.address, "ram_global")
+                )
+                seen_addresses.add(entry.address)
 
     return results
 
