@@ -18,7 +18,7 @@ from rom_analyzer.emit_ld import (
     emit_ram_free_toml,
 )
 from rom_analyzer.flash_space import find_free_blocks
-from rom_analyzer.ghidra import import_and_dump
+from rom_analyzer.ghidra import apply_symbols_to_project, import_and_dump
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import MatchedFunction, PropagatedSymbol
@@ -64,9 +64,11 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               default="VersionTrackingDiff")
 @click.option("--clean-project", is_flag=True, default=False,
               help="Delete and recreate the Ghidra project dir before starting (forces fresh analysis)")
+@click.option("--enrich-project", is_flag=True, default=False,
+              help="Apply propagated symbols back into the Ghidra project for the new ROM")
 def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
-         reference_name, diff_engine, clean_project):
+         reference_name, diff_engine, clean_project, enrich_project):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -220,6 +222,14 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     (out_dir / "match-report.md").write_text(report.getvalue())
 
     click.echo(f"\nDone. Outputs in {out_dir}/")
+
+    if enrich_project:
+        click.echo(f"[+] Enriching Ghidra project with {len(propagated_all)} propagated symbols")
+        n = apply_symbols_to_project(
+            ghidra_home, project_dir, project_name,
+            rom_path, language_id, propagated_all,
+        )
+        click.echo(f"    Applied {n} label(s) to {rom_path.name} Ghidra project")
 
 
 if __name__ == "__main__":
