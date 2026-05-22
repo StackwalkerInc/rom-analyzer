@@ -62,9 +62,11 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
 @click.option("--reference-name", default="33520003")
 @click.option("--diff-engine", type=click.Choice(["VersionTrackingDiff", "SimpleDiff"]),
               default="VersionTrackingDiff")
+@click.option("--clean-project", is_flag=True, default=False,
+              help="Delete and recreate the Ghidra project dir before starting (forces fresh analysis)")
 def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
-         reference_name, diff_engine):
+         reference_name, diff_engine, clean_project):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -74,6 +76,12 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     project_dir = Path(project_dir)
+    if clean_project and project_dir.exists():
+        import shutil
+        nested = project_dir / project_name
+        if nested.exists():
+            click.echo(f"--clean-project: removing {nested}")
+            shutil.rmtree(nested)
     is_self_diff = rom_path.resolve() == reference_rom.resolve()  # True implies reference_rom exists (rom_path has exists=True)
 
     language_id = VARIANT_TO_LANGUAGE[variant]
