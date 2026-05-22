@@ -13,6 +13,7 @@ ROMs are never distributed (CLAUDE.md). The test SKIPs if the ROM is absent.
 """
 
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -21,6 +22,12 @@ REPO_ROOT = Path(__file__).parent.parent
 LOCAL_ROM = REPO_ROOT / "roms" / "Z27AG_JDM_5MT_1860B104.bin"
 REFERENCE_XML = REPO_ROOT / "reference" / "33520003.xml"
 GOLDEN_DIR = REPO_ROOT / "tests" / "golden"
+
+# Resolve the rom-analyzer entry point: prefer the venv script next to the
+# current Python interpreter so the test works regardless of PATH.
+_VENV_BIN = Path(sys.executable).parent
+_ROM_ANALYZER_CMD = _VENV_BIN / "rom-analyzer"
+ROM_ANALYZER = str(_ROM_ANALYZER_CMD) if _ROM_ANALYZER_CMD.exists() else "rom-analyzer"
 
 
 @pytest.mark.e2e
@@ -33,7 +40,7 @@ def test_self_diff_matches_goldens(tmp_path):
     out_dir = tmp_path / "out"
     subprocess.run(
         [
-            "rom-analyzer", str(LOCAL_ROM),
+            ROM_ANALYZER, str(LOCAL_ROM),
             "--variant", "fp8000",
             "--reference", str(REFERENCE_XML),
             "--out", str(out_dir),
@@ -51,3 +58,15 @@ def test_self_diff_matches_goldens(tmp_path):
         expected = (GOLDEN_DIR / f"33520003.{filename}").read_text()
         actual = (out_dir / filename).read_text()
         assert expected == actual, f"{filename} drift; diff via local pytest output"
+
+    # v0.2: verify enriched description.ld contains colt_flash data labels and functions
+    content = (out_dir / "description.ld").read_text()
+    assert "rom_crc_check_step" in content, (
+        "rom_crc_check_step function should appear in description.ld (from colt_flash enrichment)"
+    )
+    assert content.count("flash_") > 50, (
+        "Expected >50 flash_* data labels in description.ld (from colt_flash.txt)"
+    )
+    assert "adc_run" in content, (
+        "adc_run should appear as a function entry in description.ld"
+    )
