@@ -17,3 +17,6 @@ htmlcov/
 # Local scratch
 out/
 .cache/
+
+# Stock ROMs (never distributed; user supplies locally — see README)
+roms/*.bin
