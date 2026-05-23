@@ -5,6 +5,7 @@ import struct
 import pytest
 
 from rom_analyzer.callgraph import (
+    _decode_bra_target,
     _find_mut_table,
     _func_size,
     _lcs_align,
@@ -165,6 +166,57 @@ def test_lcs_align_empty_lists():
 
 
 # ---------------------------------------------------------------------------
+# _decode_bra_target
+# ---------------------------------------------------------------------------
+
+def _encode_bra(target: int) -> bytes:
+    """Encode an M32R 32-bit bra from ROM offset 0 to target."""
+    disp24 = target >> 2  # pos=0 → disp = target >> 2
+    return bytes([0xFF, (disp24 >> 16) & 0xFF, (disp24 >> 8) & 0xFF, disp24 & 0xFF])
+
+
+def test_decode_bra_colt_reset():
+    """Colt ROM: ff 00 6d a0 → 0x1b680 (reset_interrupt_handler)."""
+    rom = bytearray(0x80000)
+    rom[0:4] = b"\xff\x00\x6d\xa0"
+    assert _decode_bra_target(bytes(rom), 0) == 0x1b680
+
+
+def test_decode_bra_outlander_reset():
+    """Outlander ROM: ff 00 4f 18 → 0x13c60 (reset_interrupt_handler)."""
+    rom = bytearray(0x80000)
+    rom[0:4] = b"\xff\x00\x4f\x18"
+    assert _decode_bra_target(bytes(rom), 0) == 0x13c60
+
+
+def test_decode_bra_roundtrip():
+    """Encoding a target and decoding it returns the original target."""
+    for target in (0x100, 0x1b680, 0x13c60, 0x7FFC):
+        rom = bytearray(0x80000)
+        rom[0:4] = _encode_bra(target)
+        assert _decode_bra_target(bytes(rom), 0) == target
+
+
+def test_decode_bra_not_ff_opcode():
+    """If first byte is not 0xFF, returns None."""
+    rom = bytearray(0x80000)
+    rom[0:4] = b"\xDE\xAD\xBE\xEF"
+    assert _decode_bra_target(bytes(rom), 0) is None
+
+
+def test_decode_bra_target_out_of_range():
+    """Target beyond ROM size returns None."""
+    rom = bytearray(0x100)  # very small ROM
+    rom[0:4] = b"\xff\x00\x6d\xa0"  # target 0x1b680 > 0x100
+    assert _decode_bra_target(bytes(rom), 0) is None
+
+
+def test_decode_bra_too_short():
+    """Buffer too short to hold a 4-byte instruction returns None."""
+    assert _decode_bra_target(b"\xff\x00\x01", 0) is None
+
+
+# ---------------------------------------------------------------------------
 # _find_mut_table
 # ---------------------------------------------------------------------------
 
@@ -232,8 +284,8 @@ def test_bootstrap_vector_table_single_callee():
 
     ref_bytes = bytearray(0x80000)
     new_bytes = bytearray(0x40000)
-    struct.pack_into(">I", ref_bytes, 0, reset_ref)
-    struct.pack_into(">I", new_bytes, 0, reset_new)
+    ref_bytes[0:4] = _encode_bra(reset_ref)
+    new_bytes[0:4] = _encode_bra(reset_new)
 
     ref_run = _make_run(
         [reset_ref, main_ref, main_ref + 0x500],
@@ -263,8 +315,8 @@ def test_bootstrap_vector_table_multi_callee_picks_largest():
 
     ref_bytes = bytearray(0x80000)
     new_bytes = bytearray(0x40000)
-    struct.pack_into(">I", ref_bytes, 0, reset_ref)
-    struct.pack_into(">I", new_bytes, 0, reset_new)
+    ref_bytes[0:4] = _encode_bra(reset_ref)
+    new_bytes[0:4] = _encode_bra(reset_new)
 
     # ref: reset → [small_helper=0x1100 (size 0x10), main=0x1200 (size 0x500)]
     ref_run = _make_run(
@@ -287,11 +339,9 @@ def test_bootstrap_vector_table_multi_callee_picks_largest():
 
 
 def test_bootstrap_bad_reset_vector_skipped():
-    """Reset vector pointing outside ROM range produces no anchors."""
-    ref_bytes = bytearray(0x1000)
+    """No bra instruction at offset 0 produces no anchors."""
+    ref_bytes = bytearray(0x1000)  # all zeros — first byte 0x00, not 0xFF
     new_bytes = bytearray(0x1000)
-    struct.pack_into(">I", ref_bytes, 0, 0xDEADBEEF)  # way out of range
-    struct.pack_into(">I", new_bytes, 0, 0xDEADBEEF)
 
     ref_run = _make_run([0x100, 0x200])
     new_run = _make_run([0x100, 0x200])

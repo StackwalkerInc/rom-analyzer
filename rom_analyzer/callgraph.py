@@ -122,16 +122,35 @@ def _find_handler_for_table(run: HeadlessRun, table_addr: int) -> int | None:
     return None
 
 
+def _decode_bra_target(rom_bytes: bytes, pos: int) -> int | None:
+    """Decode an M32R 32-bit bra instruction at pos and return the target offset.
+
+    M32R bra (GI-format): opcode 0xFF | disp24 (big-endian, 3 bytes).
+    Target = pos + SignExt(disp24) << 2.
+    Returns None if the byte at pos is not 0xFF (not a bra).
+    """
+    if pos + 4 > len(rom_bytes):
+        return None
+    if rom_bytes[pos] != 0xFF:
+        return None
+    disp24 = (rom_bytes[pos + 1] << 16) | (rom_bytes[pos + 2] << 8) | rom_bytes[pos + 3]
+    if disp24 & 0x800000:
+        disp24 -= 0x1000000
+    target = pos + (disp24 << 2)
+    if not (0 < target < len(rom_bytes)):
+        return None
+    return target
+
+
 def _bootstrap_vector_table(ref_bytes: bytes, new_bytes: bytes,
                               ref_run: HeadlessRun, new_run: HeadlessRun,
                               ) -> list[MatchedFunction]:
-    if len(ref_bytes) < 4 or len(new_bytes) < 4:
-        return []
+    # ROM offset 0 holds an M32R bra instruction to reset_interrupt_handler.
+    # Decode the branch target rather than treating the bytes as a pointer.
+    ref_reset = _decode_bra_target(ref_bytes, 0)
+    new_reset = _decode_bra_target(new_bytes, 0)
 
-    ref_reset = struct.unpack_from(">I", ref_bytes, 0)[0]
-    new_reset = struct.unpack_from(">I", new_bytes, 0)[0]
-
-    if not (0 < ref_reset < len(ref_bytes)) or not (0 < new_reset < len(new_bytes)):
+    if ref_reset is None or new_reset is None:
         return []
 
     anchors: list[MatchedFunction] = [
