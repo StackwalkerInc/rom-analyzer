@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1.6
 FROM eclipse-temurin:21-jdk AS ghidra
 ARG GHIDRA_VERSION=12.1
-ARG GHIDRA_ZIP_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${GHIDRA_VERSION}_build/ghidra_${GHIDRA_VERSION}_PUBLIC_20241108.zip
+ARG GHIDRA_ZIP_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${GHIDRA_VERSION}_build/ghidra_${GHIDRA_VERSION}_PUBLIC_20260513.zip
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl unzip git python3 python3-pip python3-venv ca-certificates \
+    curl unzip git python3 python3-pip python3-venv python3-dev ca-certificates \
+    libxml2-dev libxslt1-dev g++ \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt
@@ -32,6 +33,6 @@ COPY reference ./reference
 # ROMs are not part of the image (CLAUDE.md: No ROM distribution).
 # Users mount a ROM at runtime: `docker run -v /local/rom.bin:/work/roms/rom.bin ...`
 RUN mkdir -p /work/roms \
-    && pip install --break-system-packages -e ".[dev]"
+    && CFLAGS="-Wno-error=incompatible-pointer-types" pip install --break-system-packages -e ".[dev]"
 
 ENTRYPOINT ["rom-analyzer"]
