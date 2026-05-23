@@ -334,7 +334,27 @@ def gap_fill(ref_run: HeadlessRun,
 # Phase 4 — Bytecode identity
 # ---------------------------------------------------------------------------
 
-_MIN_IDENTITY_SIZE = 8   # bytes; below this, false-positive risk is too high
+_MIN_IDENTITY_SIZE = 8    # bytes; below this, false-positive risk is too high
+_MAX_IDENTITY_SIZE = 128  # bytes; larger functions almost always differ across ROMs
+
+
+def _find_unique_aligned(haystack: bytes, needle: bytes, alignment: int = 4) -> int | None:
+    """Return the single alignment-byte-aligned occurrence of needle in haystack.
+
+    Returns None if needle occurs zero times or more than once at aligned positions.
+    """
+    found: int | None = None
+    pos = 0
+    while pos <= len(haystack) - len(needle):
+        idx = haystack.find(needle, pos)
+        if idx == -1:
+            break
+        if idx % alignment == 0:
+            if found is not None:
+                return None  # ambiguous
+            found = idx
+        pos = idx + 1
+    return found
 
 
 def bytecode_identity_match(
@@ -343,45 +363,31 @@ def bytecode_identity_match(
         existing_matches: list[MatchedFunction],
         ref_symbols_by_addr: dict,
         min_size: int = _MIN_IDENTITY_SIZE,
+        max_size: int = _MAX_IDENTITY_SIZE,
 ) -> list[MatchedFunction]:
-    """Phase 4: exact-bytecode hash match for small/unchanged functions.
+    """Phase 4: exact-bytecode match for small/unchanged functions.
 
-    Computes SHA-256 over each function's byte span (entry → next entry).
-    A ref function is matched to the unique new function with the same hash;
-    ambiguous hashes (multiple new functions identical to each other) are
-    skipped to avoid false positives among interchangeable stubs.
+    Scans the entire new ROM for each unmatched ref function's byte sequence
+    (at 4-byte M32R alignment).  A match is accepted only when the sequence
+    appears exactly once in the new ROM — duplicates are ambiguous and skipped.
+
+    Searching the full ROM rather than just Ghidra-detected function entries
+    handles small leaf functions that the auto-analyser may not have discovered.
     """
     already_ref = {m.ref_address for m in existing_matches}
     already_new = {m.new_address for m in existing_matches}
 
-    # Build size map for new ROM functions.
-    new_entries = sorted(int(f["entry"], 16) for f in new_run.functions)
-    new_size: dict[int, int] = {}
-    for i, addr in enumerate(new_entries):
-        if i + 1 < len(new_entries):
-            new_size[addr] = new_entries[i + 1] - addr
-
-    # hash → list[new_addr] — drop hashes with multiple matches (ambiguous).
-    hash_to_new: dict[bytes, list[int]] = {}
-    for addr, sz in new_size.items():
-        if sz < min_size or addr + sz > len(new_bytes):
-            continue
-        h = hashlib.sha256(new_bytes[addr: addr + sz]).digest()
-        hash_to_new.setdefault(h, []).append(addr)
-    unique_new: dict[bytes, int] = {
-        h: addrs[0] for h, addrs in hash_to_new.items() if len(addrs) == 1
-    }
+    ref_entries = sorted(int(f["entry"], 16) for f in ref_run.functions)
 
     results: list[MatchedFunction] = []
-    ref_entries = sorted(int(f["entry"], 16) for f in ref_run.functions)
     for i, ref_addr in enumerate(ref_entries):
         if ref_addr in already_ref:
             continue
         sz = ref_entries[i + 1] - ref_addr if i + 1 < len(ref_entries) else 0
-        if sz < min_size or ref_addr + sz > len(ref_bytes):
+        if sz < min_size or sz > max_size or ref_addr + sz > len(ref_bytes):
             continue
-        h = hashlib.sha256(ref_bytes[ref_addr: ref_addr + sz]).digest()
-        new_addr = unique_new.get(h)
+        body = ref_bytes[ref_addr: ref_addr + sz]
+        new_addr = _find_unique_aligned(new_bytes, body)
         if new_addr is None or new_addr in already_new:
             continue
         sym = ref_symbols_by_addr.get(ref_addr)

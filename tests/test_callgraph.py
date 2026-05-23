@@ -7,6 +7,7 @@ import pytest
 from rom_analyzer.callgraph import (
     _decode_bra_target,
     _find_mut_table,
+    _find_unique_aligned,
     _func_size,
     _lcs_align,
     _size_ratio_ok,
@@ -611,14 +612,15 @@ def _make_rom_with_functions(func_map: dict[int, bytes], rom_size: int = 0x10000
 
 
 def test_bytecode_identity_exact_match():
-    """Identical function bytes at different addresses are matched."""
+    """Identical function bytes at different addresses are matched even if the
+    new function entry is not in new_run.functions (full-ROM scan)."""
     body = bytes([0x70, 0xE0, 0x00, 0x01,   # 8-byte synthetic function body
                   0x10, 0x00, 0x20, 0x03])
     ref_bytes = _make_rom_with_functions({0x1000: body})
     new_bytes = _make_rom_with_functions({0x2000: body})
 
     ref_run = _make_run([0x1000, 0x1000 + len(body)])
-    new_run = _make_run([0x2000, 0x2000 + len(body)])
+    new_run = _make_run([])          # new ROM: Ghidra detected no functions
     ref_syms_by_addr = {0x1000: ReferenceSymbol("my_func", 0x1000, "function")}
 
     results = bytecode_identity_match(
@@ -633,14 +635,14 @@ def test_bytecode_identity_exact_match():
 
 
 def test_bytecode_identity_ambiguous_skipped():
-    """If two new functions have the same bytes, the ref function is not matched."""
-    body = bytes([0xFF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+    """If the byte sequence appears at two aligned positions, it is not matched."""
+    body = bytes([0x70, 0xE0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00])
     ref_bytes = _make_rom_with_functions({0x1000: body})
-    # Two new functions with the same body → ambiguous
+    # Place body at two 4-byte-aligned positions in new ROM
     new_bytes = _make_rom_with_functions({0x2000: body, 0x3000: body})
 
     ref_run = _make_run([0x1000, 0x1000 + len(body)])
-    new_run = _make_run([0x2000, 0x2000 + len(body), 0x3000, 0x3000 + len(body)])
+    new_run = _make_run([])
 
     results = bytecode_identity_match(ref_bytes, new_bytes, ref_run, new_run, [], {})
     assert results == []
@@ -667,9 +669,41 @@ def test_bytecode_identity_min_size_respected():
     new_bytes = _make_rom_with_functions({0x2000: tiny})
 
     ref_run = _make_run([0x1000, 0x1000 + len(tiny)])
-    new_run = _make_run([0x2000, 0x2000 + len(tiny)])
+    new_run = _make_run([])
 
     results = bytecode_identity_match(
         ref_bytes, new_bytes, ref_run, new_run, [], {}, min_size=8
     )
     assert results == []
+
+
+# ---------------------------------------------------------------------------
+# _find_unique_aligned
+# ---------------------------------------------------------------------------
+
+def test_find_unique_aligned_found():
+    haystack = bytearray(0x100)
+    needle = bytes([0xAA, 0xBB, 0xCC, 0xDD])
+    haystack[0x40:0x44] = needle   # 0x40 is 4-byte aligned
+    assert _find_unique_aligned(bytes(haystack), needle) == 0x40
+
+
+def test_find_unique_aligned_unaligned_not_counted():
+    """Occurrence at unaligned offset is invisible."""
+    haystack = bytearray(0x100)
+    needle = bytes([0xAA, 0xBB, 0xCC, 0xDD])
+    haystack[0x41:0x45] = needle   # 0x41 is NOT 4-byte aligned
+    assert _find_unique_aligned(bytes(haystack), needle) is None
+
+
+def test_find_unique_aligned_ambiguous():
+    haystack = bytearray(0x100)
+    needle = bytes([0xAA, 0xBB, 0xCC, 0xDD])
+    haystack[0x10:0x14] = needle
+    haystack[0x20:0x24] = needle
+    assert _find_unique_aligned(bytes(haystack), needle) is None
+
+
+def test_find_unique_aligned_not_found():
+    haystack = bytes(0x100)
+    assert _find_unique_aligned(haystack, bytes([0xFF, 0xFF, 0xFF, 0xFF])) is None
