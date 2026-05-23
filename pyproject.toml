@@ -13,7 +13,7 @@ dependencies = [
     "click >= 8.1, < 9",
     "lxml >= 5, < 6",
     "tomli-w >= 1.0, < 2",
-    "ghidriff >= 1.0.0",
+    "ghidriff @ git+https://github.com/RcusStackwalker/ghidriff.git",
 ]
 
 [project.optional-dependencies]

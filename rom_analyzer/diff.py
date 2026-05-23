@@ -6,44 +6,21 @@ ghidriff's Python API (JVM already running; ghidriff's launcher is a no-op) and
 finds the pre-imported M32R programs by name. This avoids re-import and preserves
 the correct language + symbol overlay applied during import.
 
-Project path note: PyGhidra's nested_project_location=True stores the project at
-  project_dir/project_name/  (i.e. ~/rom-analyzer-projects/rom-analyzer/).
-We must pass THIS path as project_location to ghidriff's setup_project().
+Project path note: ghidriff's setup_project() appends project_name to the passed
+location itself, so we pass project_dir directly. The final openProject path is
+project_dir/project_name/project_name.gpr.
+
+Requires RcusStackwalker/ghidriff (fork of clearbluejar/ghidriff) which fixes
+Python 3.14 compatibility and handles launcher._layout=None gracefully when the
+JVM was already started by import_and_dump.
 """
 
 import tempfile
+from argparse import Namespace
 from pathlib import Path
 
 from rom_analyzer.ghidra import _resolve_java_home, ghidriff_program_name
 from rom_analyzer.types import MatchedFunction
-
-
-def _patch_launcher_for_running_jvm() -> None:
-    """Reconstruct _layout on PyGhidraLauncher when the JVM is already running.
-
-    ghidriff creates a new HeadlessLoggingPyGhidraLauncher, calls start(), but
-    PyGhidraLauncher.start() returns early (no-op) when the JVM is already up,
-    leaving _layout=None. This patch sets it from the live GhidraApplicationLayout
-    class — exactly what start() does on first launch.
-    """
-    import jpype
-    if not jpype.isJVMStarted():
-        return
-
-    from pyghidra.launcher import PyGhidraLauncher
-    if getattr(PyGhidraLauncher, "_layout_patch_applied", False):
-        return
-
-    _orig_start = PyGhidraLauncher.start
-
-    def _patched_start(self, **kwargs):
-        _orig_start(self, **kwargs)
-        if self._layout is None and jpype.isJVMStarted():
-            from ghidra import GhidraApplicationLayout
-            self._layout = GhidraApplicationLayout()
-
-    PyGhidraLauncher.start = _patched_start
-    PyGhidraLauncher._layout_patch_applied = True
 
 
 def run_ghidriff(
@@ -67,8 +44,6 @@ def run_ghidriff(
     if java_home:
         os.environ.setdefault("JAVA_HOME", java_home)
 
-    _patch_launcher_for_running_jvm()
-
     DiffEngine = {"VersionTrackingDiff": VersionTrackingDiff, "SimpleDiff": SimpleDiff}[engine]
 
     # ghidriff.setup_project appends project_name itself (line 474 in ghidra_diff_engine.py),
@@ -82,7 +57,6 @@ def run_ghidriff(
         symbols_path.mkdir()
         gzfs_path.mkdir()
 
-        from argparse import Namespace
         d = DiffEngine(
             args=Namespace(),
             verbose=False,
@@ -99,7 +73,7 @@ def run_ghidriff(
             use_calling_counts=False,
             bsim=False,
             bsim_full=False,
-            gdts=[],
+            gdts=None,
             base_address=None,
             program_options=None,
         )
