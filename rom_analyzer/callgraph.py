@@ -260,18 +260,106 @@ def _bootstrap_mut_table(ref_bytes: bytes, new_bytes: bytes,
     return [MatchedFunction(name, ref_handler, new_handler, 1.0, "mut_table")]
 
 
+# DTC table invariant: rows 4-6 (offset +0x80 from table base), 96 bytes.
+# 17×16 uint16_t table; each row is 32 bytes. Rows 4-6 contain invariant Mitsubishi
+# fault codes shared across all M32R ECU variants.
+_DTC_INVARIANT_OFFSET = 0x80
+_DTC_INVARIANT = bytes.fromhex(
+    "1715175017910705"
+    "1751074007650760"
+    "0755075007150720"
+    "0710179507251600"
+    "0340033501150000"
+    "0225011001000000"
+    "0000000005130622"
+    "0000032501050500"
+    "0000130011021101"
+    "0660000000000000"
+    "0000122701900000"
+    "1515000000000000"
+)
+
+# Fault bitmask constant: 32 bytes, identical across all M32R variants.
+# Bit-weight lookup used by the DTC storage/scan routines.
+_FAULT_BITMASK = bytes.fromhex(
+    "8000400020001000"
+    "0800040002000100"
+    "0080004000200010"
+    "0008000400020001"
+)
+
+
+def _find_dtc_table(rom_bytes: bytes) -> int | None:
+    """Locate flash_trouble_code_table via its invariant rows 4-6 (96 bytes at +0x80).
+
+    Returns the table base address, or None if the pattern is absent or ambiguous.
+    """
+    pos = rom_bytes.find(_DTC_INVARIANT)
+    if pos == -1:
+        return None
+    if rom_bytes.find(_DTC_INVARIANT, pos + 1) != -1:
+        return None  # ambiguous
+    base = pos - _DTC_INVARIANT_OFFSET
+    return base if base >= 0 else None
+
+
+def _find_fault_bitmask_table(rom_bytes: bytes) -> int | None:
+    """Locate the fault bitmask constant table via exact 32-byte match."""
+    pos = rom_bytes.find(_FAULT_BITMASK)
+    if pos == -1:
+        return None
+    if rom_bytes.find(_FAULT_BITMASK, pos + 1) != -1:
+        return None  # ambiguous
+    return pos
+
+
+def _bootstrap_dtc_bitmask(
+    ref_bytes: bytes, new_bytes: bytes,
+    ref_run: HeadlessRun, new_run: HeadlessRun,
+    ref_symbols_by_addr: dict,
+) -> list[MatchedFunction]:
+    """Phase 1 supplement: anchor pairs via DTC table and fault bitmask handlers."""
+    anchors: list[MatchedFunction] = []
+    seen_ref: set[int] = set()
+    seen_new: set[int] = set()
+
+    table_pairs = [
+        (_find_dtc_table(ref_bytes), _find_dtc_table(new_bytes)),
+        (_find_fault_bitmask_table(ref_bytes), _find_fault_bitmask_table(new_bytes)),
+    ]
+
+    for ref_table, new_table in table_pairs:
+        if ref_table is None or new_table is None:
+            continue
+        ref_handler = _find_handler_for_table(ref_run, ref_table)
+        new_handler = _find_handler_for_table(new_run, new_table)
+        if ref_handler is None or new_handler is None:
+            continue
+        if ref_handler in seen_ref or new_handler in seen_new:
+            continue
+        seen_ref.add(ref_handler)
+        seen_new.add(new_handler)
+        sym = ref_symbols_by_addr.get(ref_handler)
+        name = (sym.name if sym else None) or _name_for(ref_handler, ref_run) or "dtc_handler"
+        anchors.append(MatchedFunction(name, ref_handler, new_handler, 1.0, "dtc_table"))
+
+    return anchors
+
+
 def bootstrap_anchors(ref_bytes: bytes, new_bytes: bytes,
                        ref_run: HeadlessRun, new_run: HeadlessRun,
                        ref_symbols_by_name: dict,
                        ref_symbols_by_addr: dict | None = None,
                        ) -> list[MatchedFunction]:
-    """Phase 1: produce anchor pairs via full vector table and MUT variables table."""
+    """Phase 1: produce anchor pairs via vector table, MUT table, and DTC/bitmask tables."""
     if ref_symbols_by_addr is None:
         ref_symbols_by_addr = {v.address: v for v in ref_symbols_by_name.values()}
     anchors = _bootstrap_vector_table(ref_bytes, new_bytes, ref_run, new_run,
                                       ref_symbols_by_addr)
     anchors += _bootstrap_mut_table(ref_bytes, new_bytes, ref_run, new_run,
                                      ref_symbols_by_name)
+    anchors += _bootstrap_dtc_bitmask(ref_bytes, new_bytes, ref_run, new_run,
+                                       ref_symbols_by_addr)
     return anchors
 
 

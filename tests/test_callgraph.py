@@ -7,11 +7,16 @@ import pytest
 from rom_analyzer.callgraph import (
     _bytecode_jaccard,
     _decode_bra_target,
+    _find_dtc_table,
+    _find_fault_bitmask_table,
     _find_mut_table,
     _find_unique_aligned,
     _func_size,
     _lcs_align,
     _size_ratio_ok,
+    _DTC_INVARIANT,
+    _DTC_INVARIANT_OFFSET,
+    _FAULT_BITMASK,
     bootstrap_anchors,
     bfs_preseed,
     bytecode_identity_match,
@@ -814,3 +819,120 @@ def test_find_unique_aligned_ambiguous():
 def test_find_unique_aligned_not_found():
     haystack = bytes(0x100)
     assert _find_unique_aligned(haystack, bytes([0xFF, 0xFF, 0xFF, 0xFF])) is None
+
+
+# ---------------------------------------------------------------------------
+# _find_dtc_table / _find_fault_bitmask_table
+# ---------------------------------------------------------------------------
+
+def test_find_dtc_table_found():
+    rom = bytearray(0x20000)
+    base = 0x12948
+    rom[base + _DTC_INVARIANT_OFFSET: base + _DTC_INVARIANT_OFFSET + len(_DTC_INVARIANT)] = _DTC_INVARIANT
+    assert _find_dtc_table(bytes(rom)) == base
+
+
+def test_find_dtc_table_not_found():
+    rom = bytes(0x20000)
+    assert _find_dtc_table(rom) is None
+
+
+def test_find_dtc_table_ambiguous():
+    rom = bytearray(0x30000)
+    for base in (0x10000, 0x20000):
+        rom[base + _DTC_INVARIANT_OFFSET: base + _DTC_INVARIANT_OFFSET + len(_DTC_INVARIANT)] = _DTC_INVARIANT
+    assert _find_dtc_table(bytes(rom)) is None
+
+
+def test_find_fault_bitmask_found():
+    rom = bytearray(0x20000)
+    addr = 0x12bf0
+    rom[addr: addr + len(_FAULT_BITMASK)] = _FAULT_BITMASK
+    assert _find_fault_bitmask_table(bytes(rom)) == addr
+
+
+def test_find_fault_bitmask_not_found():
+    assert _find_fault_bitmask_table(bytes(0x1000)) is None
+
+
+def test_find_fault_bitmask_ambiguous():
+    rom = bytearray(0x30000)
+    for addr in (0x10000, 0x20000):
+        rom[addr: addr + len(_FAULT_BITMASK)] = _FAULT_BITMASK
+    assert _find_fault_bitmask_table(bytes(rom)) is None
+
+
+# ---------------------------------------------------------------------------
+# _bootstrap_dtc_bitmask (via bootstrap_anchors)
+# ---------------------------------------------------------------------------
+
+def _make_rom_with_dtc_and_bitmask(dtc_base: int, bitmask_addr: int,
+                                    func_addr: int, rom_size: int = 0x20000) -> bytes:
+    """Build a fake ROM with the DTC invariant and fault bitmask placed at known addresses,
+    and a Ghidra-style data ref at func_addr pointing to dtc_base."""
+    rom = bytearray(rom_size)
+    rom[dtc_base + _DTC_INVARIANT_OFFSET:
+        dtc_base + _DTC_INVARIANT_OFFSET + len(_DTC_INVARIANT)] = _DTC_INVARIANT
+    rom[bitmask_addr: bitmask_addr + len(_FAULT_BITMASK)] = _FAULT_BITMASK
+    return bytes(rom)
+
+
+def test_bootstrap_dtc_bitmask_produces_anchor():
+    from rom_analyzer.data_refs import DataRef
+
+    ref_dtc_base = 0x12948
+    ref_bitmask = 0x12bf0
+    ref_handler = 0x5000
+    ref_handler2 = 0x6000
+
+    new_dtc_base = 0xc378
+    new_bitmask = 0xc5e0
+    new_handler = 0x4800
+    new_handler2 = 0x5800
+
+    ref_rom = _make_rom_with_dtc_and_bitmask(ref_dtc_base, ref_bitmask, ref_handler)
+    new_rom = _make_rom_with_dtc_and_bitmask(new_dtc_base, new_bitmask, new_handler)
+
+    ref_run = _make_run(
+        [ref_handler, ref_handler2, ref_handler + 0x100],
+        data_refs={
+            ref_handler: [DataRef(0, ref_dtc_base, "flash_trouble_code_table")],
+            ref_handler2: [DataRef(0, ref_bitmask, "fault_bitmask_table")],
+        },
+    )
+    new_run = _make_run(
+        [new_handler, new_handler2, new_handler + 0x100],
+        data_refs={
+            new_handler: [DataRef(0, new_dtc_base)],
+            new_handler2: [DataRef(0, new_bitmask)],
+        },
+    )
+
+    # Supply a ref ROM with no vector-table BRA instructions so only dtc_table anchors come through
+    ref_rom_clean = bytearray(len(ref_rom))
+    ref_rom_clean[ref_dtc_base + _DTC_INVARIANT_OFFSET:
+                  ref_dtc_base + _DTC_INVARIANT_OFFSET + len(_DTC_INVARIANT)] = _DTC_INVARIANT
+    ref_rom_clean[ref_bitmask: ref_bitmask + len(_FAULT_BITMASK)] = _FAULT_BITMASK
+
+    new_rom_clean = bytearray(len(new_rom))
+    new_rom_clean[new_dtc_base + _DTC_INVARIANT_OFFSET:
+                  new_dtc_base + _DTC_INVARIANT_OFFSET + len(_DTC_INVARIANT)] = _DTC_INVARIANT
+    new_rom_clean[new_bitmask: new_bitmask + len(_FAULT_BITMASK)] = _FAULT_BITMASK
+
+    from rom_analyzer.types import ReferenceSymbol
+    ref_sym = ReferenceSymbol("check_fault_codes", ref_handler, "function")
+    ref_sym2 = ReferenceSymbol("fault_bitmask_lookup", ref_handler2, "function")
+    ref_symbols_by_addr = {ref_handler: ref_sym, ref_handler2: ref_sym2}
+
+    anchors = bootstrap_anchors(bytes(ref_rom_clean), bytes(new_rom_clean),
+                                ref_run, new_run,
+                                ref_symbols_by_name={},
+                                ref_symbols_by_addr=ref_symbols_by_addr)
+
+    dtc_anchors = [a for a in anchors if a.source == "dtc_table"]
+    assert len(dtc_anchors) == 2
+    handler_anchor = next(a for a in dtc_anchors if a.ref_address == ref_handler)
+    assert handler_anchor.new_address == new_handler
+    assert handler_anchor.ref_name == "check_fault_codes"
+    bitmask_anchor = next(a for a in dtc_anchors if a.ref_address == ref_handler2)
+    assert bitmask_anchor.new_address == new_handler2
