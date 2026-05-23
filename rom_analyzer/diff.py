@@ -18,6 +18,34 @@ from rom_analyzer.ghidra import _resolve_java_home, ghidriff_program_name
 from rom_analyzer.types import MatchedFunction
 
 
+def _patch_launcher_for_running_jvm() -> None:
+    """Reconstruct _layout on PyGhidraLauncher when the JVM is already running.
+
+    ghidriff creates a new HeadlessLoggingPyGhidraLauncher, calls start(), but
+    PyGhidraLauncher.start() returns early (no-op) when the JVM is already up,
+    leaving _layout=None. This patch sets it from the live GhidraApplicationLayout
+    class — exactly what start() does on first launch.
+    """
+    import jpype
+    if not jpype.isJVMStarted():
+        return
+
+    from pyghidra.launcher import PyGhidraLauncher
+    if getattr(PyGhidraLauncher, "_layout_patch_applied", False):
+        return
+
+    _orig_start = PyGhidraLauncher.start
+
+    def _patched_start(self, **kwargs):
+        _orig_start(self, **kwargs)
+        if self._layout is None and jpype.isJVMStarted():
+            from ghidra import GhidraApplicationLayout
+            self._layout = GhidraApplicationLayout()
+
+    PyGhidraLauncher.start = _patched_start
+    PyGhidraLauncher._layout_patch_applied = True
+
+
 def run_ghidriff(
     ghidra_home: Path,
     project_dir: Path,
@@ -39,10 +67,13 @@ def run_ghidriff(
     if java_home:
         os.environ.setdefault("JAVA_HOME", java_home)
 
+    _patch_launcher_for_running_jvm()
+
     DiffEngine = {"VersionTrackingDiff": VersionTrackingDiff, "SimpleDiff": SimpleDiff}[engine]
 
-    # PyGhidra nested project location: project_dir/project_name/
-    actual_project_location = project_dir / project_name
+    # ghidriff.setup_project appends project_name itself (line 474 in ghidra_diff_engine.py),
+    # so pass project_dir directly — the final openProject path is project_dir/project_name/
+    actual_project_location = project_dir
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
@@ -51,12 +82,14 @@ def run_ghidriff(
         symbols_path.mkdir()
         gzfs_path.mkdir()
 
+        from argparse import Namespace
         d = DiffEngine(
+            args=Namespace(),
             verbose=False,
             threaded=True,
             max_ram_percent=50.0,
             force_analysis=False,
-            force_diff=False,
+            force_diff=True,
             verbose_analysis=False,
             no_symbols=True,
             engine_log_path=None,
@@ -80,6 +113,12 @@ def run_ghidriff(
         )
         d.analyze_project(force_analysis=False)
         pdiff = d.diff_bins(reference_path, new_path)
+
+        # ghidriff leaves self.project open; close it so apply_symbols_to_project
+        # can re-open the same project without hitting a lock error.
+        if d.project is not None:
+            d.project.close()
+            d.project = None
 
     return _matches_from_payload(pdiff)
 

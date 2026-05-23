@@ -88,7 +88,9 @@ def collect_data_refs_within(program, function) -> list[DataRef]:
             target = ref.getToAddress()
             if target is None:
                 continue
-            target_offset = int(target.getOffset())
+            # Mask to uint32: Java getOffset() returns a signed long, so addresses
+            # like 0xFFFFFFFB come back as -5 in Python and slip past range guards.
+            target_offset = int(target.getOffset()) & 0xFFFFFFFF
             if target_offset >= 0x80000:
                 continue
             syms = list(sym_table.getSymbols(target))
