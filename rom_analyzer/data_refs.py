@@ -85,6 +85,12 @@ def collect_data_refs_within(program, function) -> list[DataRef]:
         instr_addr = instr.getAddress()
         instr_offset = int(instr_addr.getOffset()) - entry_offset
         for ref in ref_mgr.getReferencesFrom(instr_addr):
+            # Only propagate genuine data loads/stores (e.g. LDUH @fp(sym)).
+            # Call and flow references (BL, BRA) are excluded: using call targets
+            # as data-label anchors maps Z27AG function symbols onto whatever the
+            # outlander calls at the same instruction offset, producing wrong labels.
+            if not ref.getReferenceType().isData():
+                continue
             target = ref.getToAddress()
             if target is None:
                 continue

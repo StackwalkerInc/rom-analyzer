@@ -5,6 +5,7 @@ import struct
 import pytest
 
 from rom_analyzer.callgraph import (
+    _bytecode_jaccard,
     _decode_bra_target,
     _find_mut_table,
     _find_unique_aligned,
@@ -168,6 +169,41 @@ def test_lcs_align_empty_lists():
 
 
 # ---------------------------------------------------------------------------
+# _bytecode_jaccard
+# ---------------------------------------------------------------------------
+
+def test_bytecode_jaccard_identical():
+    body = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17])
+    rom = _make_rom_with_functions({0x100: body, 0x200: body})
+    assert _bytecode_jaccard(rom, 0x100, 8, rom, 0x200, 8) == 1.0
+
+
+def test_bytecode_jaccard_disjoint():
+    body_a = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17])
+    body_b = bytes([0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7])
+    ref_rom = _make_rom_with_functions({0x100: body_a})
+    new_rom = _make_rom_with_functions({0x200: body_b})
+    assert _bytecode_jaccard(ref_rom, 0x100, 8, new_rom, 0x200, 8) == 0.0
+
+
+def test_bytecode_jaccard_partial_overlap():
+    # 3 of 4 grams shared → Jaccard = 3/5 = 0.6
+    body_a = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                    0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F])
+    body_b = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                    0x18, 0x19, 0x1A, 0x1B, 0xF0, 0xF1, 0xF2, 0xF3])
+    ref_rom = _make_rom_with_functions({0x100: body_a})
+    new_rom = _make_rom_with_functions({0x200: body_b})
+    assert _bytecode_jaccard(ref_rom, 0x100, 16, new_rom, 0x200, 16) == pytest.approx(3 / 5)
+
+
+def test_bytecode_jaccard_zero_size_returns_neutral():
+    rom = bytes(0x400)
+    assert _bytecode_jaccard(rom, 0x100, 0, rom, 0x200, 8) == 0.5
+    assert _bytecode_jaccard(rom, 0x100, 8, rom, 0x200, 0) == 0.5
+
+
+# ---------------------------------------------------------------------------
 # _decode_bra_target
 # ---------------------------------------------------------------------------
 
@@ -310,7 +346,7 @@ def test_bootstrap_vector_table_single_callee():
     main_anchor = next(a for a in anchors if a.ref_name == "main")
     assert main_anchor.ref_address == main_ref
     assert main_anchor.new_address == main_new
-    assert main_anchor.similarity == 1.0
+    assert main_anchor.similarity == 0.9
     assert main_anchor.source == "vector_table"
 
 
@@ -427,6 +463,56 @@ def test_bfs_preseed_produces_overlays_only_for_named():
 
 
 # ---------------------------------------------------------------------------
+# bfs_preseed — bytecode gate
+# ---------------------------------------------------------------------------
+
+def test_bfs_preseed_rejects_dissimilar_callees():
+    """BFS must not pair callees whose bytecodes are completely unrelated."""
+    ref_body = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                      0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F])
+    new_body = bytes([0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7,
+                      0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF])
+    ref_bytes = _make_rom_with_functions({0x100: bytes(16), 0x200: ref_body})
+    new_bytes = _make_rom_with_functions({0x100: bytes(16), 0x200: new_body})
+
+    ref_run = _make_run([0x100, 0x200, 0x210], callees={0x100: [0x200]})
+    new_run = _make_run([0x100, 0x200, 0x210], callees={0x100: [0x200]})
+    ref_symbols_by_addr = {0x200: ReferenceSymbol("target_func", 0x200, "function")}
+    anchor = MatchedFunction("main", 0x100, 0x100, 1.0, "vector_table")
+
+    _, matches_no_bytes = bfs_preseed([anchor], ref_run, new_run, ref_symbols_by_addr)
+    assert len(matches_no_bytes) == 1  # without bytes: pair accepted (old behaviour)
+
+    _, matches_with_bytes = bfs_preseed(
+        [anchor], ref_run, new_run, ref_symbols_by_addr,
+        ref_bytes=ref_bytes, new_bytes=new_bytes,
+    )
+    assert len(matches_with_bytes) == 0  # with bytes: rejected (Jaccard == 0)
+
+
+def test_bfs_preseed_accepts_similar_callees():
+    """BFS keeps callee pairs with ≥15% bytecode overlap."""
+    shared   = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                      0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F])
+    # One 4-byte gram differs → intersection 3, union 5, Jaccard = 0.6 ≥ 0.15
+    similar  = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                      0x18, 0x19, 0x1A, 0x1B, 0xF0, 0xF1, 0xF2, 0xF3])
+    ref_bytes = _make_rom_with_functions({0x100: bytes(16), 0x200: shared})
+    new_bytes = _make_rom_with_functions({0x100: bytes(16), 0x200: similar})
+
+    ref_run = _make_run([0x100, 0x200, 0x210], callees={0x100: [0x200]})
+    new_run = _make_run([0x100, 0x200, 0x210], callees={0x100: [0x200]})
+    ref_symbols_by_addr = {0x200: ReferenceSymbol("target_func", 0x200, "function")}
+    anchor = MatchedFunction("main", 0x100, 0x100, 1.0, "vector_table")
+
+    _, matches = bfs_preseed(
+        [anchor], ref_run, new_run, ref_symbols_by_addr,
+        ref_bytes=ref_bytes, new_bytes=new_bytes,
+    )
+    assert len(matches) == 1
+
+
+# ---------------------------------------------------------------------------
 # gap_fill
 # ---------------------------------------------------------------------------
 
@@ -498,6 +584,27 @@ def test_gap_fill_no_double_match():
     results = gap_fill(ref_run, new_run, existing)
     # ref 0x300 should not be matched to new 0x300 (already taken)
     assert not any(m.new_address == 0x300 and m.ref_address == 0x300 for m in results)
+
+
+def test_gap_fill_rejects_dissimilar_callees():
+    """Gap-fill must not pair callees whose bytecodes are completely unrelated."""
+    ref_body = bytes([0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                      0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F])
+    new_body = bytes([0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7,
+                      0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF])
+    ref_bytes = _make_rom_with_functions({0x100: bytes(16), 0x200: ref_body})
+    new_bytes = _make_rom_with_functions({0x100: bytes(16), 0x200: new_body})
+
+    ref_run = _make_run([0x100, 0x200, 0x210], callees={0x100: [0x200]})
+    new_run = _make_run([0x100, 0x200, 0x210], callees={0x100: [0x200]})
+    existing = [MatchedFunction("main", 0x100, 0x100, 1.0, "vector_table")]
+
+    results_no_bytes = gap_fill(ref_run, new_run, existing)
+    assert any(m.ref_address == 0x200 for m in results_no_bytes)  # old behaviour
+
+    results_with_bytes = gap_fill(ref_run, new_run, existing,
+                                   ref_bytes=ref_bytes, new_bytes=new_bytes)
+    assert not any(m.ref_address == 0x200 for m in results_with_bytes)  # rejected
 
 
 def test_gap_fill_source_tag():

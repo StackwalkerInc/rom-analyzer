@@ -37,14 +37,19 @@ def propagate_function_labels(
     out: list[PropagatedSymbol] = []
     for m in matches:
         sym = by_addr.get(m.ref_address)
-        if sym is None:
+        # ref_name is the canonical name set at match time.  Prefer it over
+        # sym.name so that vector_table matches emit "main" rather than the
+        # Ghidra auto-generated "FUN_0001b810" that would be in ref_symbols.
+        # Fall back to sym.name only when ref_name is blank.
+        name = m.ref_name or (sym.name if sym is not None else None)
+        if not name:
             continue
         tier = tier_for_score(m.similarity)
         if tier == "low" and not force:
             continue
         out.append(
             PropagatedSymbol(
-                name=sym.name,
+                name=name,
                 ref_address=m.ref_address,
                 new_address=m.new_address,
                 category="function",

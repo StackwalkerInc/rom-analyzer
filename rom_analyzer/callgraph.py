@@ -124,6 +124,39 @@ def _find_handler_for_table(run: HeadlessRun, table_addr: int) -> int | None:
     return None
 
 
+def _find_bra_tail_call(rom_bytes: bytes, func_start: int, func_size: int,
+                        exclude: set[int]) -> int | None:
+    """Scan the body of a function for the last BRA that jumps outside it.
+
+    M32R functions that tail-call their successor do so with a plain BRA at the
+    very end of their body.  Ghidra does not always tag these as CALL references,
+    so they are invisible to callees-based analysis.  This scans the body at
+    4-byte alignment and returns the last BRA target that:
+      - Falls outside [func_start, func_start + func_size)
+      - Is not already in *exclude* (e.g. vector-table handler addresses)
+      - Looks like a plausible entry point (4-byte aligned, > 0x200)
+    Returns None if no such target is found.
+    """
+    if func_size <= 0:
+        return None
+    last_target: int | None = None
+    end = func_start + func_size
+    for pos in range(func_start, end, 4):
+        target = _decode_bra_target(rom_bytes, pos)
+        if target is None:
+            continue
+        if func_start <= target < end:
+            continue  # intra-function branch
+        if target < 0x200:
+            continue
+        if target % 4 != 0:
+            continue
+        if target in exclude:
+            continue
+        last_target = target
+    return last_target
+
+
 def _decode_bra_target(rom_bytes: bytes, pos: int) -> int | None:
     """Decode an M32R 32-bit bra instruction at pos and return the target offset.
 
@@ -180,17 +213,28 @@ def _bootstrap_vector_table(ref_bytes: bytes, new_bytes: bytes,
     if not anchors:
         return []
 
-    # Derive main from reset handler's (slot 0) callees.
+    # Derive main from reset handler's (slot 0).
+    # Prefer callee-list (BL/JL calls); fall back to tail-call BRA scan when
+    # the reset handler reaches main via a plain BRA (which Ghidra doesn't
+    # always expose as a CALL reference).
     reset_ref = anchors[0].ref_address
     reset_new = anchors[0].new_address
-    ref_mains = ref_run.callees.get(reset_ref, [])
-    new_mains = new_run.callees.get(reset_new, [])
-    if ref_mains and new_mains:
-        best_ref = max(ref_mains, key=lambda a: _func_size(a, ref_run))
-        best_new = max(new_mains, key=lambda a: _func_size(a, new_run))
-        if best_ref not in seen_ref and best_new not in seen_new:
-            sim = 1.0 if (len(ref_mains) == 1 and len(new_mains) == 1) else 0.9
-            anchors.append(MatchedFunction("main", best_ref, best_new, sim, "vector_table"))
+
+    def _best_main_candidate(run: HeadlessRun, rom_bytes: bytes,
+                              reset_addr: int) -> int | None:
+        sz = _func_size(reset_addr, run)
+        result = _find_bra_tail_call(rom_bytes, reset_addr, sz, seen_ref | seen_new)
+        if result is not None:
+            return result
+        callees = run.callees.get(reset_addr, [])
+        outside = [a for a in callees if a not in seen_ref and a not in seen_new]
+        return max(outside, key=lambda a: _func_size(a, run)) if outside else None
+
+    best_ref = _best_main_candidate(ref_run, ref_bytes, reset_ref)
+    best_new = _best_main_candidate(new_run, new_bytes, reset_new)
+    if (best_ref is not None and best_new is not None
+            and best_ref not in seen_ref and best_new not in seen_new):
+        anchors.append(MatchedFunction("main", best_ref, best_new, 0.9, "vector_table"))
 
     return anchors
 
@@ -236,12 +280,41 @@ def bootstrap_anchors(ref_bytes: bytes, new_bytes: bytes,
 # ---------------------------------------------------------------------------
 
 _MAX_BFS_DEPTH = 3
+_MIN_CALLEE_SIMILARITY = 0.15  # Jaccard threshold: reject clearly unrelated callee pairs
+
+
+def _bytecode_jaccard(
+    ref_bytes: bytes, ref_addr: int, ref_sz: int,
+    new_bytes: bytes, new_addr: int, new_sz: int,
+    ngram: int = 4,
+) -> float:
+    """Approximate Jaccard similarity on non-overlapping 4-byte n-gram sets.
+
+    Returns a neutral 0.5 when bounds are unknown (size == 0) or out of range,
+    so callers that skip the check on unknown sizes don't need special-casing here.
+    """
+    if ref_sz == 0 or new_sz == 0:
+        return 0.5
+    if ref_addr + ref_sz > len(ref_bytes) or new_addr + new_sz > len(new_bytes):
+        return 0.5
+    ref_grams: set[bytes] = {
+        ref_bytes[ref_addr + i: ref_addr + i + ngram]
+        for i in range(0, ref_sz - ngram + 1, ngram)
+    }
+    new_grams: set[bytes] = {
+        new_bytes[new_addr + i: new_addr + i + ngram]
+        for i in range(0, new_sz - ngram + 1, ngram)
+    }
+    union = len(ref_grams | new_grams)
+    return len(ref_grams & new_grams) / union if union else 1.0
 
 
 def bfs_preseed(anchors: list[MatchedFunction],
                 ref_run: HeadlessRun,
                 new_run: HeadlessRun,
                 ref_symbols_by_addr: dict,
+                ref_bytes: bytes | None = None,
+                new_bytes: bytes | None = None,
                 ) -> tuple[list[ReferenceSymbol], list[MatchedFunction]]:
     """Phase 2: BFS from anchors to discover overlay symbols for the new ROM.
 
@@ -269,6 +342,12 @@ def bfs_preseed(anchors: list[MatchedFunction],
         for ref_callee, new_callee in pairs:
             if (ref_callee, new_callee) in matched:
                 continue
+            if ref_bytes is not None and new_bytes is not None:
+                ref_sz = _func_size(ref_callee, ref_run)
+                new_sz = _func_size(new_callee, new_run)
+                if _bytecode_jaccard(ref_bytes, ref_callee, ref_sz,
+                                     new_bytes, new_callee, new_sz) < _MIN_CALLEE_SIMILARITY:
+                    continue
             matched.add((ref_callee, new_callee))
 
             sym = ref_symbols_by_addr.get(ref_callee)
@@ -293,6 +372,8 @@ def bfs_preseed(anchors: list[MatchedFunction],
 def gap_fill(ref_run: HeadlessRun,
              new_run: HeadlessRun,
              existing_matches: list[MatchedFunction],
+             ref_bytes: bytes | None = None,
+             new_bytes: bytes | None = None,
              ) -> list[MatchedFunction]:
     """Phase 3: recover unmatched functions via structural call-graph position.
 
@@ -319,6 +400,12 @@ def gap_fill(ref_run: HeadlessRun,
             for ref_callee, new_callee in pairs:
                 if ref_callee in matched_ref or new_callee in matched_new:
                     continue
+                if ref_bytes is not None and new_bytes is not None:
+                    ref_sz = _func_size(ref_callee, ref_run)
+                    new_sz = _func_size(new_callee, new_run)
+                    if _bytecode_jaccard(ref_bytes, ref_callee, ref_sz,
+                                         new_bytes, new_callee, new_sz) < _MIN_CALLEE_SIMILARITY:
+                        continue
                 name = _name_for(ref_callee, ref_run)
                 m = MatchedFunction(name or "", ref_callee, new_callee,
                                     0.7, "callgraph_gap")

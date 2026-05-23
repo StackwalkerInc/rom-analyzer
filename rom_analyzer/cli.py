@@ -140,7 +140,9 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
                                     ref_symbols_by_name, ref_symbols_by_addr)
         bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
-                                                 ref_symbols_by_addr)
+                                                 ref_symbols_by_addr,
+                                                 ref_bytes=ref_bytes,
+                                                 new_bytes=rom_bytes)
         by_src: dict[str, int] = {}
         for a in anchors:
             by_src[a.source] = by_src.get(a.source, 0) + 1
@@ -148,9 +150,18 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
         click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
         if bfs_overlays:
+            # Deduplicate by new-ROM address: multiple BFS paths can converge on the
+            # same target; writing all of them as Ghidra labels creates spurious
+            # multi-label clutter that persists across runs.
+            seen_bfs: set[int] = set()
+            unique_bfs = []
+            for s in bfs_overlays:
+                if s.address not in seen_bfs:
+                    seen_bfs.add(s.address)
+                    unique_bfs.append(s)
             bfs_propagated = [
                 PropagatedSymbol(s.name, 0, s.address, s.category, "medium")
-                for s in bfs_overlays
+                for s in unique_bfs
             ]
             apply_symbols_to_project(
                 ghidra_home, project_dir, project_name,
@@ -175,7 +186,8 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             reference_rom, rom_path,
             engine=diff_engine,
         )
-        gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches)
+        gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
+                               ref_bytes=ref_bytes, new_bytes=rom_bytes)
         click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
         all_matches = matches + anchors + bfs_matches + gap_matches
 
@@ -186,13 +198,31 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
         matches = all_matches + identity_matches
 
-    # Deduplicate by ref_address — keep the highest-similarity match when
-    # multiple phases claimed the same reference function.
+    # Source priority — used in both dedup passes.
+    # Synthetic structural matches (vector_table, mut_table) override bytecode
+    # comparison matches because they are based on ROM-level invariants (e.g.
+    # the reset vector always points to reset_interrupt_handler which always
+    # calls main).  Within a tier, higher similarity wins.
+    SOURCE_PRIORITY = {"vector_table": 3, "bytecode_identity": 2, "mut_table": 2,
+                       "callgraph_bfs": 1, "callgraph_gap": 1, "ghidriff": 0}
+    def _match_rank(m: MatchedFunction) -> tuple:
+        return (SOURCE_PRIORITY.get(m.source, 0), m.similarity)
+
+    # Deduplicate by ref_address — when multiple phases claimed the same
+    # reference function, keep the highest-ranked match.
     best_by_ref: dict[int, MatchedFunction] = {}
     for m in matches:
-        if m.ref_address not in best_by_ref or m.similarity > best_by_ref[m.ref_address].similarity:
+        if m.ref_address not in best_by_ref or _match_rank(m) > _match_rank(best_by_ref[m.ref_address]):
             best_by_ref[m.ref_address] = m
     matches = list(best_by_ref.values())
+
+    # Deduplicate by new_address — when two different ref functions map to
+    # the same new address, keep only the highest-ranked match.
+    best_by_new: dict[int, MatchedFunction] = {}
+    for m in matches:
+        if m.new_address not in best_by_new or _match_rank(m) > _match_rank(best_by_new[m.new_address]):
+            best_by_new[m.new_address] = m
+    matches = list(best_by_new.values())
 
     named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
     matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
