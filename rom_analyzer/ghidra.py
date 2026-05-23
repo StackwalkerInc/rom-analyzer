@@ -14,6 +14,7 @@ class HeadlessRun:
     ram_refs: list[int]
     rom_crc_check_step: dict | None
     data_refs: dict[int, list[DataRef]] = field(default_factory=dict)
+    callees: dict[int, list[int]] = field(default_factory=dict)
 
 
 _JDK_FALLBACK_PATHS = (
@@ -37,6 +38,37 @@ def _resolve_java_home() -> str | None:
 
 def _hex(addr) -> str:
     return "0x%x" % addr.getOffset()
+
+
+def _ordered_callees(func, ref_mgr, func_mgr) -> list[int]:
+    """Return callee entry addresses ordered by first call-site within the function body."""
+    body = func.getBody()
+    func_entry = int(func.getEntryPoint().getOffset())
+    max_addr = body.getMaxAddress()
+    seen: dict[int, int] = {}  # callee_entry → first source offset
+
+    for ref in ref_mgr.getReferenceIterator(body.getMinAddress()):
+        from_addr = ref.getFromAddress()
+        if from_addr.compareTo(max_addr) > 0:
+            break
+        if not body.contains(from_addr):
+            continue
+        if not ref.getReferenceType().isCall():
+            continue
+        target = ref.getToAddress()
+        if target is None:
+            continue
+        callee = func_mgr.getFunctionContaining(target)
+        if callee is None:
+            continue
+        entry = int(callee.getEntryPoint().getOffset())
+        if entry == func_entry:
+            continue  # skip self-calls
+        src_offset = int(from_addr.getOffset())
+        if entry not in seen or src_offset < seen[entry]:
+            seen[entry] = src_offset
+
+    return [k for k, _ in sorted(seen.items(), key=lambda kv: kv[1])]
 
 
 def _overlay_symbols(flat_api, ref_symbols: list[ReferenceSymbol]) -> None:
@@ -134,10 +166,12 @@ def _dump_program(
             crc_step = {"entry": _hex(f.getEntryPoint()), "instructions": instrs}
 
     data_refs_map: dict[int, list[DataRef]] = {}
-    if collect_data_refs_flag:
-        for f in func_mgr.getFunctions(True):
-            entry_addr = int(f.getEntryPoint().getOffset())
+    callees_map: dict[int, list[int]] = {}
+    for f in func_mgr.getFunctions(True):
+        entry_addr = int(f.getEntryPoint().getOffset())
+        if collect_data_refs_flag:
             data_refs_map[entry_addr] = collect_data_refs_within(program, f)
+        callees_map[entry_addr] = _ordered_callees(f, ref_mgr, func_mgr)
 
     return HeadlessRun(
         functions=functions,
@@ -145,6 +179,7 @@ def _dump_program(
         ram_refs=sorted(ram_refs),
         rom_crc_check_step=crc_step,
         data_refs=data_refs_map,
+        callees=callees_map,
     )
 
 

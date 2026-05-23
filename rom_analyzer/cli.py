@@ -7,6 +7,7 @@ from pathlib import Path
 
 import click
 
+from rom_analyzer.callgraph import bootstrap_anchors, bfs_preseed, gap_fill
 from rom_analyzer.crc import Instruction, extract_crc_region
 from rom_analyzer.data_refs import propagate_data_labels
 from rom_analyzer.diff import run_ghidriff
@@ -125,6 +126,35 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         collect_data_refs_flag=(not is_self_diff),
     )
 
+    # Read ROM bytes now — used by call-graph bootstrap and CRC scan
+    rom_bytes = rom_path.read_bytes()
+
+    # Call-graph bootstrap + BFS pre-seed (cross-ROM only)
+    anchors: list[MatchedFunction] = []
+    bfs_matches: list[MatchedFunction] = []
+    if not is_self_diff and ref_run is not None:
+        ref_bytes = reference_rom.read_bytes()
+        ref_symbols_by_name = {s.name: s for s in ref_symbols}
+        anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
+                                    ref_symbols_by_name)
+        bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
+                                                 ref_symbols_by_addr)
+        by_src: dict[str, int] = {}
+        for a in anchors:
+            by_src[a.source] = by_src.get(a.source, 0) + 1
+        src_str = ", ".join(f"{s}: {n}" for s, n in sorted(by_src.items()))
+        click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
+        click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
+        if bfs_overlays:
+            bfs_propagated = [
+                PropagatedSymbol(s.name, 0, s.address, s.category, "medium")
+                for s in bfs_overlays
+            ]
+            apply_symbols_to_project(
+                ghidra_home, project_dir, project_name,
+                rom_path, language_id, bfs_propagated,
+            )
+
     # [4/7] Diff (identity or ghidriff)
     if is_self_diff:
         click.echo(f"[4/7] Self-diff detected; using identity matches")
@@ -143,6 +173,9 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             reference_rom, rom_path,
             engine=diff_engine,
         )
+        gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches)
+        click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
+        matches = matches + anchors + bfs_matches + gap_matches
 
     matched_count = len(matches)
     total_ref = sum(1 for s in ref_symbols if s.category == "function")
@@ -188,7 +221,6 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         click.echo("   warning: rom_crc_check_step not located in new ROM")
         crc = None
 
-    rom_bytes = rom_path.read_bytes()
     flash_blocks = find_free_blocks(rom_bytes, crc, min_length=min_flash_block) if crc else []
     ram_blocks = find_free_ram_blocks(new_ram_refs, min_length=min_ram_block)
 
@@ -215,6 +247,14 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     report.write(f"Variant:    {language_id}\n\n")
     report.write(f"## Summary\n- Matched functions: {match_summary}\n")
     report.write(f"- Propagated data labels: {len(data_labels)}\n\n")
+    src_counts: dict[str, int] = {}
+    for m in matches:
+        src_counts[m.source] = src_counts.get(m.source, 0) + 1
+    if src_counts:
+        report.write("## Match sources\n")
+        for src, cnt in sorted(src_counts.items()):
+            report.write(f"- {src}: {cnt}\n")
+        report.write("\n")
     if crc is not None:
         report.write(f"## CRC region\n")
         report.write(f"- Full mode:    [{crc.full_start:#x}, {crc.full_end:#x})\n")

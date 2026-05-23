@@ -21,6 +21,7 @@ class MatchedFunction:
     ref_address: int
     new_address: int
     similarity: float
+    source: str = "ghidriff"
 
 
 @dataclass(frozen=True)
