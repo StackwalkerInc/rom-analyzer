@@ -13,7 +13,7 @@ dependencies = [
     "click >= 8.1, < 9",
     "lxml >= 5, < 6",
     "tomli-w >= 1.0, < 2",
-    "ghidriff @ git+https://github.com/RcusStackwalker/ghidriff.git",
+    "ghidriff @ git+https://github.com/RcusStackwalker/ghidriff.git@e6bc1a1becffe57909523251dcd85f3b16f24d34",
 ]
 
 [project.optional-dependencies]
@@ -30,6 +30,9 @@ markers = [
     "e2e: end-to-end test requiring Ghidra + ghidriff in environment",
 ]
 addopts = "-m 'not e2e'"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["rom_analyzer"]
