@@ -1,12 +1,14 @@
 """Call-graph-driven function matching to supplement ghidriff.
 
-Three phases:
-  bootstrap_anchors  – guaranteed anchor pairs via vector table + MUT table
-  bfs_preseed        – BFS from anchors; produces overlays for the new ROM
-                       before ghidriff runs, improving named-match output
-  gap_fill           – iteratively fills ghidriff misses using structural position
+Four phases:
+  bootstrap_anchors      – anchor pairs via full vector table + MUT table
+  bfs_preseed            – BFS from anchors; produces overlays for the new ROM
+                           before ghidriff runs, improving named-match output
+  gap_fill               – iteratively fills ghidriff misses using structural position
+  bytecode_identity_match – exact-bytecode hash match for small/unchanged functions
 """
 
+import hashlib
 import struct
 from collections import deque
 
@@ -144,27 +146,51 @@ def _decode_bra_target(rom_bytes: bytes, pos: int) -> int | None:
 
 def _bootstrap_vector_table(ref_bytes: bytes, new_bytes: bytes,
                               ref_run: HeadlessRun, new_run: HeadlessRun,
+                              ref_symbols_by_addr: dict,
                               ) -> list[MatchedFunction]:
-    # ROM offset 0 holds an M32R bra instruction to reset_interrupt_handler.
-    # Decode the branch target rather than treating the bytes as a pointer.
-    ref_reset = _decode_bra_target(ref_bytes, 0)
-    new_reset = _decode_bra_target(new_bytes, 0)
+    """Decode all 64 M32R vector table entries; emit one anchor per distinct handler pair.
 
-    if ref_reset is None or new_reset is None:
+    Entries that target < 0x200 are chain/stub entries pointing within the table
+    itself and are skipped.  Duplicate handler addresses (e.g. the default ISR
+    occupying slots 16–31) are deduplicated — only the first slot is emitted.
+    """
+    anchors: list[MatchedFunction] = []
+    seen_ref: set[int] = set()
+    seen_new: set[int] = set()
+
+    for i in range(64):
+        pos = i * 4
+        ref_target = _decode_bra_target(ref_bytes, pos)
+        new_target = _decode_bra_target(new_bytes, pos)
+        if ref_target is None or new_target is None:
+            continue
+        # Skip chain entries that loop back within the vector table region.
+        if ref_target < 0x200 or new_target < 0x200:
+            continue
+        # Skip duplicate handlers (same handler referenced by multiple vector slots).
+        if ref_target in seen_ref or new_target in seen_new:
+            continue
+        seen_ref.add(ref_target)
+        seen_new.add(new_target)
+
+        sym = ref_symbols_by_addr.get(ref_target)
+        name = sym.name if sym else _name_for(ref_target, ref_run) or f"isr_vector_{i:02d}"
+        anchors.append(MatchedFunction(name, ref_target, new_target, 1.0, "vector_table"))
+
+    if not anchors:
         return []
 
-    anchors: list[MatchedFunction] = [
-        MatchedFunction("reset_interrupt_handler",
-                        ref_reset, new_reset, 1.0, "vector_table"),
-    ]
-
-    ref_mains = ref_run.callees.get(ref_reset, [])
-    new_mains = new_run.callees.get(new_reset, [])
+    # Derive main from reset handler's (slot 0) callees.
+    reset_ref = anchors[0].ref_address
+    reset_new = anchors[0].new_address
+    ref_mains = ref_run.callees.get(reset_ref, [])
+    new_mains = new_run.callees.get(reset_new, [])
     if ref_mains and new_mains:
         best_ref = max(ref_mains, key=lambda a: _func_size(a, ref_run))
         best_new = max(new_mains, key=lambda a: _func_size(a, new_run))
-        sim = 1.0 if (len(ref_mains) == 1 and len(new_mains) == 1) else 0.9
-        anchors.append(MatchedFunction("main", best_ref, best_new, sim, "vector_table"))
+        if best_ref not in seen_ref and best_new not in seen_new:
+            sim = 1.0 if (len(ref_mains) == 1 and len(new_mains) == 1) else 0.9
+            anchors.append(MatchedFunction("main", best_ref, best_new, sim, "vector_table"))
 
     return anchors
 
@@ -193,9 +219,13 @@ def _bootstrap_mut_table(ref_bytes: bytes, new_bytes: bytes,
 def bootstrap_anchors(ref_bytes: bytes, new_bytes: bytes,
                        ref_run: HeadlessRun, new_run: HeadlessRun,
                        ref_symbols_by_name: dict,
+                       ref_symbols_by_addr: dict | None = None,
                        ) -> list[MatchedFunction]:
-    """Phase 1: produce anchor pairs via vector table and MUT variables table."""
-    anchors = _bootstrap_vector_table(ref_bytes, new_bytes, ref_run, new_run)
+    """Phase 1: produce anchor pairs via full vector table and MUT variables table."""
+    if ref_symbols_by_addr is None:
+        ref_symbols_by_addr = {v.address: v for v in ref_symbols_by_name.values()}
+    anchors = _bootstrap_vector_table(ref_bytes, new_bytes, ref_run, new_run,
+                                      ref_symbols_by_addr)
     anchors += _bootstrap_mut_table(ref_bytes, new_bytes, ref_run, new_run,
                                      ref_symbols_by_name)
     return anchors
@@ -296,5 +326,68 @@ def gap_fill(ref_run: HeadlessRun,
                 matched_ref[ref_callee] = new_callee
                 matched_new.add(new_callee)
                 changed = True
+
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 — Bytecode identity
+# ---------------------------------------------------------------------------
+
+_MIN_IDENTITY_SIZE = 8   # bytes; below this, false-positive risk is too high
+
+
+def bytecode_identity_match(
+        ref_bytes: bytes, new_bytes: bytes,
+        ref_run: HeadlessRun, new_run: HeadlessRun,
+        existing_matches: list[MatchedFunction],
+        ref_symbols_by_addr: dict,
+        min_size: int = _MIN_IDENTITY_SIZE,
+) -> list[MatchedFunction]:
+    """Phase 4: exact-bytecode hash match for small/unchanged functions.
+
+    Computes SHA-256 over each function's byte span (entry → next entry).
+    A ref function is matched to the unique new function with the same hash;
+    ambiguous hashes (multiple new functions identical to each other) are
+    skipped to avoid false positives among interchangeable stubs.
+    """
+    already_ref = {m.ref_address for m in existing_matches}
+    already_new = {m.new_address for m in existing_matches}
+
+    # Build size map for new ROM functions.
+    new_entries = sorted(int(f["entry"], 16) for f in new_run.functions)
+    new_size: dict[int, int] = {}
+    for i, addr in enumerate(new_entries):
+        if i + 1 < len(new_entries):
+            new_size[addr] = new_entries[i + 1] - addr
+
+    # hash → list[new_addr] — drop hashes with multiple matches (ambiguous).
+    hash_to_new: dict[bytes, list[int]] = {}
+    for addr, sz in new_size.items():
+        if sz < min_size or addr + sz > len(new_bytes):
+            continue
+        h = hashlib.sha256(new_bytes[addr: addr + sz]).digest()
+        hash_to_new.setdefault(h, []).append(addr)
+    unique_new: dict[bytes, int] = {
+        h: addrs[0] for h, addrs in hash_to_new.items() if len(addrs) == 1
+    }
+
+    results: list[MatchedFunction] = []
+    ref_entries = sorted(int(f["entry"], 16) for f in ref_run.functions)
+    for i, ref_addr in enumerate(ref_entries):
+        if ref_addr in already_ref:
+            continue
+        sz = ref_entries[i + 1] - ref_addr if i + 1 < len(ref_entries) else 0
+        if sz < min_size or ref_addr + sz > len(ref_bytes):
+            continue
+        h = hashlib.sha256(ref_bytes[ref_addr: ref_addr + sz]).digest()
+        new_addr = unique_new.get(h)
+        if new_addr is None or new_addr in already_new:
+            continue
+        sym = ref_symbols_by_addr.get(ref_addr)
+        name = (sym.name if sym else None) or _name_for(ref_addr, ref_run) or ""
+        results.append(MatchedFunction(name, ref_addr, new_addr, 1.0, "bytecode_identity"))
+        already_ref.add(ref_addr)
+        already_new.add(new_addr)
 
     return results

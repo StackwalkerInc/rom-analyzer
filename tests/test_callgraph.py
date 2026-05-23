@@ -12,6 +12,7 @@ from rom_analyzer.callgraph import (
     _size_ratio_ok,
     bootstrap_anchors,
     bfs_preseed,
+    bytecode_identity_match,
     gap_fill,
 )
 from rom_analyzer.ghidra import HeadlessRun
@@ -169,9 +170,11 @@ def test_lcs_align_empty_lists():
 # _decode_bra_target
 # ---------------------------------------------------------------------------
 
-def _encode_bra(target: int) -> bytes:
-    """Encode an M32R 32-bit bra from ROM offset 0 to target."""
-    disp24 = target >> 2  # pos=0 → disp = target >> 2
+def _encode_bra(target: int, pos: int = 0) -> bytes:
+    """Encode an M32R 32-bit bra at instruction position pos targeting target."""
+    disp24 = (target - pos) >> 2
+    if disp24 < 0:
+        disp24 &= 0xFFFFFF  # two's complement 24-bit
     return bytes([0xFF, (disp24 >> 16) & 0xFF, (disp24 >> 8) & 0xFF, disp24 & 0xFF])
 
 
@@ -296,8 +299,10 @@ def test_bootstrap_vector_table_single_callee():
         callees={reset_new: [main_new]},
     )
 
+    ref_syms_by_addr = {reset_ref: ReferenceSymbol("reset_interrupt_handler", reset_ref, "function")}
     anchors = bootstrap_anchors(bytes(ref_bytes), bytes(new_bytes),
-                                ref_run, new_run, ref_symbols_by_name={})
+                                ref_run, new_run, ref_symbols_by_name={},
+                                ref_symbols_by_addr=ref_syms_by_addr)
     names = {a.ref_name for a in anchors}
     assert "reset_interrupt_handler" in names
     assert "main" in names
@@ -317,6 +322,7 @@ def test_bootstrap_vector_table_multi_callee_picks_largest():
     new_bytes = bytearray(0x40000)
     ref_bytes[0:4] = _encode_bra(reset_ref)
     new_bytes[0:4] = _encode_bra(reset_new)
+    ref_syms_by_addr = {reset_ref: ReferenceSymbol("reset_interrupt_handler", reset_ref, "function")}
 
     # ref: reset → [small_helper=0x1100 (size 0x10), main=0x1200 (size 0x500)]
     ref_run = _make_run(
@@ -330,7 +336,8 @@ def test_bootstrap_vector_table_multi_callee_picks_largest():
     )
 
     anchors = bootstrap_anchors(bytes(ref_bytes), bytes(new_bytes),
-                                ref_run, new_run, ref_symbols_by_name={})
+                                ref_run, new_run, ref_symbols_by_name={},
+                                ref_symbols_by_addr=ref_syms_by_addr)
     main_anchor = next((a for a in anchors if a.ref_name == "main"), None)
     assert main_anchor is not None
     assert main_anchor.ref_address == 0x1200
@@ -498,3 +505,171 @@ def test_gap_fill_source_tag():
     existing = [MatchedFunction("main", 0x100, 0x100, 1.0, "vector_table")]
     results = gap_fill(ref_run, new_run, existing)
     assert all(m.source == "callgraph_gap" for m in results)
+
+
+# ---------------------------------------------------------------------------
+# bootstrap_anchors — multi-entry vector table
+# ---------------------------------------------------------------------------
+
+def test_bootstrap_vector_table_multi_entry():
+    """Multiple distinct ISR handlers in the vector table each get an anchor."""
+    reset_ref  = 0x1000
+    isr1_ref   = 0x2000
+    isr2_ref   = 0x3000
+    reset_new  = 0x0800
+    isr1_new   = 0x1800
+    isr2_new   = 0x2800
+
+    ref_bytes = bytearray(0x80000)
+    new_bytes = bytearray(0x80000)
+    ref_bytes[0:4]  = _encode_bra(reset_ref,  pos=0)   # slot 0
+    ref_bytes[4:8]  = _encode_bra(isr1_ref,   pos=4)   # slot 1
+    ref_bytes[8:12] = _encode_bra(isr2_ref,   pos=8)   # slot 2
+    new_bytes[0:4]  = _encode_bra(reset_new,  pos=0)
+    new_bytes[4:8]  = _encode_bra(isr1_new,   pos=4)
+    new_bytes[8:12] = _encode_bra(isr2_new,   pos=8)
+
+    ref_syms_by_addr = {
+        reset_ref: ReferenceSymbol("reset_interrupt_handler", reset_ref, "function"),
+        isr1_ref:  ReferenceSymbol("timer_isr",               isr1_ref,  "function"),
+        isr2_ref:  ReferenceSymbol("serial_isr",              isr2_ref,  "function"),
+    }
+    ref_run = _make_run([reset_ref, isr1_ref, isr2_ref, reset_ref + 0x8000])
+    new_run = _make_run([reset_new, isr1_new, isr2_new, reset_new + 0x8000])
+
+    anchors = bootstrap_anchors(bytes(ref_bytes), bytes(new_bytes),
+                                ref_run, new_run, ref_symbols_by_name={},
+                                ref_symbols_by_addr=ref_syms_by_addr)
+    ref_names = {a.ref_name for a in anchors}
+    assert "reset_interrupt_handler" in ref_names
+    assert "timer_isr" in ref_names
+    assert "serial_isr" in ref_names
+    assert all(a.source == "vector_table" for a in anchors if a.ref_name != "main")
+
+
+def test_bootstrap_vector_table_deduplicates_default_isr():
+    """Multiple slots pointing to the same default ISR emit only one anchor."""
+    reset_ref    = 0x1000
+    default_ref  = 0x2000  # same handler in 5 slots
+    reset_new    = 0x0800
+    default_new  = 0x1800
+
+    ref_bytes = bytearray(0x80000)
+    new_bytes = bytearray(0x80000)
+    ref_bytes[0:4] = _encode_bra(reset_ref)
+    new_bytes[0:4] = _encode_bra(reset_new)
+    for slot in range(1, 6):         # slots 1–5 all point to the same default
+        pos = slot * 4
+        ref_bytes[pos: pos + 4] = _encode_bra(default_ref, pos=pos)
+        new_bytes[pos: pos + 4] = _encode_bra(default_new, pos=pos)
+
+    ref_run = _make_run([reset_ref, default_ref, default_ref + 0x100])
+    new_run = _make_run([reset_new, default_new, default_new + 0x100])
+
+    anchors = bootstrap_anchors(bytes(ref_bytes), bytes(new_bytes),
+                                ref_run, new_run, ref_symbols_by_name={},
+                                ref_symbols_by_addr={})
+    # default_isr should appear exactly once despite 5 slots pointing there
+    default_anchors = [a for a in anchors if a.ref_address == default_ref]
+    assert len(default_anchors) == 1
+
+
+def test_bootstrap_vector_table_skips_chain_entries():
+    """Entries targeting < 0x200 (vector-table self-references) are ignored."""
+    reset_ref = 0x1000
+    reset_new = 0x0800
+
+    ref_bytes = bytearray(0x80000)
+    new_bytes = bytearray(0x80000)
+    ref_bytes[0:4] = _encode_bra(reset_ref)
+    new_bytes[0:4] = _encode_bra(reset_new)
+    # slot 1 → chain into vector table (target = 0x08, < 0x200)
+    ref_bytes[4:8] = _encode_bra(0x08, pos=4)
+    new_bytes[4:8] = _encode_bra(0x08, pos=4)
+
+    ref_run = _make_run([reset_ref, reset_ref + 0x100])
+    new_run = _make_run([reset_new, reset_new + 0x100])
+
+    anchors = bootstrap_anchors(bytes(ref_bytes), bytes(new_bytes),
+                                ref_run, new_run, ref_symbols_by_name={},
+                                ref_symbols_by_addr={})
+    # Chain entry at slot 1 must not produce an anchor
+    ref_addrs = {a.ref_address for a in anchors}
+    assert 0x08 not in ref_addrs
+
+
+# ---------------------------------------------------------------------------
+# bytecode_identity_match
+# ---------------------------------------------------------------------------
+
+def _make_rom_with_functions(func_map: dict[int, bytes], rom_size: int = 0x10000) -> bytes:
+    """Build a ROM with known byte sequences at given function addresses."""
+    rom = bytearray(rom_size)
+    for addr, body in func_map.items():
+        rom[addr: addr + len(body)] = body
+    return bytes(rom)
+
+
+def test_bytecode_identity_exact_match():
+    """Identical function bytes at different addresses are matched."""
+    body = bytes([0x70, 0xE0, 0x00, 0x01,   # 8-byte synthetic function body
+                  0x10, 0x00, 0x20, 0x03])
+    ref_bytes = _make_rom_with_functions({0x1000: body})
+    new_bytes = _make_rom_with_functions({0x2000: body})
+
+    ref_run = _make_run([0x1000, 0x1000 + len(body)])
+    new_run = _make_run([0x2000, 0x2000 + len(body)])
+    ref_syms_by_addr = {0x1000: ReferenceSymbol("my_func", 0x1000, "function")}
+
+    results = bytecode_identity_match(
+        ref_bytes, new_bytes, ref_run, new_run, [], ref_syms_by_addr
+    )
+    assert len(results) == 1
+    assert results[0].ref_address == 0x1000
+    assert results[0].new_address == 0x2000
+    assert results[0].ref_name == "my_func"
+    assert results[0].similarity == 1.0
+    assert results[0].source == "bytecode_identity"
+
+
+def test_bytecode_identity_ambiguous_skipped():
+    """If two new functions have the same bytes, the ref function is not matched."""
+    body = bytes([0xFF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+    ref_bytes = _make_rom_with_functions({0x1000: body})
+    # Two new functions with the same body → ambiguous
+    new_bytes = _make_rom_with_functions({0x2000: body, 0x3000: body})
+
+    ref_run = _make_run([0x1000, 0x1000 + len(body)])
+    new_run = _make_run([0x2000, 0x2000 + len(body), 0x3000, 0x3000 + len(body)])
+
+    results = bytecode_identity_match(ref_bytes, new_bytes, ref_run, new_run, [], {})
+    assert results == []
+
+
+def test_bytecode_identity_skips_already_matched():
+    """Functions already in existing_matches are not re-matched."""
+    body = bytes([0x70, 0xE0, 0x00, 0x01, 0x10, 0x00, 0x20, 0x03])
+    ref_bytes = _make_rom_with_functions({0x1000: body})
+    new_bytes = _make_rom_with_functions({0x2000: body})
+
+    ref_run = _make_run([0x1000, 0x1000 + len(body)])
+    new_run = _make_run([0x2000, 0x2000 + len(body)])
+
+    existing = [MatchedFunction("my_func", 0x1000, 0x2000, 0.9, "ghidriff")]
+    results = bytecode_identity_match(ref_bytes, new_bytes, ref_run, new_run, existing, {})
+    assert results == []
+
+
+def test_bytecode_identity_min_size_respected():
+    """Functions smaller than min_size are never matched (false-positive risk)."""
+    tiny = bytes([0x70, 0xE0, 0x00, 0x01])  # 4 bytes
+    ref_bytes = _make_rom_with_functions({0x1000: tiny})
+    new_bytes = _make_rom_with_functions({0x2000: tiny})
+
+    ref_run = _make_run([0x1000, 0x1000 + len(tiny)])
+    new_run = _make_run([0x2000, 0x2000 + len(tiny)])
+
+    results = bytecode_identity_match(
+        ref_bytes, new_bytes, ref_run, new_run, [], {}, min_size=8
+    )
+    assert results == []

@@ -7,7 +7,9 @@ from pathlib import Path
 
 import click
 
-from rom_analyzer.callgraph import bootstrap_anchors, bfs_preseed, gap_fill
+from rom_analyzer.callgraph import (
+    bootstrap_anchors, bfs_preseed, gap_fill, bytecode_identity_match,
+)
 from rom_analyzer.crc import Instruction, extract_crc_region
 from rom_analyzer.data_refs import propagate_data_labels
 from rom_analyzer.diff import run_ghidriff
@@ -136,7 +138,7 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         ref_bytes = reference_rom.read_bytes()
         ref_symbols_by_name = {s.name: s for s in ref_symbols}
         anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
-                                    ref_symbols_by_name)
+                                    ref_symbols_by_name, ref_symbols_by_addr)
         bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
                                                  ref_symbols_by_addr)
         by_src: dict[str, int] = {}
@@ -175,10 +177,26 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         )
         gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches)
         click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
-        matches = matches + anchors + bfs_matches + gap_matches
+        all_matches = matches + anchors + bfs_matches + gap_matches
 
-    matched_count = len(matches)
-    total_ref = sum(1 for s in ref_symbols if s.category == "function")
+        identity_matches = bytecode_identity_match(
+            ref_bytes, rom_bytes, ref_run, new_run,
+            all_matches, ref_symbols_by_addr,
+        )
+        click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
+        matches = all_matches + identity_matches
+
+    # Deduplicate by ref_address — keep the highest-similarity match when
+    # multiple phases claimed the same reference function.
+    best_by_ref: dict[int, MatchedFunction] = {}
+    for m in matches:
+        if m.ref_address not in best_by_ref or m.similarity > best_by_ref[m.ref_address].similarity:
+            best_by_ref[m.ref_address] = m
+    matches = list(best_by_ref.values())
+
+    named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
+    matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
+    total_ref = len(named_ref_addrs)
     match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
 
     # [5/7] Propagate symbols
