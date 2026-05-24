@@ -31,6 +31,8 @@ class PropagatedSymbol:
     new_address: int
     category: SymbolCategory
     confidence: ConfidenceTier
+    source: str = ""
+    score: float = 0.0
 
 
 @dataclass(frozen=True)
