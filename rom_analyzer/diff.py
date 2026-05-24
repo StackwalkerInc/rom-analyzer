@@ -2,78 +2,49 @@
 
 Both programs must have been imported into the Ghidra project by
 import_and_dump before calling run_vt_diff. This function opens them by
-name from the project's DomainFolder, creates an in-memory VTSession, runs
-four standard VT correlators in priority order, and returns matched pairs.
+name from the project, creates an in-memory VTSession, runs four standard
+VT correlators in priority order, and returns matched pairs.
 
 The VTSession is in-memory only (VTSessionDB constructor uses DBHandle with
 no backing file) and is released when run_vt_diff returns.
 """
 
-from pathlib import Path
-
-from rom_analyzer.ghidra import _resolve_java_home, ghidriff_program_name
 from rom_analyzer.types import MatchedFunction
 
 
 def run_vt_diff(
-    ghidra_home: Path,
-    project_dir: Path,
-    project_name: str,
-    reference_path: Path,
-    new_path: Path,
-    language_id: str = "m32r:2:fp8000",
+    project,
+    ref_name: str,
+    new_name: str,
 ) -> list[MatchedFunction]:
     """Diff two pre-imported programs via Ghidra VTSessionDB.
 
     Both ROMs must have been imported into the project via import_and_dump
-    first. Programs are located by ghidriff_program_name() key in the project.
+    first. Programs are located by their ghidriff_program_name() key.
     """
-    import os
-
     import pyghidra
     from ghidra.feature.vt.api.db import VTSessionDB
     from ghidra.util.task import ConsoleTaskMonitor
 
-    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
-    java_home = _resolve_java_home()
-    if java_home:
-        os.environ.setdefault("JAVA_HOME", java_home)
-
-    pyghidra.start()
     monitor = ConsoleTaskMonitor()
-    ref_name = ghidriff_program_name(reference_path)
-    new_name = ghidriff_program_name(new_path)
     session_name = f"{ref_name}-vs-{new_name}"
 
-    with pyghidra.open_program(
-        binary_path=str(reference_path),
-        project_location=str(project_dir),
-        project_name=project_name,
-        language=language_id,
-        loader="ghidra.app.util.opinion.BinaryLoader",
-        analyze=False,
-        program_name=ref_name,
-    ) as ref_api:
-        ref_prog = ref_api.getCurrentProgram()
-        folder = ref_prog.getDomainFile().getParent()
-
-        new_file = folder.getFile(new_name)
-        if new_file is None:
-            raise FileNotFoundError(
-                f"Program '{new_name}' not found in project '{project_name}'. "
-                "Import the new ROM via import_and_dump before calling run_vt_diff."
-            )
-        consumer = "rom-analyzer-vt"
-        new_prog = new_file.getDomainObject(consumer, False, False, monitor)
+    ref_prog, ref_consumer = pyghidra.consume_program(project, f"/{ref_name}")
+    try:
+        new_prog, new_consumer = pyghidra.consume_program(project, f"/{new_name}")
         try:
-            session = VTSessionDB(session_name, ref_prog, new_prog, consumer)
+            from java.lang import Object  # type: ignore
+            session_consumer = Object()
+            session = VTSessionDB(session_name, ref_prog, new_prog, session_consumer)
             try:
                 _run_vt_correlators(session, monitor)
                 return _matches_from_vtsession(session)
             finally:
-                session.release(consumer)
+                session.release(session_consumer)
         finally:
-            new_prog.release(consumer)
+            new_prog.release(new_consumer)
+    finally:
+        ref_prog.release(ref_consumer)
 
 
 def _run_vt_correlators(session, monitor) -> None:

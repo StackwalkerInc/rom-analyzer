@@ -36,6 +36,14 @@ def _resolve_java_home() -> str | None:
     return None
 
 
+def setup_environment(ghidra_home: Path) -> None:
+    """Set GHIDRA_INSTALL_DIR and JAVA_HOME env vars. Call once before pyghidra.start()."""
+    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
+    java_home = _resolve_java_home()
+    if java_home:
+        os.environ.setdefault("JAVA_HOME", java_home)
+
+
 def _hex(addr) -> str:
     return "0x%x" % addr.getOffset()
 
@@ -71,25 +79,23 @@ def _ordered_callees(func, ref_mgr, func_mgr) -> list[int]:
     return [k for k, _ in sorted(seen.items(), key=lambda kv: kv[1])]
 
 
-def _overlay_symbols(flat_api, ref_symbols: list[ReferenceSymbol]) -> None:
-    """Apply enriched reference symbols to an already-imported program.
-
-    Uses flat_api.createLabel and flat_api.createFunction so VTSessionDB
-    sees named functions and can produce named matches.
-    """
+def _overlay_symbols(program, ref_symbols: list[ReferenceSymbol]) -> None:
+    """Apply enriched reference symbols to an already-imported program (must be in a transaction)."""
     from ghidra.program.model.symbol import SourceType
+    from ghidra.program.flatapi import FlatProgramAPI
 
+    flat = FlatProgramAPI(program)
     for s in ref_symbols:
-        addr = flat_api.toAddr(s.address)
+        addr = flat.toAddr(s.address)
         if addr is None:
             continue
         try:
-            flat_api.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
+            flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
         except Exception:
             pass
         if s.category == "function":
             try:
-                flat_api.createFunction(addr, s.name)
+                flat.createFunction(addr, s.name)
             except Exception:
                 pass
 
@@ -188,47 +194,54 @@ def ghidriff_program_name(binary_path: Path) -> str:
     return f"{binary_path.name}-{sha1[:6]}"
 
 
+def _import_program(project, input_path: Path, prog_name: str, language_id: str) -> None:
+    """Import input_path into the project under prog_name using BinaryLoader."""
+    import pyghidra
+
+    loader = (
+        pyghidra.program_loader()
+        .project(project)
+        .source(str(input_path))
+        .name(prog_name)
+        .loaders("BinaryLoader")
+        .language(language_id)
+    )
+    with loader.load() as load_results:
+        load_results.save(pyghidra.task_monitor())
+
+
 def import_and_dump(
-    ghidra_home: Path,
-    project_dir: Path,
-    project_name: str,
+    project,
     input_path: Path,
     language_id: str,
     *,
-    extra_args: tuple[str, ...] = (),  # accepted for back-compat; unused
     crc_step_address: int | None = None,
     ref_symbols_for_overlay: list[ReferenceSymbol] | None = None,
     collect_data_refs_flag: bool = False,
 ) -> HeadlessRun:
-    """Import a raw-binary ROM via PyGhidra with explicit language, analyze, and dump.
+    """Import a raw-binary ROM into the open project (if not already present), analyze, and dump.
 
-    Programs are saved under {filename}-{sha1[:6]} so run_vt_diff can locate them
-    by name in the project's DomainFolder.
+    Programs are keyed by ghidriff_program_name() so the same ROM imported
+    multiple times within a run is opened from disk rather than re-imported.
     """
-    project_dir.mkdir(parents=True, exist_ok=True)
-
-    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
-    java_home = _resolve_java_home()
-    if java_home:
-        os.environ.setdefault("JAVA_HOME", java_home)
-
     import pyghidra
-    pyghidra.start()
+    from ghidra.program.util import GhidraProgramUtilities
 
     prog_name = ghidriff_program_name(input_path)
 
-    with pyghidra.open_program(
-        binary_path=str(input_path),
-        project_location=str(project_dir),
-        project_name=project_name,
-        language=language_id,
-        loader="ghidra.app.util.opinion.BinaryLoader",
-        analyze=True,
-        program_name=prog_name,
-    ) as flat_api:
+    if project.getProjectData().getFile(f"/{prog_name}") is None:
+        _import_program(project, input_path, prog_name, language_id)
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        if GhidraProgramUtilities.shouldAskToAnalyze(program):
+            pyghidra.analyze(program)
+            program.save("Analyzed", pyghidra.task_monitor())
+
         if ref_symbols_for_overlay:
-            _overlay_symbols(flat_api, ref_symbols_for_overlay)
-        program = flat_api.getCurrentProgram()
+            with pyghidra.transaction(program, "Overlay symbols"):
+                _overlay_symbols(program, ref_symbols_for_overlay)
+            program.save("Symbol overlay", pyghidra.task_monitor())
+
         return _dump_program(
             program,
             crc_step_address=crc_step_address,
@@ -237,44 +250,21 @@ def import_and_dump(
 
 
 def fetch_instructions_at(
-    ghidra_home: Path,
-    project_dir: Path,
-    project_name: str,
-    input_path: Path,
-    language_id: str,
+    project,
+    prog_name: str,
     address: int,
     max_instructions: int = 200,
 ) -> list[dict] | None:
-    """Fetch instructions of the function at the given address from an existing project.
+    """Fetch instructions of the function at the given address from an existing project program.
 
-    Opens with analyze=False (project must already exist from import_and_dump).
     Returns None if no instructions are found at the address.
     """
-    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
-    java_home = _resolve_java_home()
-    if java_home:
-        os.environ.setdefault("JAVA_HOME", java_home)
-
     import pyghidra
-    pyghidra.start()
 
-    prog_name = ghidriff_program_name(input_path)
-
-    with pyghidra.open_program(
-        binary_path=str(input_path),
-        project_location=str(project_dir),
-        project_name=project_name,
-        language=language_id,
-        loader="ghidra.app.util.opinion.BinaryLoader",
-        analyze=False,
-        program_name=prog_name,
-    ) as flat_api:
-        program = flat_api.getCurrentProgram()
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
         listing = program.getListing()
         func_mgr = program.getFunctionManager()
-        addr_factory = program.getAddressFactory()
-
-        addr = addr_factory.getDefaultAddressSpace().getAddress(address)
+        addr = program.getAddressFactory().getDefaultAddressSpace().getAddress(address)
         f = func_mgr.getFunctionContaining(addr)
 
         if f is not None:
@@ -305,61 +295,36 @@ def fetch_instructions_at(
             return instrs or None
 
 
-def apply_symbols_to_project(
-    ghidra_home: Path,
-    project_dir: Path,
-    project_name: str,
-    input_path: Path,
-    language_id: str,
+def apply_labels(
+    project,
+    prog_name: str,
     symbols: list[PropagatedSymbol],
 ) -> int:
-    """Apply propagated symbols to an already-imported Ghidra program.
+    """Apply propagated symbols to an already-imported program.
 
-    Opens the existing program by program_name_for_project (analyze=False — already done)
-    and applies createLabel / createFunction for each PropagatedSymbol.
     Returns the number of labels successfully applied.
     """
-    # PyGhidra stores nested projects at project_dir/project_name/project_name.gpr
-    if not (project_dir / project_name / f"{project_name}.gpr").exists():
-        raise FileNotFoundError(
-            f"Ghidra project not found at {project_dir / project_name / f'{project_name}.gpr'}; "
-            "run without --enrich-project first to import the ROM"
-        )
-
-    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
-    java_home = _resolve_java_home()
-    if java_home:
-        os.environ.setdefault("JAVA_HOME", java_home)
-
     import pyghidra
-    pyghidra.start()
+    from ghidra.program.model.symbol import SourceType
+    from ghidra.program.flatapi import FlatProgramAPI
 
-    prog_name = ghidriff_program_name(input_path)
-
-    with pyghidra.open_program(
-        binary_path=str(input_path),
-        project_location=str(project_dir),
-        project_name=project_name,
-        language=language_id,
-        loader="ghidra.app.util.opinion.BinaryLoader",
-        analyze=False,
-        program_name=prog_name,
-    ) as flat_api:
-        from ghidra.program.model.symbol import SourceType
-
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
         count = 0
-        for s in symbols:
-            addr = flat_api.toAddr(s.new_address)
-            if addr is None:
-                continue
-            try:
-                flat_api.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
-                count += 1
-            except Exception:
-                pass
-            if s.category == "function":
+        with pyghidra.transaction(program, "Apply labels"):
+            flat = FlatProgramAPI(program)
+            for s in symbols:
+                addr = flat.toAddr(s.new_address)
+                if addr is None:
+                    continue
                 try:
-                    flat_api.createFunction(addr, s.name)
+                    flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
+                    count += 1
                 except Exception:
                     pass
+                if s.category == "function":
+                    try:
+                        flat.createFunction(addr, s.name)
+                    except Exception:
+                        pass
+        program.save("Apply labels", pyghidra.task_monitor())
         return count

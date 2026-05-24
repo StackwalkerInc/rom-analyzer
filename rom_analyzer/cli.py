@@ -21,7 +21,10 @@ from rom_analyzer.emit_ld import (
     emit_ram_free_toml,
 )
 from rom_analyzer.flash_space import find_free_blocks
-from rom_analyzer.ghidra import apply_symbols_to_project, fetch_instructions_at, import_and_dump
+from rom_analyzer.ghidra import (
+    apply_labels, fetch_instructions_at, ghidriff_program_name, import_and_dump,
+    setup_environment,
+)
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
@@ -103,246 +106,249 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     if crc_step_addr is None:
         click.echo("   warning: rom_crc_check_step not in reference symbols; CRC detection skipped")
 
-    # [2/7] Import reference ROM into Ghidra + apply symbol overlay
-    click.echo(f"[2/7] Importing reference ROM into Ghidra: {reference_rom}")
-    if not reference_rom.exists():
-        click.echo(f"   warning: reference ROM not found at {reference_rom}; skipping reference import")
-        ref_run = None
-    else:
-        ref_run = import_and_dump(
-            ghidra_home, project_dir, project_name,
-            reference_rom, language_id,
+    # Start Ghidra JVM and open the project once for the full run.
+    setup_environment(ghidra_home)
+    import pyghidra
+    pyghidra.start()
+
+    project_path = project_dir / project_name
+    project_path.mkdir(parents=True, exist_ok=True)
+    project = pyghidra.open_project(project_path, project_name, create=True)
+    try:
+        new_prog_name = ghidriff_program_name(rom_path)
+
+        # [2/7] Import reference ROM into Ghidra + apply symbol overlay
+        click.echo(f"[2/7] Importing reference ROM into Ghidra: {reference_rom}")
+        if not reference_rom.exists():
+            click.echo(f"   warning: reference ROM not found at {reference_rom}; skipping reference import")
+            ref_run = None
+        else:
+            ref_run = import_and_dump(
+                project,
+                reference_rom, language_id,
+                crc_step_address=crc_step_addr,
+                ref_symbols_for_overlay=ref_symbols,
+                collect_data_refs_flag=(not is_self_diff),
+            )
+
+        # [3/7] Import new ROM into Ghidra
+        click.echo(f"[3/7] Importing new ROM into Ghidra: {rom_path}")
+        new_run = import_and_dump(
+            project,
+            rom_path, language_id,
             crc_step_address=crc_step_addr,
-            ref_symbols_for_overlay=ref_symbols,
             collect_data_refs_flag=(not is_self_diff),
         )
 
-    # [3/7] Import new ROM into Ghidra
-    click.echo(f"[3/7] Importing new ROM into Ghidra: {rom_path}")
-    new_run = import_and_dump(
-        ghidra_home, project_dir, project_name,
-        rom_path, language_id,
-        crc_step_address=crc_step_addr,
-        collect_data_refs_flag=(not is_self_diff),
-    )
+        # Read ROM bytes now — used by call-graph bootstrap and CRC scan
+        rom_bytes = rom_path.read_bytes()
 
-    # Read ROM bytes now — used by call-graph bootstrap and CRC scan
-    rom_bytes = rom_path.read_bytes()
+        # Call-graph bootstrap + BFS pre-seed (cross-ROM only)
+        anchors: list[MatchedFunction] = []
+        bfs_matches: list[MatchedFunction] = []
+        if not is_self_diff and ref_run is not None:
+            ref_bytes = reference_rom.read_bytes()
+            ref_symbols_by_name = {s.name: s for s in ref_symbols}
+            anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
+                                        ref_symbols_by_name, ref_symbols_by_addr)
+            bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
+                                                     ref_symbols_by_addr,
+                                                     ref_bytes=ref_bytes,
+                                                     new_bytes=rom_bytes)
+            by_src: dict[str, int] = {}
+            for a in anchors:
+                by_src[a.source] = by_src.get(a.source, 0) + 1
+            src_str = ", ".join(f"{s}: {n}" for s, n in sorted(by_src.items()))
+            click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
+            click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
+            if bfs_overlays:
+                # Deduplicate by new-ROM address: multiple BFS paths can converge on the
+                # same target; writing all of them as Ghidra labels creates spurious
+                # multi-label clutter that persists across runs.
+                seen_bfs: set[int] = set()
+                unique_bfs = []
+                for s in bfs_overlays:
+                    if s.address not in seen_bfs:
+                        seen_bfs.add(s.address)
+                        unique_bfs.append(s)
+                bfs_propagated = [
+                    PropagatedSymbol(s.name, 0, s.address, s.category, "medium")
+                    for s in unique_bfs
+                ]
+                apply_labels(project, new_prog_name, bfs_propagated)
 
-    # Call-graph bootstrap + BFS pre-seed (cross-ROM only)
-    anchors: list[MatchedFunction] = []
-    bfs_matches: list[MatchedFunction] = []
-    if not is_self_diff and ref_run is not None:
-        ref_bytes = reference_rom.read_bytes()
-        ref_symbols_by_name = {s.name: s for s in ref_symbols}
-        anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
-                                    ref_symbols_by_name, ref_symbols_by_addr)
-        bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
-                                                 ref_symbols_by_addr,
-                                                 ref_bytes=ref_bytes,
-                                                 new_bytes=rom_bytes)
-        by_src: dict[str, int] = {}
-        for a in anchors:
-            by_src[a.source] = by_src.get(a.source, 0) + 1
-        src_str = ", ".join(f"{s}: {n}" for s, n in sorted(by_src.items()))
-        click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
-        click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
-        if bfs_overlays:
-            # Deduplicate by new-ROM address: multiple BFS paths can converge on the
-            # same target; writing all of them as Ghidra labels creates spurious
-            # multi-label clutter that persists across runs.
-            seen_bfs: set[int] = set()
-            unique_bfs = []
-            for s in bfs_overlays:
-                if s.address not in seen_bfs:
-                    seen_bfs.add(s.address)
-                    unique_bfs.append(s)
-            bfs_propagated = [
-                PropagatedSymbol(s.name, 0, s.address, s.category, "medium")
-                for s in unique_bfs
+        # [4/7] Diff (identity or VTSession)
+        if is_self_diff:
+            click.echo(f"[4/7] Self-diff detected; using identity matches")
+            matches = [
+                MatchedFunction(ref_name=s.name, ref_address=s.address,
+                                new_address=s.address, similarity=1.0)
+                for s in ref_symbols if s.category == "function"
             ]
-            apply_symbols_to_project(
-                ghidra_home, project_dir, project_name,
-                rom_path, language_id, bfs_propagated,
-            )
-
-    # [4/7] Diff (identity or VTSession)
-    if is_self_diff:
-        click.echo(f"[4/7] Self-diff detected; using identity matches")
-        matches = [
-            MatchedFunction(ref_name=s.name, ref_address=s.address,
-                            new_address=s.address, similarity=1.0)
-            for s in ref_symbols if s.category == "function"
-        ]
-    elif ref_run is None:
-        click.echo("[4/7] Skipping diff — reference ROM unavailable")
-        matches = []
-    else:
-        click.echo(f"[4/7] Diffing via Ghidra VTSession")
-        matches = run_vt_diff(
-            ghidra_home, project_dir, project_name,
-            reference_rom, rom_path,
-            language_id=language_id,
-        )
-        gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
-                               ref_bytes=ref_bytes, new_bytes=rom_bytes)
-        click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
-        all_matches = matches + anchors + bfs_matches + gap_matches
-
-        identity_matches = bytecode_identity_match(
-            ref_bytes, rom_bytes, ref_run, new_run,
-            all_matches, ref_symbols_by_addr,
-        )
-        click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
-        matches = all_matches + identity_matches
-
-    # Source priority — used in both dedup passes.
-    # Structural ROM-invariant sources (vector_table, icu_vector_table, mut_table)
-    # override bytecode-comparison matches.  Within a tier, higher similarity wins.
-    SOURCE_PRIORITY = {"vector_table": 3, "icu_vector_table": 3,
-                       "bytecode_identity": 2, "mut_table": 2,
-                       "callgraph_bfs": 1, "callgraph_gap": 1, "vt_diff": 0}
-    def _match_rank(m: MatchedFunction) -> tuple:
-        return (SOURCE_PRIORITY.get(m.source, 0), m.similarity)
-
-    # Deduplicate by ref_address — when multiple phases claimed the same
-    # reference function, keep the highest-ranked match.
-    best_by_ref: dict[int, MatchedFunction] = {}
-    for m in matches:
-        if m.ref_address not in best_by_ref or _match_rank(m) > _match_rank(best_by_ref[m.ref_address]):
-            best_by_ref[m.ref_address] = m
-    matches = list(best_by_ref.values())
-
-    # Deduplicate by new_address — when two different ref functions map to
-    # the same new address, keep only the highest-ranked match.
-    best_by_new: dict[int, MatchedFunction] = {}
-    for m in matches:
-        if m.new_address not in best_by_new or _match_rank(m) > _match_rank(best_by_new[m.new_address]):
-            best_by_new[m.new_address] = m
-    matches = list(best_by_new.values())
-
-    named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
-    matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
-    total_ref = len(named_ref_addrs)
-    match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
-
-    # [5/7] Propagate symbols
-    click.echo("[5/7] Propagating symbols")
-    propagated_fns = propagate_function_labels(ref_symbols, matches)
-
-    new_ram_refs = set(new_run.ram_refs)
-    # Ram-global propagation by absolute address is only valid for same-ECU ROMs
-    # (identical RAM layout).  Cross-family analysis (e.g. Z27AG vs Outlander)
-    # must not copy reference RAM labels: a given fp-offset may hold a completely
-    # different variable in the target ECU.  For cross-ROM analysis, per-function
-    # RAM ref tracking would be required — that is not yet implemented.
-    if is_self_diff:
-        ram_globals = [
-            PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high")
-            for s in ref_symbols
-            if s.category == "ram_global" and s.address in new_ram_refs
-        ]
-    else:
-        ram_globals = []
-
-    if not is_self_diff and ref_run is not None and ref_run.data_refs and new_run.data_refs:
-        data_labels = propagate_data_labels(
-            ref_run.data_refs, new_run.data_refs, matches, ref_symbols_by_addr
-        )
-        click.echo(f"   data labels propagated: {len(data_labels)}")
-    elif is_self_diff:
-        data_labels = [
-            PropagatedSymbol(s.name, s.address, s.address, "data", "high")
-            for s in ref_symbols if s.category == "data"
-        ]
-    else:
-        data_labels = []
-
-    propagated_all = propagated_fns + ram_globals + data_labels
-
-    # [6/7] Detect CRC, scan free space
-    click.echo("[6/7] Detecting CRC, scanning free space")
-
-    # For self-diff the reference address equals the new-ROM address, so the
-    # pre-fetched new_run.rom_crc_check_step is correct.  For cross-ROM analysis
-    # crc_step_addr is the *reference* ROM's address (wrong for the target ROM);
-    # look up the matched address from VTSession/BFS and re-fetch instructions.
-    _crc_instrs_raw: list[dict] | None = None
-    if is_self_diff:
-        if new_run.rom_crc_check_step:
-            _crc_instrs_raw = new_run.rom_crc_check_step["instructions"]
+        elif ref_run is None:
+            click.echo("[4/7] Skipping diff — reference ROM unavailable")
+            matches = []
         else:
-            click.echo("   warning: rom_crc_check_step not located in new ROM")
-    else:
-        crc_match = next((m for m in matches if m.ref_name == "rom_crc_check_step"), None)
-        if crc_match is not None:
-            click.echo(f"   fetching rom_crc_check_step at matched address {crc_match.new_address:#x}")
-            _crc_instrs_raw = fetch_instructions_at(
-                ghidra_home, project_dir, project_name,
-                rom_path, language_id, crc_match.new_address,
+            click.echo(f"[4/7] Diffing via Ghidra VTSession")
+            ref_prog_name = ghidriff_program_name(reference_rom)
+            matches = run_vt_diff(project, ref_prog_name, new_prog_name)
+            gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
+                                   ref_bytes=ref_bytes, new_bytes=rom_bytes)
+            click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
+            all_matches = matches + anchors + bfs_matches + gap_matches
+
+            identity_matches = bytecode_identity_match(
+                ref_bytes, rom_bytes, ref_run, new_run,
+                all_matches, ref_symbols_by_addr,
             )
-            if _crc_instrs_raw is None:
-                click.echo("   warning: no instructions found at matched rom_crc_check_step address")
+            click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
+            matches = all_matches + identity_matches
+
+        # Source priority — used in both dedup passes.
+        # Structural ROM-invariant sources (vector_table, icu_vector_table, mut_table)
+        # override bytecode-comparison matches.  Within a tier, higher similarity wins.
+        SOURCE_PRIORITY = {"vector_table": 3, "icu_vector_table": 3,
+                           "bytecode_identity": 2, "mut_table": 2,
+                           "callgraph_bfs": 1, "callgraph_gap": 1, "vt_diff": 0}
+        def _match_rank(m: MatchedFunction) -> tuple:
+            return (SOURCE_PRIORITY.get(m.source, 0), m.similarity)
+
+        # Deduplicate by ref_address — when multiple phases claimed the same
+        # reference function, keep the highest-ranked match.
+        best_by_ref: dict[int, MatchedFunction] = {}
+        for m in matches:
+            if m.ref_address not in best_by_ref or _match_rank(m) > _match_rank(best_by_ref[m.ref_address]):
+                best_by_ref[m.ref_address] = m
+        matches = list(best_by_ref.values())
+
+        # Deduplicate by new_address — when two different ref functions map to
+        # the same new address, keep only the highest-ranked match.
+        best_by_new: dict[int, MatchedFunction] = {}
+        for m in matches:
+            if m.new_address not in best_by_new or _match_rank(m) > _match_rank(best_by_new[m.new_address]):
+                best_by_new[m.new_address] = m
+        matches = list(best_by_new.values())
+
+        named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
+        matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
+        total_ref = len(named_ref_addrs)
+        match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
+
+        # [5/7] Propagate symbols
+        click.echo("[5/7] Propagating symbols")
+        propagated_fns = propagate_function_labels(ref_symbols, matches)
+
+        new_ram_refs = set(new_run.ram_refs)
+        # Ram-global propagation by absolute address is only valid for same-ECU ROMs
+        # (identical RAM layout).  Cross-family analysis (e.g. Z27AG vs Outlander)
+        # must not copy reference RAM labels: a given fp-offset may hold a completely
+        # different variable in the target ECU.  For cross-ROM analysis, per-function
+        # RAM ref tracking would be required — that is not yet implemented.
+        if is_self_diff:
+            ram_globals = [
+                PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high")
+                for s in ref_symbols
+                if s.category == "ram_global" and s.address in new_ram_refs
+            ]
         else:
-            click.echo("   warning: rom_crc_check_step not in VTSession/BFS matches; CRC detection skipped")
+            ram_globals = []
 
-    crc: CrcRegion | None = None
-    if _crc_instrs_raw is not None:
-        instrs = [Instruction(i["mnemonic"], tuple(i["operands"])) for i in _crc_instrs_raw]
-        try:
-            crc = extract_crc_region(instrs)
-        except Exception as e:
-            click.echo(f"   warning: CRC extraction failed: {e}")
+        if not is_self_diff and ref_run is not None and ref_run.data_refs and new_run.data_refs:
+            data_labels = propagate_data_labels(
+                ref_run.data_refs, new_run.data_refs, matches, ref_symbols_by_addr
+            )
+            click.echo(f"   data labels propagated: {len(data_labels)}")
+        elif is_self_diff:
+            data_labels = [
+                PropagatedSymbol(s.name, s.address, s.address, "data", "high")
+                for s in ref_symbols if s.category == "data"
+            ]
+        else:
+            data_labels = []
 
-    flash_blocks = find_free_blocks(rom_bytes, crc, min_length=min_flash_block) if crc else []
-    ram_blocks = find_free_ram_blocks(new_ram_refs, min_length=min_ram_block)
+        propagated_all = propagated_fns + ram_globals + data_labels
 
-    # [7/7] Emit outputs
-    click.echo("[7/7] Emitting outputs")
-    (out_dir / "description.ld").write_text(emit_description_ld(
-        propagated_all,
-        source_rom=rom_path.name,
-        reference_name=reference_name,
-        variant=language_id,
-        match_summary=match_summary,
-    ))
-    (out_dir / "omni.ld.stub").write_text(emit_omni_stub(flash_blocks, ram_globals))
-    (out_dir / "crc-region.toml").write_text(
-        emit_crc_region_toml(crc) if crc else "# CRC region not detected\n"
-    )
-    (out_dir / "flash-free.toml").write_text(emit_flash_free_toml(flash_blocks))
-    (out_dir / "ram-free.toml").write_text(emit_ram_free_toml(ram_blocks))
+        # [6/7] Detect CRC, scan free space
+        click.echo("[6/7] Detecting CRC, scanning free space")
 
-    report = StringIO()
-    report.write("# rom-analyzer match report\n\n")
-    report.write(f"Source ROM: {rom_path.name}\n")
-    report.write(f"Reference:  {reference_name}\n")
-    report.write(f"Variant:    {language_id}\n\n")
-    report.write(f"## Summary\n- Matched functions: {match_summary}\n")
-    report.write(f"- Propagated data labels: {len(data_labels)}\n\n")
-    src_counts: dict[str, int] = {}
-    for m in matches:
-        src_counts[m.source] = src_counts.get(m.source, 0) + 1
-    if src_counts:
-        report.write("## Match sources\n")
-        for src, cnt in sorted(src_counts.items()):
-            report.write(f"- {src}: {cnt}\n")
-        report.write("\n")
-    if crc is not None:
-        report.write(f"## CRC region\n")
-        report.write(f"- Full mode:    [{crc.full_start:#x}, {crc.full_end:#x})\n")
-        report.write(f"- Partial mode: [{crc.partial_start:#x}, {crc.partial_end:#x})\n")
-    (out_dir / "match-report.md").write_text(report.getvalue())
+        # For self-diff the reference address equals the new-ROM address, so the
+        # pre-fetched new_run.rom_crc_check_step is correct.  For cross-ROM analysis
+        # crc_step_addr is the *reference* ROM's address (wrong for the target ROM);
+        # look up the matched address from VTSession/BFS and re-fetch instructions.
+        _crc_instrs_raw: list[dict] | None = None
+        if is_self_diff:
+            if new_run.rom_crc_check_step:
+                _crc_instrs_raw = new_run.rom_crc_check_step["instructions"]
+            else:
+                click.echo("   warning: rom_crc_check_step not located in new ROM")
+        else:
+            crc_match = next((m for m in matches if m.ref_name == "rom_crc_check_step"), None)
+            if crc_match is not None:
+                click.echo(f"   fetching rom_crc_check_step at matched address {crc_match.new_address:#x}")
+                _crc_instrs_raw = fetch_instructions_at(
+                    project, new_prog_name, crc_match.new_address,
+                )
+                if _crc_instrs_raw is None:
+                    click.echo("   warning: no instructions found at matched rom_crc_check_step address")
+            else:
+                click.echo("   warning: rom_crc_check_step not in VTSession/BFS matches; CRC detection skipped")
 
-    click.echo(f"\nDone. Outputs in {out_dir}/")
+        crc: CrcRegion | None = None
+        if _crc_instrs_raw is not None:
+            instrs = [Instruction(i["mnemonic"], tuple(i["operands"])) for i in _crc_instrs_raw]
+            try:
+                crc = extract_crc_region(instrs)
+            except Exception as e:
+                click.echo(f"   warning: CRC extraction failed: {e}")
 
-    if enrich_project:
-        click.echo(f"[+] Enriching Ghidra project with {len(propagated_all)} propagated symbols")
-        n = apply_symbols_to_project(
-            ghidra_home, project_dir, project_name,
-            rom_path, language_id, propagated_all,
+        flash_blocks = find_free_blocks(rom_bytes, crc, min_length=min_flash_block) if crc else []
+        ram_blocks = find_free_ram_blocks(new_ram_refs, min_length=min_ram_block)
+
+        # [7/7] Emit outputs
+        click.echo("[7/7] Emitting outputs")
+        (out_dir / "description.ld").write_text(emit_description_ld(
+            propagated_all,
+            source_rom=rom_path.name,
+            reference_name=reference_name,
+            variant=language_id,
+            match_summary=match_summary,
+        ))
+        (out_dir / "omni.ld.stub").write_text(emit_omni_stub(flash_blocks, ram_globals))
+        (out_dir / "crc-region.toml").write_text(
+            emit_crc_region_toml(crc) if crc else "# CRC region not detected\n"
         )
-        click.echo(f"    Applied {n} label(s) to {rom_path.name} Ghidra project")
+        (out_dir / "flash-free.toml").write_text(emit_flash_free_toml(flash_blocks))
+        (out_dir / "ram-free.toml").write_text(emit_ram_free_toml(ram_blocks))
+
+        report = StringIO()
+        report.write("# rom-analyzer match report\n\n")
+        report.write(f"Source ROM: {rom_path.name}\n")
+        report.write(f"Reference:  {reference_name}\n")
+        report.write(f"Variant:    {language_id}\n\n")
+        report.write(f"## Summary\n- Matched functions: {match_summary}\n")
+        report.write(f"- Propagated data labels: {len(data_labels)}\n\n")
+        src_counts: dict[str, int] = {}
+        for m in matches:
+            src_counts[m.source] = src_counts.get(m.source, 0) + 1
+        if src_counts:
+            report.write("## Match sources\n")
+            for src, cnt in sorted(src_counts.items()):
+                report.write(f"- {src}: {cnt}\n")
+            report.write("\n")
+        if crc is not None:
+            report.write(f"## CRC region\n")
+            report.write(f"- Full mode:    [{crc.full_start:#x}, {crc.full_end:#x})\n")
+            report.write(f"- Partial mode: [{crc.partial_start:#x}, {crc.partial_end:#x})\n")
+        (out_dir / "match-report.md").write_text(report.getvalue())
+
+        click.echo(f"\nDone. Outputs in {out_dir}/")
+
+        if enrich_project:
+            click.echo(f"[+] Enriching Ghidra project with {len(propagated_all)} propagated symbols")
+            n = apply_labels(project, new_prog_name, propagated_all)
+            click.echo(f"    Applied {n} label(s) to {rom_path.name} Ghidra project")
+    finally:
+        project.close()
 
 
 if __name__ == "__main__":
