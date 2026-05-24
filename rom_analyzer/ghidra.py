@@ -236,6 +236,75 @@ def import_and_dump(
         )
 
 
+def fetch_instructions_at(
+    ghidra_home: Path,
+    project_dir: Path,
+    project_name: str,
+    input_path: Path,
+    language_id: str,
+    address: int,
+    max_instructions: int = 200,
+) -> list[dict] | None:
+    """Fetch instructions of the function at the given address from an existing project.
+
+    Opens with analyze=False (project must already exist from import_and_dump).
+    Returns None if no instructions are found at the address.
+    """
+    os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
+    java_home = _resolve_java_home()
+    if java_home:
+        os.environ.setdefault("JAVA_HOME", java_home)
+
+    import pyghidra
+    pyghidra.start()
+
+    prog_name = ghidriff_program_name(input_path)
+
+    with pyghidra.open_program(
+        binary_path=str(input_path),
+        project_location=str(project_dir),
+        project_name=project_name,
+        language=language_id,
+        loader="ghidra.app.util.opinion.BinaryLoader",
+        analyze=False,
+        program_name=prog_name,
+    ) as flat_api:
+        program = flat_api.getCurrentProgram()
+        listing = program.getListing()
+        func_mgr = program.getFunctionManager()
+        addr_factory = program.getAddressFactory()
+
+        addr = addr_factory.getDefaultAddressSpace().getAddress(address)
+        f = func_mgr.getFunctionContaining(addr)
+
+        if f is not None:
+            body = f.getBody()
+            instrs = []
+            for instr in listing.getInstructions(body, True):
+                mnem = str(instr.getMnemonicString())
+                operands = [
+                    str(instr.getDefaultOperandRepresentation(i))
+                    for i in range(instr.getNumOperands())
+                ]
+                instrs.append({"mnemonic": mnem, "operands": operands})
+            return instrs or None
+        else:
+            instrs_iter = listing.getInstructions(addr, True)
+            instrs = []
+            count = 0
+            for instr in instrs_iter:
+                if count >= max_instructions:
+                    break
+                mnem = str(instr.getMnemonicString())
+                operands = [
+                    str(instr.getDefaultOperandRepresentation(i))
+                    for i in range(instr.getNumOperands())
+                ]
+                instrs.append({"mnemonic": mnem, "operands": operands})
+                count += 1
+            return instrs or None
+
+
 def apply_symbols_to_project(
     ghidra_home: Path,
     project_dir: Path,

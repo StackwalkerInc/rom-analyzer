@@ -21,10 +21,10 @@ from rom_analyzer.emit_ld import (
     emit_ram_free_toml,
 )
 from rom_analyzer.flash_space import find_free_blocks
-from rom_analyzer.ghidra import apply_symbols_to_project, import_and_dump
+from rom_analyzer.ghidra import apply_symbols_to_project, fetch_instructions_at, import_and_dump
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_space import find_free_ram_blocks
-from rom_analyzer.types import MatchedFunction, PropagatedSymbol
+from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
 from rom_analyzer.xml_io import load_reference_symbols
 
 
@@ -262,17 +262,37 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
 
     # [6/7] Detect CRC, scan free space
     click.echo("[6/7] Detecting CRC, scanning free space")
-    if new_run.rom_crc_check_step:
-        instrs = [Instruction(i["mnemonic"], tuple(i["operands"]))
-                  for i in new_run.rom_crc_check_step["instructions"]]
+
+    # For self-diff the reference address equals the new-ROM address, so the
+    # pre-fetched new_run.rom_crc_check_step is correct.  For cross-ROM analysis
+    # crc_step_addr is the *reference* ROM's address (wrong for the target ROM);
+    # look up the matched address from VTSession/BFS and re-fetch instructions.
+    _crc_instrs_raw: list[dict] | None = None
+    if is_self_diff:
+        if new_run.rom_crc_check_step:
+            _crc_instrs_raw = new_run.rom_crc_check_step["instructions"]
+        else:
+            click.echo("   warning: rom_crc_check_step not located in new ROM")
+    else:
+        crc_match = next((m for m in matches if m.ref_name == "rom_crc_check_step"), None)
+        if crc_match is not None:
+            click.echo(f"   fetching rom_crc_check_step at matched address {crc_match.new_address:#x}")
+            _crc_instrs_raw = fetch_instructions_at(
+                ghidra_home, project_dir, project_name,
+                rom_path, language_id, crc_match.new_address,
+            )
+            if _crc_instrs_raw is None:
+                click.echo("   warning: no instructions found at matched rom_crc_check_step address")
+        else:
+            click.echo("   warning: rom_crc_check_step not in VTSession/BFS matches; CRC detection skipped")
+
+    crc: CrcRegion | None = None
+    if _crc_instrs_raw is not None:
+        instrs = [Instruction(i["mnemonic"], tuple(i["operands"])) for i in _crc_instrs_raw]
         try:
             crc = extract_crc_region(instrs)
         except Exception as e:
             click.echo(f"   warning: CRC extraction failed: {e}")
-            crc = None
-    else:
-        click.echo("   warning: rom_crc_check_step not located in new ROM")
-        crc = None
 
     flash_blocks = find_free_blocks(rom_bytes, crc, min_length=min_flash_block) if crc else []
     ram_blocks = find_free_ram_blocks(new_ram_refs, min_length=min_ram_block)
