@@ -1,3 +1,5 @@
+import pytest
+
 from rom_analyzer.data_refs import DataRef, DataRefType, propagate_data_labels
 from rom_analyzer.types import MatchedFunction, ReferenceSymbol
 
@@ -20,6 +22,8 @@ def test_propagate_data_labels_exact_offset_match():
     assert result[0].new_address == 0x5678
     assert result[0].confidence == "high"
     assert result[0].category == "data"
+    assert result[0].source == "data_refs"
+    assert result[0].score == pytest.approx(1.0)
 
 
 def test_propagate_data_labels_sliding_window():
@@ -31,6 +35,7 @@ def test_propagate_data_labels_sliding_window():
     assert len(result) == 1
     assert result[0].name == "flash_y"
     assert result[0].new_address == 0x5678
+    assert result[0].source == "data_refs"
 
 
 def test_propagate_data_labels_skips_outside_window():

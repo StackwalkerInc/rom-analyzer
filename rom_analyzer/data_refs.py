@@ -81,6 +81,8 @@ def propagate_data_labels(
             new_address=new_addr,
             category="data",
             confidence=final_tier,
+            source="data_refs",
+            score=1.0,
         ))
 
     return results
