@@ -1,148 +1,136 @@
-"""ghidriff integration via in-process Python API.
+"""Cross-ROM function matching via Ghidra VTSessionDB.
 
-Strategy: import_and_dump saves programs under {filename}-{sha1[:6]} in the
-PyGhidra project. When run_ghidriff is called, it opens the SAME project using
-ghidriff's Python API (JVM already running; ghidriff's launcher is a no-op) and
-finds the pre-imported M32R programs by name. This avoids re-import and preserves
-the correct language + symbol overlay applied during import.
+Both programs must have been imported into the Ghidra project by
+import_and_dump before calling run_vt_diff. This function opens them by
+name from the project's DomainFolder, creates an ephemeral VTSession, runs
+four standard VT correlators in priority order, and returns matched pairs.
 
-Project path note: ghidriff's setup_project() appends project_name to the passed
-location itself, so we pass project_dir directly. The final openProject path is
-project_dir/project_name/project_name.gpr.
-
-Requires RcusStackwalker/ghidriff (fork of clearbluejar/ghidriff) which fixes
-Python 3.14 compatibility and handles launcher._layout=None gracefully when the
-JVM was already started by import_and_dump.
+The VTSession file is written into the project folder as a secondary artifact;
+it is deleted and recreated on each run so callers always get a fresh diff.
 """
 
-import tempfile
-from argparse import Namespace
 from pathlib import Path
 
 from rom_analyzer.ghidra import _resolve_java_home, ghidriff_program_name
 from rom_analyzer.types import MatchedFunction
 
 
-def run_ghidriff(
+def run_vt_diff(
     ghidra_home: Path,
     project_dir: Path,
     project_name: str,
     reference_path: Path,
     new_path: Path,
-    engine: str = "VersionTrackingDiff",
+    language_id: str = "m32r:2:fp8000",
 ) -> list[MatchedFunction]:
-    """Diff two already-imported programs via ghidriff's Python API.
+    """Diff two pre-imported programs via Ghidra VTSessionDB.
 
-    Both ROMs must have been imported into the project via import_and_dump first.
-    ghidriff finds them by {filename}-{sha1[:6]} key in the project.
+    Both ROMs must have been imported into the project via import_and_dump
+    first. Programs are located by ghidriff_program_name() key in the project.
     """
     import os
-    from ghidriff import SimpleDiff, VersionTrackingDiff
+
+    import pyghidra
+    from ghidra.feature.versiontracking.db import VTSessionDB
+    from ghidra.util.task import ConsoleTaskMonitor
 
     os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
     java_home = _resolve_java_home()
     if java_home:
         os.environ.setdefault("JAVA_HOME", java_home)
 
-    DiffEngine = {"VersionTrackingDiff": VersionTrackingDiff, "SimpleDiff": SimpleDiff}[engine]
+    monitor = ConsoleTaskMonitor()
+    ref_name = ghidriff_program_name(reference_path)
+    new_name = ghidriff_program_name(new_path)
+    session_name = f"{ref_name}-vs-{new_name}"
 
-    # ghidriff.setup_project appends project_name itself (line 474 in ghidra_diff_engine.py),
-    # so pass project_dir directly — the final openProject path is project_dir/project_name/
-    actual_project_location = project_dir
+    with pyghidra.open_program(
+        binary_path=str(reference_path),
+        project_location=str(project_dir),
+        project_name=project_name,
+        language=language_id,
+        loader="ghidra.app.util.opinion.BinaryLoader",
+        analyze=False,
+        program_name=ref_name,
+    ) as ref_api:
+        ref_prog = ref_api.getCurrentProgram()
+        folder = ref_prog.getDomainFile().getParent()
 
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_path = Path(tmp)
-        symbols_path = tmp_path / "symbols"
-        gzfs_path = tmp_path / "gzfs"
-        symbols_path.mkdir()
-        gzfs_path.mkdir()
+        # Delete stale session from a prior run, if present.
+        old = folder.getFile(session_name)
+        if old is not None:
+            old.delete()
 
-        d = DiffEngine(
-            args=Namespace(),
-            verbose=False,
-            threaded=True,
-            max_ram_percent=50.0,
-            force_analysis=False,
-            force_diff=True,
-            verbose_analysis=False,
-            no_symbols=True,
-            engine_log_path=None,
-            engine_log_level="WARNING",
-            engine_file_log_level="WARNING",
-            min_func_len=10,
-            use_calling_counts=False,
-            bsim=False,
-            bsim_full=False,
-            gdts=None,
-            base_address=None,
-            program_options=None,
-        )
-
-        d.setup_project(
-            [reference_path, new_path],
-            actual_project_location,
-            project_name,
-            symbols_path,
-            gzfs_path,
-        )
-        d.analyze_project(force_analysis=False)
-        pdiff = d.diff_bins(reference_path, new_path)
-
-        # ghidriff leaves self.project open; close it so apply_symbols_to_project
-        # can re-open the same project without hitting a lock error.
-        if d.project is not None:
-            d.project.close()
-            d.project = None
-
-    return _matches_from_payload(pdiff)
+        new_file = folder.getFile(new_name)
+        if new_file is None:
+            raise FileNotFoundError(
+                f"Program '{new_name}' not found in project '{project_name}'. "
+                "Import the new ROM via import_and_dump before calling run_vt_diff."
+            )
+        new_prog = new_file.getDomainObject(None, False, False, monitor)
+        try:
+            session = VTSessionDB.createNewSession(
+                session_name, ref_prog, new_prog, folder, monitor
+            )
+            try:
+                _run_vt_correlators(session, monitor)
+                return _matches_from_vtsession(session)
+            finally:
+                session.release(None)
+        finally:
+            new_prog.release(None)
 
 
-def _parse_addr(s: str) -> int:
-    return int(s.strip(), 16)
+def _run_vt_correlators(session, monitor) -> None:
+    """Run the four standard VT correlator factories against the session."""
+    from ghidra.feature.versiontracking.correlators import (
+        ExactMatchFunctionBytesCorrelatorFactory,
+        ExactMatchFunctionHasherProgramCorrelatorFactory,
+        ExactMatchInstructionsProgramCorrelatorFactory,
+        ExactMatchMnemonicsProgramCorrelatorFactory,
+    )
+
+    factories = [
+        ExactMatchFunctionBytesCorrelatorFactory(),
+        ExactMatchFunctionHasherProgramCorrelatorFactory(),
+        ExactMatchInstructionsProgramCorrelatorFactory(),
+        ExactMatchMnemonicsProgramCorrelatorFactory(),
+    ]
+    for factory in factories:
+        options = factory.createDefaultOptions()
+        correlator = factory.createCorrelator(session, options)
+        correlator.correlate(monitor)
 
 
-def _matches_from_payload(payload: dict) -> list[MatchedFunction]:
-    """Parse ghidriff's pdiff dict into MatchedFunction list.
+def _matches_from_vtsession(session) -> list[MatchedFunction]:
+    """Extract MatchedFunction list from all VTMatchSets in the session.
 
-    Primary source: pdiff["functions"]["modified"] — gives ref_name, ref_addr,
-    new_addr, ratio (similarity score).
-
-    Secondary source: pdiff["matches"]["address_matches"] — all matched pairs
-    including unchanged functions (not in "modified"). Unchanged → similarity=1.0.
+    When multiple correlators match the same ref address, keeps the entry
+    with the highest similarity score.
     """
-    results: list[MatchedFunction] = []
-    modified_ref_addrs: set[int] = set()
+    best: dict[int, MatchedFunction] = {}
 
-    for entry in payload.get("functions", {}).get("modified", []):
-        old = entry.get("old", {})
-        new = entry.get("new", {})
-        ratio = float(entry.get("ratio", 0.0))
-        ref_addr_str = old.get("address", "")
-        new_addr_str = new.get("address", "")
-        if not ref_addr_str or not new_addr_str:
-            continue
-        ref_addr = _parse_addr(ref_addr_str)
-        new_addr = _parse_addr(new_addr_str)
-        results.append(MatchedFunction(
-            ref_name=str(old.get("name", "")),
-            ref_address=ref_addr,
-            new_address=new_addr,
-            similarity=ratio,
-        ))
-        modified_ref_addrs.add(ref_addr)
+    for match_set in session.getMatchSets():
+        for match in match_set.getMatches():
+            assoc = match.getAssociation()
+            ref_addr = assoc.getSourceAddress().getOffset()
+            new_addr = assoc.getDestinationAddress().getOffset()
+            score = float(match.getSimilarityScore().getScore())
+            name = _func_name_at(session.getSourceProgram(), assoc.getSourceAddress())
+            existing = best.get(ref_addr)
+            if existing is None or score > existing.similarity:
+                best[ref_addr] = MatchedFunction(
+                    ref_name=name,
+                    ref_address=ref_addr,
+                    new_address=new_addr,
+                    similarity=score,
+                    source="vt_diff",
+                )
 
-    for ref_addr_str, new_list in payload.get("matches", {}).get("address_matches", {}).items():
-        ref_addr = _parse_addr(ref_addr_str)
-        if ref_addr in modified_ref_addrs:
-            continue
-        if not new_list:
-            continue
-        new_addr_str = new_list[0][0]
-        results.append(MatchedFunction(
-            ref_name="",  # name not available in address_matches payload
-            ref_address=ref_addr,
-            new_address=_parse_addr(new_addr_str),
-            similarity=1.0,
-        ))
+    return list(best.values())
 
-    return results
+
+def _func_name_at(program, addr) -> str:
+    """Return the function name at addr in program, or '' if no function there."""
+    func = program.getFunctionManager().getFunctionAt(addr)
+    return func.getName() if func is not None else ""
