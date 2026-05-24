@@ -39,6 +39,7 @@ def run_vt_diff(
     if java_home:
         os.environ.setdefault("JAVA_HOME", java_home)
 
+    pyghidra.start()
     monitor = ConsoleTaskMonitor()
     ref_name = ghidriff_program_name(reference_path)
     new_name = ghidriff_program_name(new_path)
