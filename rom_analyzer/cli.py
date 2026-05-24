@@ -70,9 +70,11 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               help="Delete and recreate the Ghidra project dir before starting (forces fresh analysis)")
 @click.option("--enrich-project", is_flag=True, default=False,
               help="Apply propagated symbols back into the Ghidra project for the new ROM")
+@click.option("--inline-source-annotations", is_flag=True, default=False,
+              help="Write heuristic source as a pre-comment at each labeled address")
 def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
-         reference_name, clean_project, enrich_project):
+         reference_name, clean_project, enrich_project, inline_source_annotations):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -172,17 +174,20 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                         seen_bfs.add(s.address)
                         unique_bfs.append(s)
                 bfs_propagated = [
-                    PropagatedSymbol(s.name, 0, s.address, s.category, "medium")
+                    PropagatedSymbol(s.name, 0, s.address, s.category, "medium",
+                                     source="callgraph_bfs", score=1.0)
                     for s in unique_bfs
                 ]
-                apply_labels(project, new_prog_name, bfs_propagated)
+                apply_labels(project, new_prog_name, bfs_propagated,
+                             add_comments=inline_source_annotations)
 
         # [4/7] Diff (identity or VTSession)
         if is_self_diff:
             click.echo(f"[4/7] Self-diff detected; using identity matches")
             matches = [
                 MatchedFunction(ref_name=s.name, ref_address=s.address,
-                                new_address=s.address, similarity=1.0)
+                                new_address=s.address, similarity=1.0,
+                                source="identity")
                 for s in ref_symbols if s.category == "function"
             ]
         elif ref_run is None:
@@ -246,7 +251,8 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         # RAM ref tracking would be required — that is not yet implemented.
         if is_self_diff:
             ram_globals = [
-                PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high")
+                PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high",
+                                 source="ram_global", score=1.0)
                 for s in ref_symbols
                 if s.category == "ram_global" and s.address in new_ram_refs
             ]
@@ -260,7 +266,8 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             click.echo(f"   data labels propagated: {len(data_labels)}")
         elif is_self_diff:
             data_labels = [
-                PropagatedSymbol(s.name, s.address, s.address, "data", "high")
+                PropagatedSymbol(s.name, s.address, s.address, "data", "high",
+                                 source="identity", score=1.0)
                 for s in ref_symbols if s.category == "data"
             ]
         else:
@@ -345,7 +352,8 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
 
         if enrich_project:
             click.echo(f"[+] Enriching Ghidra project with {len(propagated_all)} propagated symbols")
-            n = apply_labels(project, new_prog_name, propagated_all)
+            n = apply_labels(project, new_prog_name, propagated_all,
+                             add_comments=inline_source_annotations)
             click.echo(f"    Applied {n} label(s) to {rom_path.name} Ghidra project")
     finally:
         project.close()
