@@ -299,6 +299,9 @@ def apply_labels(
     project,
     prog_name: str,
     symbols: list[PropagatedSymbol],
+    *,
+    add_bookmarks: bool = True,
+    add_comments: bool = False,
 ) -> int:
     """Apply propagated symbols to an already-imported program.
 
@@ -307,9 +310,12 @@ def apply_labels(
     import pyghidra
     from ghidra.program.model.symbol import SourceType
     from ghidra.program.flatapi import FlatProgramAPI
+    from ghidra.program.model.listing import CodeUnit
 
     with pyghidra.program_context(project, f"/{prog_name}") as program:
         count = 0
+        listing = program.getListing()
+        bookmark_mgr = program.getBookmarkManager()
         with pyghidra.transaction(program, "Apply labels"):
             flat = FlatProgramAPI(program)
             for s in symbols:
@@ -326,5 +332,44 @@ def apply_labels(
                         flat.createFunction(addr, s.name)
                     except Exception:
                         pass
+                if s.source:
+                    annotation = (
+                        f"rom-analyzer: source={s.source}"
+                        f" score={s.score:.2f}"
+                        f" confidence={s.confidence}"
+                    )
+                    if add_bookmarks:
+                        try:
+                            bookmark_mgr.setBookmark(
+                                addr, "Analysis", "rom-analyzer", annotation
+                            )
+                        except Exception:
+                            pass
+                    if add_comments:
+                        try:
+                            existing = listing.getComment(
+                                addr, CodeUnit.PRE_COMMENT
+                            )
+                            if existing is None:
+                                listing.setComment(
+                                    addr, CodeUnit.PRE_COMMENT, annotation
+                                )
+                            elif "rom-analyzer:" in existing:
+                                lines = existing.split("\n")
+                                new_lines = [
+                                    annotation if "rom-analyzer:" in ln else ln
+                                    for ln in lines
+                                ]
+                                listing.setComment(
+                                    addr, CodeUnit.PRE_COMMENT,
+                                    "\n".join(new_lines),
+                                )
+                            else:
+                                listing.setComment(
+                                    addr, CodeUnit.PRE_COMMENT,
+                                    existing + "\n" + annotation,
+                                )
+                        except Exception:
+                            pass
         program.save("Apply labels", pyghidra.task_monitor())
         return count
