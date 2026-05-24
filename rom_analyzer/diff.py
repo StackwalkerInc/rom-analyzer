@@ -31,7 +31,7 @@ def run_vt_diff(
     import os
 
     import pyghidra
-    from ghidra.feature.versiontracking.db import VTSessionDB
+    from ghidra.feature.vt.api.db import VTSessionDB
     from ghidra.util.task import ConsoleTaskMonitor
 
     os.environ.setdefault("GHIDRA_INSTALL_DIR", str(ghidra_home))
@@ -70,9 +70,7 @@ def run_vt_diff(
             )
         new_prog = new_file.getDomainObject(None, False, False, monitor)
         try:
-            session = VTSessionDB.createNewSession(
-                session_name, ref_prog, new_prog, folder, monitor
-            )
+            session = VTSessionDB(session_name, ref_prog, new_prog, None)
             try:
                 _run_vt_correlators(session, monitor)
                 return _matches_from_vtsession(session)
@@ -83,24 +81,42 @@ def run_vt_diff(
 
 
 def _run_vt_correlators(session, monitor) -> None:
-    """Run the four standard VT correlator factories against the session."""
-    from ghidra.feature.versiontracking.correlators import (
-        ExactMatchFunctionBytesCorrelatorFactory,
-        ExactMatchFunctionHasherProgramCorrelatorFactory,
+    """Run three standard VT correlator factories against the session.
+
+    Uses ExactMatchBytesProgramCorrelatorFactory,
+    ExactMatchInstructionsProgramCorrelatorFactory, and
+    ExactMatchMnemonicsProgramCorrelatorFactory (the exact-match trio).
+    FunctionReferenceProgramCorrelatorFactory is included as a fourth pass
+    to catch functions matched only by call-graph structure.
+
+    createCorrelator signature (from javap):
+        createCorrelator(Program src, AddressSetView srcSet,
+                         Program dst, AddressSetView dstSet, VTOptions)
+    correlate signature:
+        correlate(VTSession, TaskMonitor)
+    """
+    from ghidra.feature.vt.api.correlator.program import (
+        ExactMatchBytesProgramCorrelatorFactory,
         ExactMatchInstructionsProgramCorrelatorFactory,
         ExactMatchMnemonicsProgramCorrelatorFactory,
+        FunctionReferenceProgramCorrelatorFactory,
     )
 
+    src_prog = session.getSourceProgram()
+    dst_prog = session.getDestinationProgram()
+    src_set = src_prog.getMemory()
+    dst_set = dst_prog.getMemory()
+
     factories = [
-        ExactMatchFunctionBytesCorrelatorFactory(),
-        ExactMatchFunctionHasherProgramCorrelatorFactory(),
+        ExactMatchBytesProgramCorrelatorFactory(),
         ExactMatchInstructionsProgramCorrelatorFactory(),
         ExactMatchMnemonicsProgramCorrelatorFactory(),
+        FunctionReferenceProgramCorrelatorFactory(),
     ]
     for factory in factories:
         options = factory.createDefaultOptions()
-        correlator = factory.createCorrelator(session, options)
-        correlator.correlate(monitor)
+        correlator = factory.createCorrelator(src_prog, src_set, dst_prog, dst_set, options)
+        correlator.correlate(session, monitor)
 
 
 def _matches_from_vtsession(session) -> list[MatchedFunction]:
