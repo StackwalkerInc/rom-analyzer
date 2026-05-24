@@ -75,7 +75,6 @@ GHIDRA_HOME="$GHIDRA_HOME" \
     --project-dir "$PROJECT_DIR" \
     --project-name "$PROJECT_NAME" \
     --out "$OUT_DIR" \
-    --diff-engine SimpleDiff \
     --enrich-project \
     "${CLEAN_FLAG[@]}"
 

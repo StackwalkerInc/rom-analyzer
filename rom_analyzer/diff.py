@@ -63,16 +63,17 @@ def run_vt_diff(
                 f"Program '{new_name}' not found in project '{project_name}'. "
                 "Import the new ROM via import_and_dump before calling run_vt_diff."
             )
-        new_prog = new_file.getDomainObject(None, False, False, monitor)
+        consumer = "rom-analyzer-vt"
+        new_prog = new_file.getDomainObject(consumer, False, False, monitor)
         try:
-            session = VTSessionDB(session_name, ref_prog, new_prog, None)
+            session = VTSessionDB(session_name, ref_prog, new_prog, consumer)
             try:
                 _run_vt_correlators(session, monitor)
                 return _matches_from_vtsession(session)
             finally:
-                session.release(None)
+                session.release(consumer)
         finally:
-            new_prog.release(None)
+            new_prog.release(consumer)
 
 
 def _run_vt_correlators(session, monitor) -> None:
@@ -108,10 +109,18 @@ def _run_vt_correlators(session, monitor) -> None:
         ExactMatchMnemonicsProgramCorrelatorFactory(),
         FunctionReferenceProgramCorrelatorFactory(),
     ]
-    for factory in factories:
-        options = factory.createDefaultOptions()
-        correlator = factory.createCorrelator(src_prog, src_set, dst_prog, dst_set, options)
-        correlator.correlate(session, monitor)
+    tx_id = session.startTransaction("VT correlate")
+    ok = False
+    try:
+        session.setEventsEnabled(False)
+        for factory in factories:
+            options = factory.createDefaultOptions()
+            correlator = factory.createCorrelator(src_prog, src_set, dst_prog, dst_set, options)
+            correlator.correlate(session, monitor)
+        ok = True
+    finally:
+        session.setEventsEnabled(True)
+        session.endTransaction(tx_id, ok)
 
 
 def _matches_from_vtsession(session) -> list[MatchedFunction]:
