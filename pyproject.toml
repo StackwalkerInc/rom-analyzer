@@ -26,7 +26,7 @@ rom-analyzer = "rom_analyzer.cli:main"
 
 [tool.pytest.ini_options]
 markers = [
-    "e2e: end-to-end test requiring Ghidra + ghidriff in environment",
+    "e2e: end-to-end test requiring Ghidra in environment",
 ]
 addopts = "-m 'not e2e'"
 
