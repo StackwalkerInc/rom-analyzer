@@ -54,6 +54,8 @@ def propagate_function_labels(
                 new_address=m.new_address,
                 category="function",
                 confidence=tier,
+                source=m.source,
+                score=m.similarity,
             )
         )
     return out

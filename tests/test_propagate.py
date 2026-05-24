@@ -1,3 +1,5 @@
+import pytest
+
 from rom_analyzer.propagate import propagate_function_labels, tier_for_score
 from rom_analyzer.types import MatchedFunction, PropagatedSymbol, ReferenceSymbol
 
@@ -25,6 +27,7 @@ def test_propagate_function_labels_only_emits_for_function_symbols():
         PropagatedSymbol(
             name="adc_run", ref_address=0x1533c, new_address=0x15400,
             category="function", confidence="high",
+            source="vt_diff", score=0.97,
         )
     ]
 
@@ -41,3 +44,5 @@ def test_propagate_function_labels_includes_low_confidence_when_forced():
     out = propagate_function_labels(ref_symbols, matches, force=True)
     assert len(out) == 1
     assert out[0].confidence == "low"
+    assert out[0].source == "vt_diff"
+    assert out[0].score == pytest.approx(0.55)
