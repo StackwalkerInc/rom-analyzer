@@ -1,10 +1,10 @@
-"""Call-graph-driven function matching to supplement ghidriff.
+"""Call-graph-driven function matching to supplement VTSession diff.
 
 Four phases:
   bootstrap_anchors      – anchor pairs via full vector table + MUT table
   bfs_preseed            – BFS from anchors; produces overlays for the new ROM
-                           before ghidriff runs, improving named-match output
-  gap_fill               – iteratively fills ghidriff misses using structural position
+                           before VT diff runs, improving named-match output
+  gap_fill               – iteratively fills VT diff misses using structural position
   bytecode_identity_match – exact-bytecode hash match for small/unchanged functions
 """
 
@@ -408,8 +408,8 @@ def bfs_preseed(anchors: list[MatchedFunction],
 
     Returns:
         new_overlays – ReferenceSymbol list to apply to new ROM's Ghidra project
-                       before ghidriff runs (improves named-match output)
-        new_matches  – MatchedFunction list to merge with ghidriff's output
+                       before VT diff runs (improves named-match output)
+        new_matches  – MatchedFunction list to merge with VT diff output
     """
     queue: deque[tuple[int, int, int]] = deque(
         (a.ref_address, a.new_address, 0) for a in anchors

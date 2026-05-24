@@ -1,13 +1,13 @@
 # rom-analyzer
 
-M32R ROM analyzer: headless Ghidra + ghidriff producing linker fragments for mmc-patches.
+M32R ROM analyzer: headless Ghidra (PyGhidra) producing linker fragments for mmc-patches.
 
 ## What it does
 
 Given a stock M32R ECU ROM (e.g., a Z27AG variant), `rom-analyzer`:
 
 1. Imports the ROM into a headless Ghidra project using the `m32r:BE:32:fp8000:default` SLEIGH variant (or the default `m32r` variant for Evo X-class ROMs).
-2. Diffs against the reference 33520003 (Z27AG_JDM_5MT_1860B104) Ghidra XML via ghidriff.
+2. Diffs against the reference 33520003 (Z27AG_JDM_5MT_1860B104) Ghidra XML via Ghidra VTSessionDB.
 3. Propagates function labels and RAM globals to the new ROM's addresses.
 4. Locates `rom_crc_check_step` and extracts the protected flash range.
 5. Scans for unused flash (0xFF runs) and classifies by CRC band.
@@ -52,7 +52,7 @@ docker run --rm -v "$PWD":/host ghcr.io/rcusstackwalker/rom-analyzer:latest \
 
 - Pure-Python analyzers (`xml_io`, `propagate`, `crc`, `flash_space`, `ram_space`, `emit_ld`) under `rom_analyzer/`. Unit-tested in CI without Ghidra.
 - Ghidra integration via `analyzeHeadless` subprocess (`rom_analyzer/ghidra.py`) and Jython post-script (`rom_analyzer/scripts/dump_references.py`) that dumps symbols + functions + RAM refs + `rom_crc_check_step` disassembly as JSON.
-- Function matching via `ghidriff` CLI invocation (`rom_analyzer/diff.py`).
+- Cross-ROM function matching via Ghidra's native `VTSessionDB` API (`rom_analyzer/diff.py`), plus callgraph-bootstrap/BFS/identity layers.
 - The reference 33520003 Ghidra XML is vendored at `reference/33520003.xml`. The matching ROM is user-supplied at `roms/` (gitignored). End-to-end self-diff test asserts goldens match byte-for-byte; runs locally via `scripts/run-e2e.sh`.
 
 ## Companion repos

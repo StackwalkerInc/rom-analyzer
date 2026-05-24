@@ -2,11 +2,11 @@
 
 Both programs must have been imported into the Ghidra project by
 import_and_dump before calling run_vt_diff. This function opens them by
-name from the project's DomainFolder, creates an ephemeral VTSession, runs
+name from the project's DomainFolder, creates an in-memory VTSession, runs
 four standard VT correlators in priority order, and returns matched pairs.
 
-The VTSession file is written into the project folder as a secondary artifact;
-it is deleted and recreated on each run so callers always get a fresh diff.
+The VTSession is in-memory only (VTSessionDB constructor uses DBHandle with
+no backing file) and is released when run_vt_diff returns.
 """
 
 from pathlib import Path
@@ -57,11 +57,6 @@ def run_vt_diff(
         ref_prog = ref_api.getCurrentProgram()
         folder = ref_prog.getDomainFile().getParent()
 
-        # Delete stale session from a prior run, if present.
-        old = folder.getFile(session_name)
-        if old is not None:
-            old.delete()
-
         new_file = folder.getFile(new_name)
         if new_file is None:
             raise FileNotFoundError(
@@ -81,7 +76,7 @@ def run_vt_diff(
 
 
 def _run_vt_correlators(session, monitor) -> None:
-    """Run three standard VT correlator factories against the session.
+    """Run four standard VT correlator factories against the session.
 
     Uses ExactMatchBytesProgramCorrelatorFactory,
     ExactMatchInstructionsProgramCorrelatorFactory, and

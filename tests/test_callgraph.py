@@ -533,7 +533,7 @@ def test_gap_fill_basic():
     )
     existing = [
         MatchedFunction("main", 0x100, 0x100, 1.0, "vector_table"),
-        MatchedFunction("init_hw", 0x200, 0x200, 0.9, "ghidriff"),
+        MatchedFunction("init_hw", 0x200, 0x200, 0.9, "vt_diff"),
         # 0x300 not matched yet
     ]
     results = gap_fill(ref_run, new_run, existing)
@@ -582,9 +582,9 @@ def test_gap_fill_no_double_match():
     )
     existing = [
         MatchedFunction("main", 0x100, 0x100, 1.0, "vector_table"),
-        MatchedFunction("init_hw", 0x200, 0x200, 1.0, "ghidriff"),
+        MatchedFunction("init_hw", 0x200, 0x200, 1.0, "vt_diff"),
         # 0x300 already occupies new_address=0x300 by another ref
-        MatchedFunction("other", 0x999, 0x300, 1.0, "ghidriff"),
+        MatchedFunction("other", 0x999, 0x300, 1.0, "vt_diff"),
     ]
     results = gap_fill(ref_run, new_run, existing)
     # ref 0x300 should not be matched to new 0x300 (already taken)
@@ -769,7 +769,7 @@ def test_bytecode_identity_skips_already_matched():
     ref_run = _make_run([0x1000, 0x1000 + len(body)])
     new_run = _make_run([0x2000, 0x2000 + len(body)])
 
-    existing = [MatchedFunction("my_func", 0x1000, 0x2000, 0.9, "ghidriff")]
+    existing = [MatchedFunction("my_func", 0x1000, 0x2000, 0.9, "vt_diff")]
     results = bytecode_identity_match(ref_bytes, new_bytes, ref_run, new_run, existing, {})
     assert results == []
 

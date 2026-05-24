@@ -74,8 +74,8 @@ def _ordered_callees(func, ref_mgr, func_mgr) -> list[int]:
 def _overlay_symbols(flat_api, ref_symbols: list[ReferenceSymbol]) -> None:
     """Apply enriched reference symbols to an already-imported program.
 
-    Uses flat_api.createLabel and flat_api.createFunction so ghidriff (which
-    reuses this program) sees named functions and can produce named matches.
+    Uses flat_api.createLabel and flat_api.createFunction so VTSessionDB
+    sees named functions and can produce named matches.
     """
     from ghidra.program.model.symbol import SourceType
 
@@ -202,8 +202,8 @@ def import_and_dump(
 ) -> HeadlessRun:
     """Import a raw-binary ROM via PyGhidra with explicit language, analyze, and dump.
 
-    Programs are saved under {filename}-{sha1[:6]} so ghidriff's in-process API
-    can find and reuse them when pointed at the same project directory.
+    Programs are saved under {filename}-{sha1[:6]} so run_vt_diff can locate them
+    by name in the project's DomainFolder.
     """
     project_dir.mkdir(parents=True, exist_ok=True)
 
@@ -246,7 +246,7 @@ def apply_symbols_to_project(
 ) -> int:
     """Apply propagated symbols to an already-imported Ghidra program.
 
-    Opens the existing program by ghidriff_program_name (analyze=False — already done)
+    Opens the existing program by program_name_for_project (analyze=False — already done)
     and applies createLabel / createFunction for each PropagatedSymbol.
     Returns the number of labels successfully applied.
     """

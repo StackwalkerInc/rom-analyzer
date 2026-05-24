@@ -1,4 +1,4 @@
-"""Propagate symbols from a reference Ghidra DB to a new ROM via ghidriff matches.
+"""Propagate symbols from a reference Ghidra DB to a new ROM via VT diff matches.
 
 v1 handles function-entry labels only. Data label and RAM global propagation
 require Ghidra disassembly context and is handled at integration time in cli.py.
