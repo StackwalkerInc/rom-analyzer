@@ -1,7 +1,13 @@
 from dataclasses import dataclass
+from enum import Enum
 
 from rom_analyzer.propagate import tier_for_score
 from rom_analyzer.types import ConfidenceTier, MatchedFunction, PropagatedSymbol, ReferenceSymbol
+
+
+class DataRefType(Enum):
+    READ = "read"      # genuine memory read: LDUH @fp(sym), LD @Rsrc, etc.
+    SCALAR = "scalar"  # Ghidra scalar/computed ref: LDI Rd, #imm treated as addr
 
 
 @dataclass(frozen=True)
@@ -9,6 +15,7 @@ class DataRef:
     instruction_offset: int
     referenced_address: int
     label: str | None = None
+    ref_type: DataRefType = DataRefType.READ
 
 
 def propagate_data_labels(
@@ -51,6 +58,14 @@ def propagate_data_labels(
                         break
             if match is None:
                 continue
+            # Skip scalar/computed references in the new ROM.  Ghidra marks
+            # LDI Rd, #imm instructions with a scalar reference to the immediate
+            # value when it falls in the ROM address space — even though the
+            # instruction loads a constant, not a flash-table pointer.  Propagating
+            # a label here makes Ghidra display the symbol name on the LDI operand,
+            # which is misleading (the operand is a value, not an address dereference).
+            if match.ref_type == DataRefType.SCALAR:
+                continue
 
             proposals.setdefault(sym.name, []).append((match.referenced_address, tier))
 
@@ -85,12 +100,15 @@ def collect_data_refs_within(program, function) -> list[DataRef]:
         instr_addr = instr.getAddress()
         instr_offset = int(instr_addr.getOffset()) - entry_offset
         for ref in ref_mgr.getReferencesFrom(instr_addr):
-            # Only propagate genuine data loads/stores (e.g. LDUH @fp(sym)).
-            # Call and flow references (BL, BRA) are excluded: using call targets
-            # as data-label anchors maps Z27AG function symbols onto whatever the
-            # outlander calls at the same instruction offset, producing wrong labels.
-            if not ref.getReferenceType().isData():
+            # Collect both genuine data reads (LDUH @fp(sym)) and scalar/computed
+            # references that Ghidra auto-generates for LDI Rd, #imm when the
+            # immediate falls within a valid ROM address range.  Call and flow
+            # references (BL, BRA) are excluded: they are not data references.
+            rt = ref.getReferenceType()
+            if not rt.isData():
                 continue
+            # Tag refs so propagate_data_labels can reject scalar matches.
+            ref_type = DataRefType.READ if rt.isRead() else DataRefType.SCALAR
             target = ref.getToAddress()
             if target is None:
                 continue
@@ -105,5 +123,6 @@ def collect_data_refs_within(program, function) -> list[DataRef]:
                 instruction_offset=instr_offset,
                 referenced_address=target_offset,
                 label=label,
+                ref_type=ref_type,
             ))
     return results

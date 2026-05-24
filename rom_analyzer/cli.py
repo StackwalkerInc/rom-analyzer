@@ -197,11 +197,10 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         matches = all_matches + identity_matches
 
     # Source priority — used in both dedup passes.
-    # Synthetic structural matches (vector_table, mut_table) override bytecode
-    # comparison matches because they are based on ROM-level invariants (e.g.
-    # the reset vector always points to reset_interrupt_handler which always
-    # calls main).  Within a tier, higher similarity wins.
-    SOURCE_PRIORITY = {"vector_table": 3, "bytecode_identity": 2, "mut_table": 2,
+    # Structural ROM-invariant sources (vector_table, icu_vector_table, mut_table)
+    # override bytecode-comparison matches.  Within a tier, higher similarity wins.
+    SOURCE_PRIORITY = {"vector_table": 3, "icu_vector_table": 3,
+                       "bytecode_identity": 2, "mut_table": 2,
                        "callgraph_bfs": 1, "callgraph_gap": 1, "vt_diff": 0}
     def _match_rank(m: MatchedFunction) -> tuple:
         return (SOURCE_PRIORITY.get(m.source, 0), m.similarity)
@@ -232,11 +231,19 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     propagated_fns = propagate_function_labels(ref_symbols, matches)
 
     new_ram_refs = set(new_run.ram_refs)
-    ram_globals = [
-        PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high")
-        for s in ref_symbols
-        if s.category == "ram_global" and s.address in new_ram_refs
-    ]
+    # Ram-global propagation by absolute address is only valid for same-ECU ROMs
+    # (identical RAM layout).  Cross-family analysis (e.g. Z27AG vs Outlander)
+    # must not copy reference RAM labels: a given fp-offset may hold a completely
+    # different variable in the target ECU.  For cross-ROM analysis, per-function
+    # RAM ref tracking would be required — that is not yet implemented.
+    if is_self_diff:
+        ram_globals = [
+            PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high")
+            for s in ref_symbols
+            if s.category == "ram_global" and s.address in new_ram_refs
+        ]
+    else:
+        ram_globals = []
 
     if not is_self_diff and ref_run is not None and ref_run.data_refs and new_run.data_refs:
         data_labels = propagate_data_labels(

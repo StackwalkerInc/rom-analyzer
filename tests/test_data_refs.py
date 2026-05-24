@@ -1,9 +1,11 @@
-from rom_analyzer.data_refs import DataRef, propagate_data_labels
+from rom_analyzer.data_refs import DataRef, DataRefType, propagate_data_labels
 from rom_analyzer.types import MatchedFunction, ReferenceSymbol
 
 
-def _mk_ref(offset: int, addr: int, label: str | None) -> DataRef:
-    return DataRef(instruction_offset=offset, referenced_address=addr, label=label)
+def _mk_ref(offset: int, addr: int, label: str | None,
+            ref_type: DataRefType = DataRefType.READ) -> DataRef:
+    return DataRef(instruction_offset=offset, referenced_address=addr,
+                   label=label, ref_type=ref_type)
 
 
 def test_propagate_data_labels_exact_offset_match():
@@ -56,6 +58,46 @@ def test_propagate_data_labels_skips_ram_refs():
     ref_syms = {0x804e5c: ReferenceSymbol("engine_rpm", 0x804e5c, "ram_global")}
     result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
     assert result == []
+
+
+def test_propagate_data_labels_skips_scalar_ref_in_new_rom():
+    """A data label must not be propagated to the new ROM when the matched data
+    reference there is a scalar/computed reference (e.g. Ghidra marking an LDI
+    Rd, #imm immediate as a ROM address) rather than a genuine memory read.
+
+    Concrete case: Z27AG flash_injector_latency_scaling lives at 0x0800 (value
+    0x000F = 15).  The outlander's matched function uses LDI R1, #0x0800 to load
+    the constant 2048 — not a flash table pointer.  Ghidra's scalar-reference
+    analysis creates a READ-type reference from that instruction to address 0x0800.
+    Without this guard, propagate_data_labels would incorrectly label 0x0800 in
+    the outlander project, making Ghidra display "flash_injector_latency_scaling"
+    on the LDI operand (which reads 0x000F from that address) instead of showing
+    the actual constant 2048.
+    """
+    ref_refs = {0x10000: [_mk_ref(24, 0x0800, "flash_injector_latency_scaling",
+                                  DataRefType.READ)]}
+    # Outlander function has LDI R1, #0x0800 — Ghidra marks it as READ to 0x0800.
+    new_refs = {0x20000: [_mk_ref(24, 0x0800, None, DataRefType.SCALAR)]}
+    matches = [MatchedFunction("update_tio5_duty", 0x10000, 0x20000, similarity=0.97)]
+    ref_syms = {0x0800: ReferenceSymbol("flash_injector_latency_scaling", 0x0800, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
+    assert result == [], (
+        "flash_injector_latency_scaling must not be propagated when the new ROM's "
+        "matching data reference is a scalar/computed ref, not a genuine read"
+    )
+
+
+def test_propagate_data_labels_keeps_genuine_read_in_new_rom():
+    """Propagation must still work when the new ROM's data ref is a genuine read."""
+    ref_refs = {0x10000: [_mk_ref(24, 0x0800, "flash_injector_latency_scaling",
+                                  DataRefType.READ)]}
+    new_refs = {0x20000: [_mk_ref(24, 0x0800, None, DataRefType.READ)]}
+    matches = [MatchedFunction("some_func", 0x10000, 0x20000, similarity=0.97)]
+    ref_syms = {0x0800: ReferenceSymbol("flash_injector_latency_scaling", 0x0800, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].name == "flash_injector_latency_scaling"
+    assert result[0].new_address == 0x0800
 
 
 def test_propagate_data_labels_confidence_downgrade_on_conflict():

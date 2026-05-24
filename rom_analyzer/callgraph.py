@@ -1,7 +1,8 @@
 """Call-graph-driven function matching to supplement VTSession diff.
 
 Four phases:
-  bootstrap_anchors      – anchor pairs via full vector table + MUT table
+  bootstrap_anchors      – anchor pairs via EIT vector table, ICU vector table,
+                           MUT table, and DTC/bitmask tables
   bfs_preseed            – BFS from anchors; produces overlays for the new ROM
                            before VT diff runs, improving named-match output
   gap_fill               – iteratively fills VT diff misses using structural position
@@ -239,6 +240,62 @@ def _bootstrap_vector_table(ref_bytes: bytes, new_bytes: bytes,
     return anchors
 
 
+_ICU_VECTOR_TABLE_BASE = 0x0094
+_ICU_VECTOR_TABLE_COUNT = 32  # max entries; table ends around 0x010E
+
+
+def _decode_icu_entry(rom_bytes: bytes, pos: int) -> int | None:
+    """Decode one 4-byte ICU Vector Table entry at pos.
+
+    M32176 ICU Vector Table entries are plain 32-bit big-endian handler
+    start addresses (verified against z27ag.S disassembly; see Figure 3.6.1).
+    Returns None for zero/unset entries or addresses outside ROM bounds.
+    """
+    if pos + 4 > len(rom_bytes):
+        return None
+    addr = struct.unpack_from('>I', rom_bytes, pos)[0]
+    if addr == 0 or addr == 0xFFFFFFFF:
+        return None
+    if addr % 4 != 0:
+        return None
+    if addr >= len(rom_bytes):
+        return None
+    return addr
+
+
+def _bootstrap_icu_vector_table(
+    ref_bytes: bytes, new_bytes: bytes,
+    ref_run: HeadlessRun, new_run: HeadlessRun,
+    ref_symbols_by_addr: dict,
+) -> list[MatchedFunction]:
+    """Decode M32176 ICU Vector Table entries (starting at 0x0094) and emit anchors.
+
+    Each 4-byte entry is a plain 32-bit big-endian ISR start address.  One
+    anchor is emitted per distinct, valid ref↔new handler pair at the same
+    table slot.
+    """
+    anchors: list[MatchedFunction] = []
+    seen_ref: set[int] = set()
+    seen_new: set[int] = set()
+
+    for i in range(_ICU_VECTOR_TABLE_COUNT):
+        pos = _ICU_VECTOR_TABLE_BASE + i * 4
+        ref_addr = _decode_icu_entry(ref_bytes, pos)
+        new_addr = _decode_icu_entry(new_bytes, pos)
+        if ref_addr is None or new_addr is None:
+            continue
+        if ref_addr in seen_ref or new_addr in seen_new:
+            continue
+        seen_ref.add(ref_addr)
+        seen_new.add(new_addr)
+
+        sym = ref_symbols_by_addr.get(ref_addr)
+        name = sym.name if sym else _name_for(ref_addr, ref_run) or f"icu_isr_{i:02d}"
+        anchors.append(MatchedFunction(name, ref_addr, new_addr, 1.0, "icu_vector_table"))
+
+    return anchors
+
+
 def _bootstrap_mut_table(ref_bytes: bytes, new_bytes: bytes,
                           ref_run: HeadlessRun, new_run: HeadlessRun,
                           ref_symbols_by_name: dict,
@@ -351,11 +408,14 @@ def bootstrap_anchors(ref_bytes: bytes, new_bytes: bytes,
                        ref_symbols_by_name: dict,
                        ref_symbols_by_addr: dict | None = None,
                        ) -> list[MatchedFunction]:
-    """Phase 1: produce anchor pairs via vector table, MUT table, and DTC/bitmask tables."""
+    """Phase 1: produce anchor pairs via EIT vector table, ICU vector table,
+    MUT table, and DTC/bitmask tables."""
     if ref_symbols_by_addr is None:
         ref_symbols_by_addr = {v.address: v for v in ref_symbols_by_name.values()}
     anchors = _bootstrap_vector_table(ref_bytes, new_bytes, ref_run, new_run,
                                       ref_symbols_by_addr)
+    anchors += _bootstrap_icu_vector_table(ref_bytes, new_bytes, ref_run, new_run,
+                                            ref_symbols_by_addr)
     anchors += _bootstrap_mut_table(ref_bytes, new_bytes, ref_run, new_run,
                                      ref_symbols_by_name)
     anchors += _bootstrap_dtc_bitmask(ref_bytes, new_bytes, ref_run, new_run,
