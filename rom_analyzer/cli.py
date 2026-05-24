@@ -12,7 +12,7 @@ from rom_analyzer.callgraph import (
 )
 from rom_analyzer.crc import Instruction, extract_crc_region
 from rom_analyzer.data_refs import propagate_data_labels
-from rom_analyzer.diff import run_ghidriff
+from rom_analyzer.diff import run_vt_diff
 from rom_analyzer.emit_ld import (
     emit_crc_region_toml,
     emit_description_ld,
@@ -57,21 +57,19 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               default=Path.home() / "rom-analyzer-projects",
               help="Persistent Ghidra project dir (no path element may start with '.')")
 @click.option("--project-name", default="rom-analyzer",
-              help="Ghidra project name (also used by ghidriff to find pre-imported programs)")
+              help="Ghidra project name for the persistent PyGhidra project")
 @click.option("--out", "out_dir", type=click.Path(path_type=Path), required=True,
               help="Output directory for emitted files")
 @click.option("--min-flash-block", type=int, default=64)
 @click.option("--min-ram-block", type=int, default=4)
 @click.option("--reference-name", default="33520003")
-@click.option("--diff-engine", type=click.Choice(["VersionTrackingDiff", "SimpleDiff"]),
-              default="VersionTrackingDiff")
 @click.option("--clean-project", is_flag=True, default=False,
               help="Delete and recreate the Ghidra project dir before starting (forces fresh analysis)")
 @click.option("--enrich-project", is_flag=True, default=False,
               help="Apply propagated symbols back into the Ghidra project for the new ROM")
 def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
-         reference_name, diff_engine, clean_project, enrich_project):
+         reference_name, clean_project, enrich_project):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -168,7 +166,7 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                 rom_path, language_id, bfs_propagated,
             )
 
-    # [4/7] Diff (identity or ghidriff)
+    # [4/7] Diff (identity or VTSession)
     if is_self_diff:
         click.echo(f"[4/7] Self-diff detected; using identity matches")
         matches = [
@@ -180,11 +178,11 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         click.echo("[4/7] Skipping diff — reference ROM unavailable")
         matches = []
     else:
-        click.echo(f"[4/7] Diffing via ghidriff ({diff_engine})")
-        matches = run_ghidriff(
+        click.echo(f"[4/7] Diffing via Ghidra VTSession")
+        matches = run_vt_diff(
             ghidra_home, project_dir, project_name,
             reference_rom, rom_path,
-            engine=diff_engine,
+            language_id=language_id,
         )
         gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
                                ref_bytes=ref_bytes, new_bytes=rom_bytes)
@@ -204,7 +202,7 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     # the reset vector always points to reset_interrupt_handler which always
     # calls main).  Within a tier, higher similarity wins.
     SOURCE_PRIORITY = {"vector_table": 3, "bytecode_identity": 2, "mut_table": 2,
-                       "callgraph_bfs": 1, "callgraph_gap": 1, "ghidriff": 0}
+                       "callgraph_bfs": 1, "callgraph_gap": 1, "vt_diff": 0}
     def _match_rank(m: MatchedFunction) -> tuple:
         return (SOURCE_PRIORITY.get(m.source, 0), m.similarity)
 
