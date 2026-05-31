@@ -22,9 +22,10 @@ from rom_analyzer.emit_ld import (
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
-    apply_labels, fetch_instructions_at, ghidriff_program_name, import_and_dump,
-    setup_environment,
+    apply_labels, apply_mut_table_in_ghidra, fetch_instructions_at,
+    ghidriff_program_name, import_and_dump, setup_environment,
 )
+from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
@@ -274,6 +275,32 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             data_labels = []
 
         propagated_all = propagated_fns + ram_globals + data_labels
+
+        # [5.5/7] MUT table identification (cross-ROM only)
+        if not is_self_diff and new_run.data_refs:
+            mut_result = find_mut_table_in_run(matches, new_run, rom_bytes)
+            if mut_result is not None:
+                click.echo(
+                    f"   MUT table: {mut_result.table_address:#x}, size={mut_result.table_size}"
+                )
+                if mut_result.triplet_mismatch:
+                    click.echo(
+                        f"   warning: MUT table triplet scan disagrees; "
+                        f"using data-ref result at {mut_result.table_address:#x}"
+                    )
+                ref_table_sym = next(
+                    (s for s in ref_symbols if s.name == "flash_mut_variables_table"), None
+                )
+                ref_table_addr = ref_table_sym.address if ref_table_sym is not None else 0
+                propagated_all.append(
+                    mut_table_to_propagated_symbol(mut_result, ref_table_addr)
+                )
+                if enrich_project:
+                    apply_mut_table_in_ghidra(project, new_prog_name, mut_result)
+            else:
+                click.echo(
+                    "   warning: MUT table not identified via get_mut_pointer data refs"
+                )
 
         # [6/7] Detect CRC, scan free space
         click.echo("[6/7] Detecting CRC, scanning free space")
