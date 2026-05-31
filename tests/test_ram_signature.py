@@ -22,7 +22,7 @@ def _sym(name: str, addr: int) -> ReferenceSymbol:
 
 def test_build_signatures_basic():
     refs = {
-        0x1000: [_ref(0, 0x804010), _ref(4, 0x804020), _ref(4, 0x804030)],
+        0x1000: [_ref(0, 0x804010), _ref(4, 0x804020), _ref(8, 0x804030)],
         0x2000: [_ref(0, 0x804040), _ref(4, 0x804050)],
     }
     label_map = {
