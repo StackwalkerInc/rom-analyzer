@@ -89,7 +89,7 @@ def _lcs_align(ref_callees: list[int], new_callees: list[int],
 # Phase 1 — Bootstrap anchors
 # ---------------------------------------------------------------------------
 
-def _find_mut_table(rom_bytes: bytes) -> int | None:
+def find_mut_table_by_triplet(rom_bytes: bytes) -> int | None:
     """Scan for the invariant PID-0x80..0x82 triplet; return the table base.
 
     The three consecutive 4-byte entries at table_base + 0x200 (PID 0x80–0x82)
@@ -304,7 +304,7 @@ def _bootstrap_mut_table(ref_bytes: bytes, new_bytes: bytes,
     if ref_sym is None:
         return []
 
-    new_table_addr = _find_mut_table(new_bytes)
+    new_table_addr = find_mut_table_by_triplet(new_bytes)
     if new_table_addr is None:
         return []
 

@@ -9,7 +9,7 @@ from rom_analyzer.callgraph import (
     _decode_bra_target,
     _find_dtc_table,
     _find_fault_bitmask_table,
-    _find_mut_table,
+    find_mut_table_by_triplet,
     _find_unique_aligned,
     _func_size,
     _lcs_align,
@@ -281,19 +281,19 @@ def _make_rom_with_mut_table(table_base: int, rom_size: int = 0x80000) -> bytes:
 
 def test_find_mut_table_known_colt_address():
     rom = _make_rom_with_mut_table(0x3b4f4)
-    result = _find_mut_table(rom)
+    result = find_mut_table_by_triplet(rom)
     assert result == 0x3b4f4
 
 
 def test_find_mut_table_outlander_address():
     rom = _make_rom_with_mut_table(0x39bf4)
-    result = _find_mut_table(rom)
+    result = find_mut_table_by_triplet(rom)
     assert result == 0x39bf4
 
 
 def test_find_mut_table_no_match_returns_none():
     rom = bytes(0x80000)
-    assert _find_mut_table(rom) is None
+    assert find_mut_table_by_triplet(rom) is None
 
 
 def test_find_mut_table_wrong_prefix_no_match():
@@ -303,7 +303,7 @@ def test_find_mut_table_wrong_prefix_no_match():
     struct.pack_into(">I", rom, pid_base,     0x01805486)
     struct.pack_into(">I", rom, pid_base + 4, 0x01805487)
     struct.pack_into(">I", rom, pid_base + 8, 0x01805489)
-    assert _find_mut_table(bytes(rom)) is None
+    assert find_mut_table_by_triplet(bytes(rom)) is None
 
 
 def test_find_mut_table_wrong_gap_no_match():
@@ -313,7 +313,7 @@ def test_find_mut_table_wrong_gap_no_match():
     struct.pack_into(">I", rom, pid_base,     0x00805486)
     struct.pack_into(">I", rom, pid_base + 4, 0x00805487)
     struct.pack_into(">I", rom, pid_base + 8, 0x00805488)  # A+2, not A+3
-    assert _find_mut_table(bytes(rom)) is None
+    assert find_mut_table_by_triplet(bytes(rom)) is None
 
 
 # ---------------------------------------------------------------------------
