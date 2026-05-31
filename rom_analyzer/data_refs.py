@@ -25,7 +25,7 @@ def propagate_data_labels(
     ref_symbols_by_addr: dict[int, ReferenceSymbol],
     window_bytes: int = 8,
 ) -> list[PropagatedSymbol]:
-    proposals: dict[str, list[tuple[int, ConfidenceTier]]] = {}
+    proposals: dict[str, list[tuple[int, ConfidenceTier, str]]] = {}
 
     for m in matches:
         tier = tier_for_score(m.similarity)
@@ -58,22 +58,29 @@ def propagate_data_labels(
                         break
             if match is None:
                 continue
-            # Skip scalar/computed references in the new ROM.  Ghidra marks
-            # LDI Rd, #imm instructions with a scalar reference to the immediate
-            # value when it falls in the ROM address space — even though the
-            # instruction loads a constant, not a flash-table pointer.  Propagating
-            # a label here makes Ghidra display the symbol name on the LDI operand,
-            # which is misleading (the operand is a value, not an address dereference).
-            if match.ref_type == DataRefType.SCALAR:
+            # Block the asymmetric case: ref ROM used a genuine memory read (LD @fp)
+            # but the new ROM uses a scalar LDI immediate for the same slot.
+            # Allow the symmetric case (both SCALAR/LDI) — the immediate IS the address
+            # of a named flash structure and propagation is correct; tagged separately.
+            if match.ref_type == DataRefType.SCALAR and ref_r.ref_type != DataRefType.SCALAR:
                 continue
 
-            proposals.setdefault(sym.name, []).append((match.referenced_address, tier))
+            source = (
+                "data_refs_scalar"
+                if match.ref_type == DataRefType.SCALAR
+                else "data_refs"
+            )
+            proposals.setdefault(sym.name, []).append(
+                (match.referenced_address, tier, source)
+            )
 
     results: list[PropagatedSymbol] = []
     for name, addr_tiers in proposals.items():
-        new_addrs = {a for a, _ in addr_tiers}
+        new_addrs = {a for a, _, _ in addr_tiers}
         final_tier: ConfidenceTier = "low" if len(new_addrs) > 1 else addr_tiers[0][1]
         new_addr = addr_tiers[0][0]
+        sources = {s for _, _, s in addr_tiers}
+        final_source = "data_refs" if "data_refs" in sources else "data_refs_scalar"
         ref_sym = next(s for s in ref_symbols_by_addr.values() if s.name == name)
         results.append(PropagatedSymbol(
             name=name,
@@ -81,7 +88,7 @@ def propagate_data_labels(
             new_address=new_addr,
             category="data",
             confidence=final_tier,
-            source="data_refs",
+            source=final_source,
             score=1.0,
         ))
 
