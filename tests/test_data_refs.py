@@ -123,3 +123,69 @@ def test_propagate_data_labels_confidence_downgrade_on_conflict():
     assert len(result) == 1
     assert result[0].name == "flash_m"
     assert result[0].confidence == "low"
+
+
+def test_scalar_symmetric_propagated():
+    """Both ref and new use LDI (SCALAR) at the same offset — should propagate
+    with source='data_refs_scalar'."""
+    ref_refs = {0x1000: [_mk_ref(8, 0xb2fa, "flash_fuel_map_rpm_axis",
+                                 DataRefType.SCALAR)]}
+    new_refs = {0x2000: [_mk_ref(8, 0xc350, None, DataRefType.SCALAR)]}
+    matches = [MatchedFunction("fuel_map_reader", 0x1000, 0x2000, similarity=0.90)]
+    ref_syms = {0xb2fa: ReferenceSymbol("flash_fuel_map_rpm_axis", 0xb2fa, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].name == "flash_fuel_map_rpm_axis"
+    assert result[0].new_address == 0xc350
+    assert result[0].source == "data_refs_scalar"
+    assert result[0].confidence == "high"
+
+
+def test_scalar_asymmetric_blocked():
+    """ref=READ, new=SCALAR — the asymmetric case must stay blocked (existing behaviour)."""
+    ref_refs = {0x1000: [_mk_ref(8, 0xb2fa, "flash_fuel_map_rpm_axis",
+                                 DataRefType.READ)]}
+    new_refs = {0x2000: [_mk_ref(8, 0xc350, None, DataRefType.SCALAR)]}
+    matches = [MatchedFunction("fuel_map_reader", 0x1000, 0x2000, similarity=0.90)]
+    ref_syms = {0xb2fa: ReferenceSymbol("flash_fuel_map_rpm_axis", 0xb2fa, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
+    assert result == []
+
+
+def test_scalar_read_takes_precedence():
+    """Same symbol found by READ path (one function) AND SCALAR path (another)
+    — final source must be 'data_refs', not 'data_refs_scalar'."""
+    ref_refs = {
+        0x1000: [_mk_ref(8, 0xb2fa, "flash_fuel_map_rpm_axis", DataRefType.READ)],
+        0x3000: [_mk_ref(8, 0xb2fa, "flash_fuel_map_rpm_axis", DataRefType.SCALAR)],
+    }
+    new_refs = {
+        0x2000: [_mk_ref(8, 0xc350, None, DataRefType.READ)],
+        0x4000: [_mk_ref(8, 0xc350, None, DataRefType.SCALAR)],
+    }
+    matches = [
+        MatchedFunction("f1", 0x1000, 0x2000, similarity=0.90),
+        MatchedFunction("f2", 0x3000, 0x4000, similarity=0.90),
+    ]
+    ref_syms = {0xb2fa: ReferenceSymbol("flash_fuel_map_rpm_axis", 0xb2fa, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].name == "flash_fuel_map_rpm_axis"
+    assert result[0].new_address == 0xc350
+    assert result[0].source == "data_refs"
+
+
+def test_scalar_window_applies():
+    """Symmetric SCALAR match within the sliding window (offset differs by 2)
+    must still propagate."""
+    ref_refs = {0x1000: [_mk_ref(8, 0xb2fa, "flash_boost_map_rpm_axis",
+                                 DataRefType.SCALAR)]}
+    new_refs = {0x2000: [_mk_ref(10, 0xd4a0, None, DataRefType.SCALAR)]}
+    matches = [MatchedFunction("boost_reader", 0x1000, 0x2000, similarity=0.85)]
+    ref_syms = {0xb2fa: ReferenceSymbol("flash_boost_map_rpm_axis", 0xb2fa, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms,
+                                   window_bytes=8)
+    assert len(result) == 1
+    assert result[0].name == "flash_boost_map_rpm_axis"
+    assert result[0].new_address == 0xd4a0
+    assert result[0].source == "data_refs_scalar"
