@@ -3,8 +3,6 @@
 import struct
 from unittest.mock import patch
 
-import pytest
-
 from rom_analyzer.data_refs import DataRef, DataRefType
 from rom_analyzer.ghidra import HeadlessRun
 from rom_analyzer.mut_table import (
@@ -133,6 +131,27 @@ def test_find_mut_table_ambiguous_refs():
     refs = [
         DataRef(instruction_offset=0, referenced_address=TABLE_A, ref_type=DataRefType.READ),
         DataRef(instruction_offset=4, referenced_address=TABLE_B, ref_type=DataRefType.READ),
+    ]
+    run = _make_run(FUNC_ENTRY, refs)
+    matches = [_make_match(FUNC_ENTRY, FUNC_ENTRY)]
+
+    assert find_mut_table_in_run(matches, run, rom) is None
+
+
+# ---------------------------------------------------------------------------
+# Failure: table-region ref with invalid RAM pointer
+# ---------------------------------------------------------------------------
+
+def test_find_mut_table_invalid_ram_ptr():
+    """Table-region ref whose first 4 bytes are not a RAM ptr → treated as non-table ref → None."""
+    NOT_RAM_PTR = 0x00700000  # below 0x00800000, not a valid M32R RAM address
+    rom = _make_rom({
+        SIZE_ADDR: struct.pack(">H", TABLE_SIZE),
+        TABLE_ADDR: struct.pack(">I", NOT_RAM_PTR),
+    })
+    refs = [
+        DataRef(instruction_offset=0, referenced_address=SIZE_ADDR, ref_type=DataRefType.READ),
+        DataRef(instruction_offset=4, referenced_address=TABLE_ADDR, ref_type=DataRefType.READ),
     ]
     run = _make_run(FUNC_ENTRY, refs)
     matches = [_make_match(FUNC_ENTRY, FUNC_ENTRY)]
