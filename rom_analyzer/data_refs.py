@@ -27,6 +27,7 @@ def propagate_data_labels(
     window_bytes: int = 8,
 ) -> list[PropagatedSymbol]:
     proposals: dict[str, list[tuple[int, ConfidenceTier, str]]] = {}
+    ref_addr_by_name: dict[str, int] = {}
 
     for m in matches:
         tier = tier_for_score(m.similarity)
@@ -74,6 +75,7 @@ def propagate_data_labels(
             proposals.setdefault(sym.name, []).append(
                 (match.referenced_address, tier, source)
             )
+            ref_addr_by_name[sym.name] = ref_r.referenced_address
 
     results: list[PropagatedSymbol] = []
     for name, addr_tiers in proposals.items():
@@ -82,7 +84,7 @@ def propagate_data_labels(
         new_addr = addr_tiers[0][0]
         sources = {s for _, _, s in addr_tiers}
         final_source = "data_refs" if "data_refs" in sources else "data_refs_scalar"
-        ref_sym = next(s for s in ref_symbols_by_addr.values() if s.name == name)
+        ref_sym = ref_symbols_by_addr[ref_addr_by_name[name]]
         results.append(PropagatedSymbol(
             name=name,
             ref_address=ref_sym.address,
@@ -104,6 +106,7 @@ def propagate_ram_labels(
     window_bytes: int = 8,
 ) -> list[PropagatedSymbol]:
     proposals: dict[str, list[tuple[int, ConfidenceTier, str]]] = {}
+    ref_addr_by_name: dict[str, int] = {}
 
     for m in matches:
         tier = tier_for_score(m.similarity)
@@ -140,13 +143,14 @@ def propagate_ram_labels(
             proposals.setdefault(sym.name, []).append(
                 (match.referenced_address, tier, "ram_refs")
             )
+            ref_addr_by_name[sym.name] = ref_r.referenced_address
 
     results: list[PropagatedSymbol] = []
     for name, addr_tiers in proposals.items():
         new_addrs = {a for a, _, _ in addr_tiers}
         final_tier: ConfidenceTier = "low" if len(new_addrs) > 1 else addr_tiers[0][1]
         new_addr = addr_tiers[0][0]
-        ref_sym = next(s for s in ref_symbols_by_addr.values() if s.name == name)
+        ref_sym = ref_symbols_by_addr[ref_addr_by_name[name]]
         results.append(PropagatedSymbol(
             name=name,
             ref_address=ref_sym.address,
