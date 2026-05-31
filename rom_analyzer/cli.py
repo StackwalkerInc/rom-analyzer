@@ -366,7 +366,13 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         report.write(f"Reference:  {reference_name}\n")
         report.write(f"Variant:    {language_id}\n\n")
         report.write(f"## Summary\n- Matched functions: {match_summary}\n")
-        report.write(f"- Propagated data labels: {len(data_labels)}\n\n")
+        scalar_count = sum(1 for d in data_labels if d.source == "data_refs_scalar")
+        label_summary = (
+            f"{len(data_labels)} ({scalar_count} via scalar refs)"
+            if scalar_count
+            else str(len(data_labels))
+        )
+        report.write(f"- Propagated data labels: {label_summary}\n\n")
         src_counts: dict[str, int] = {}
         for m in matches:
             src_counts[m.source] = src_counts.get(m.source, 0) + 1
