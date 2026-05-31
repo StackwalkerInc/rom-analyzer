@@ -96,6 +96,70 @@ def propagate_data_labels(
     return results
 
 
+def propagate_ram_labels(
+    ref_ram_by_func: dict[int, list[DataRef]],
+    new_ram_by_func: dict[int, list[DataRef]],
+    matches: list[MatchedFunction],
+    ref_symbols_by_addr: dict[int, ReferenceSymbol],
+    window_bytes: int = 8,
+) -> list[PropagatedSymbol]:
+    proposals: dict[str, list[tuple[int, ConfidenceTier, str]]] = {}
+
+    for m in matches:
+        tier = tier_for_score(m.similarity)
+        if tier == "low":
+            continue
+        ref_refs = ref_ram_by_func.get(m.ref_address, [])
+        new_refs = new_ram_by_func.get(m.new_address, [])
+        if not ref_refs or not new_refs:
+            continue
+
+        new_by_offset: dict[int, DataRef] = {r.instruction_offset: r for r in new_refs}
+
+        for ref_r in ref_refs:
+            if ref_r.label is None:
+                continue
+            if not (0x804000 <= ref_r.referenced_address < 0x820000):
+                continue
+            sym = ref_symbols_by_addr.get(ref_r.referenced_address)
+            if sym is None:
+                continue
+
+            match = new_by_offset.get(ref_r.instruction_offset)
+            if match is None:
+                for delta in range(1, window_bytes + 1):
+                    match = new_by_offset.get(ref_r.instruction_offset + delta)
+                    if match:
+                        break
+                    match = new_by_offset.get(ref_r.instruction_offset - delta)
+                    if match:
+                        break
+            if match is None:
+                continue
+
+            proposals.setdefault(sym.name, []).append(
+                (match.referenced_address, tier, "ram_refs")
+            )
+
+    results: list[PropagatedSymbol] = []
+    for name, addr_tiers in proposals.items():
+        new_addrs = {a for a, _, _ in addr_tiers}
+        final_tier: ConfidenceTier = "low" if len(new_addrs) > 1 else addr_tiers[0][1]
+        new_addr = addr_tiers[0][0]
+        ref_sym = next(s for s in ref_symbols_by_addr.values() if s.name == name)
+        results.append(PropagatedSymbol(
+            name=name,
+            ref_address=ref_sym.address,
+            new_address=new_addr,
+            category="ram_global",
+            confidence=final_tier,
+            source="ram_refs",
+            score=1.0,
+        ))
+
+    return results
+
+
 def collect_data_refs_within(program, function) -> list[DataRef]:
     """Collect flash data refs (addr < 0x80000) for all instructions in a Ghidra function."""
     listing = program.getListing()
