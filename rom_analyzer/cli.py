@@ -278,9 +278,9 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             ram_labels = propagate_ram_labels(
                 ref_run.ram_data_refs, new_run.ram_data_refs, matches, ref_symbols_by_addr
             )
-            click.echo(f"   RAM labels propagated: {len(ram_labels)}")
+            click.echo(f"   ram labels propagated: {len(ram_labels)}")
         else:
-            ram_labels = []
+            ram_labels = []  # self-diff: ram_globals covers RAM vars by identity address
 
         propagated_all = propagated_fns + ram_globals + data_labels + ram_labels
 
