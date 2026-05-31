@@ -241,6 +241,7 @@ def test_ram_write_symmetric_propagated():
     assert result[0].name == "age_x1.ignition"
     assert result[0].new_address == 0x806100
     assert result[0].source == "ram_refs"
+    assert result[0].category == "ram_global"
 
 
 def test_ram_asymmetric_allowed():
@@ -253,6 +254,7 @@ def test_ram_asymmetric_allowed():
     assert len(result) == 1
     assert result[0].new_address == 0x805abc
     assert result[0].source == "ram_refs"
+    assert result[0].confidence == "high"
 
 
 def test_ram_window_applies():
@@ -264,6 +266,7 @@ def test_ram_window_applies():
     result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms, window_bytes=8)
     assert len(result) == 1
     assert result[0].new_address == 0x805abc
+    assert result[0].source == "ram_refs"
 
 
 def test_ram_address_below_range_skipped():
