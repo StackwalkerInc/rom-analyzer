@@ -236,11 +236,6 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                 best_by_new[m.new_address] = m
         matches = list(best_by_new.values())
 
-        named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
-        matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
-        total_ref = len(named_ref_addrs)
-        match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
-
         # [5/7] Propagate symbols
         click.echo("[5/7] Propagating symbols")
         propagated_fns = propagate_function_labels(ref_symbols, matches)
@@ -313,6 +308,11 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                 click.echo(f"   data labels (p2): {len(data_labels_p2)}")
                 propagated_all += fn_labels_p2 + ram_labels_p2 + data_labels_p2
                 matches = extended_matches
+
+        named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
+        matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
+        total_ref = len(named_ref_addrs)
+        match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
 
         # [5.5/7] MUT table identification (cross-ROM only)
         _mut_table_ghidra_applied = False
