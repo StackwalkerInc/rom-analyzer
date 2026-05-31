@@ -5,7 +5,7 @@ from pathlib import Path
 
 from typing import TYPE_CHECKING
 
-from rom_analyzer.data_refs import DataRef, collect_data_refs_within
+from rom_analyzer.data_refs import DataRef, collect_data_refs_within, collect_ram_refs_within
 from rom_analyzer.types import PropagatedSymbol, ReferenceSymbol
 
 if TYPE_CHECKING:
@@ -20,6 +20,7 @@ class HeadlessRun:
     rom_crc_check_step: dict | None
     data_refs: dict[int, list[DataRef]] = field(default_factory=dict)
     callees: dict[int, list[int]] = field(default_factory=dict)
+    ram_data_refs: dict[int, list[DataRef]] = field(default_factory=dict)
 
 
 _JDK_FALLBACK_PATHS = (
@@ -177,11 +178,13 @@ def _dump_program(
             crc_step = {"entry": _hex(f.getEntryPoint()), "instructions": instrs}
 
     data_refs_map: dict[int, list[DataRef]] = {}
+    ram_data_refs_map: dict[int, list[DataRef]] = {}
     callees_map: dict[int, list[int]] = {}
     for f in func_mgr.getFunctions(True):
         entry_addr = int(f.getEntryPoint().getOffset())
         if collect_data_refs_flag:
             data_refs_map[entry_addr] = collect_data_refs_within(program, f)
+            ram_data_refs_map[entry_addr] = collect_ram_refs_within(program, f)
         callees_map[entry_addr] = _ordered_callees(f, ref_mgr, func_mgr)
 
     return HeadlessRun(
@@ -191,6 +194,7 @@ def _dump_program(
         rom_crc_check_step=crc_step,
         data_refs=data_refs_map,
         callees=callees_map,
+        ram_data_refs=ram_data_refs_map,
     )
 
 

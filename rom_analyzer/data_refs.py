@@ -160,6 +160,42 @@ def propagate_ram_labels(
     return results
 
 
+def collect_ram_refs_within(program, function) -> list[DataRef]:
+    """Collect RAM data refs (0x804000–0x81FFFF, READ or WRITE) per instruction in a Ghidra function."""
+    listing = program.getListing()
+    sym_table = program.getSymbolTable()
+    ref_mgr = program.getReferenceManager()
+    entry_offset = int(function.getEntryPoint().getOffset())
+
+    results: list[DataRef] = []
+    body = function.getBody()
+    for instr in listing.getInstructions(body, True):
+        instr_addr = instr.getAddress()
+        instr_offset = int(instr_addr.getOffset()) - entry_offset
+        for ref in ref_mgr.getReferencesFrom(instr_addr):
+            rt = ref.getReferenceType()
+            if not rt.isData():
+                continue
+            if not (rt.isRead() or rt.isWrite()):
+                continue  # skip scalar/computed refs to RAM addresses
+            ref_type = DataRefType.READ if rt.isRead() else DataRefType.WRITE
+            target = ref.getToAddress()
+            if target is None:
+                continue
+            target_offset = int(target.getOffset()) & 0xFFFFFFFF
+            if not (0x804000 <= target_offset < 0x820000):
+                continue
+            syms = list(sym_table.getSymbols(target))
+            label = str(syms[0].getName()) if syms else None
+            results.append(DataRef(
+                instruction_offset=instr_offset,
+                referenced_address=target_offset,
+                label=label,
+                ref_type=ref_type,
+            ))
+    return results
+
+
 def collect_data_refs_within(program, function) -> list[DataRef]:
     """Collect flash data refs (addr < 0x80000) for all instructions in a Ghidra function."""
     listing = program.getListing()
