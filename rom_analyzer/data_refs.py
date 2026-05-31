@@ -7,6 +7,7 @@ from rom_analyzer.types import ConfidenceTier, MatchedFunction, PropagatedSymbol
 
 class DataRefType(Enum):
     READ = "read"      # genuine memory read: LDUH @fp(sym), LD @Rsrc, etc.
+    WRITE = "write"    # memory write: ST Rs, @addr
     SCALAR = "scalar"  # Ghidra scalar/computed ref: LDI Rd, #imm treated as addr
 
 

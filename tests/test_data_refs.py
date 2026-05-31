@@ -1,6 +1,6 @@
 import pytest
 
-from rom_analyzer.data_refs import DataRef, DataRefType, propagate_data_labels
+from rom_analyzer.data_refs import DataRef, DataRefType, propagate_data_labels, propagate_ram_labels
 from rom_analyzer.types import MatchedFunction, ReferenceSymbol
 
 
@@ -206,3 +206,91 @@ def test_scalar_ref_new_read_propagates():
     assert result[0].new_address == 0xc350
     assert result[0].source == "data_refs"
     assert result[0].confidence == "high"
+
+
+def _mk_ram_ref(offset: int, addr: int, label: str | None,
+                ref_type: DataRefType = DataRefType.READ) -> DataRef:
+    return DataRef(instruction_offset=offset, referenced_address=addr,
+                   label=label, ref_type=ref_type)
+
+
+def test_ram_read_symmetric_propagated():
+    """Both ref and new READ from RAM at same offset — propagated with source='ram_refs'."""
+    ref_refs = {0x1000: [_mk_ram_ref(8, 0x8048f8, "age_x1.rpm")]}
+    new_refs = {0x2000: [_mk_ram_ref(8, 0x805abc, None)]}
+    matches = [MatchedFunction("rpm_reader", 0x1000, 0x2000, similarity=0.97)]
+    ref_syms = {0x8048f8: ReferenceSymbol("age_x1.rpm", 0x8048f8, "ram_global")}
+    result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].name == "age_x1.rpm"
+    assert result[0].new_address == 0x805abc
+    assert result[0].source == "ram_refs"
+    assert result[0].category == "ram_global"
+    assert result[0].confidence == "high"
+
+
+def test_ram_write_symmetric_propagated():
+    """Both ref and new WRITE to RAM at same offset — propagated."""
+    ref_refs = {0x1000: [_mk_ram_ref(12, 0x804900, "age_x1.ignition",
+                                     DataRefType.WRITE)]}
+    new_refs = {0x2000: [_mk_ram_ref(12, 0x806100, None, DataRefType.WRITE)]}
+    matches = [MatchedFunction("ignition_writer", 0x1000, 0x2000, similarity=0.97)]
+    ref_syms = {0x804900: ReferenceSymbol("age_x1.ignition", 0x804900, "ram_global")}
+    result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].name == "age_x1.ignition"
+    assert result[0].new_address == 0x806100
+    assert result[0].source == "ram_refs"
+
+
+def test_ram_asymmetric_allowed():
+    """ref=READ, new=WRITE at same offset — no type blocking; propagated."""
+    ref_refs = {0x1000: [_mk_ram_ref(8, 0x8048f8, "age_x1.rpm", DataRefType.READ)]}
+    new_refs = {0x2000: [_mk_ram_ref(8, 0x805abc, None, DataRefType.WRITE)]}
+    matches = [MatchedFunction("f", 0x1000, 0x2000, similarity=0.97)]
+    ref_syms = {0x8048f8: ReferenceSymbol("age_x1.rpm", 0x8048f8, "ram_global")}
+    result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].new_address == 0x805abc
+    assert result[0].source == "ram_refs"
+
+
+def test_ram_window_applies():
+    """Offsets differ by 4 (within window=8) — propagated."""
+    ref_refs = {0x1000: [_mk_ram_ref(8, 0x8048f8, "age_x1.rpm")]}
+    new_refs = {0x2000: [_mk_ram_ref(12, 0x805abc, None)]}
+    matches = [MatchedFunction("f", 0x1000, 0x2000, similarity=0.97)]
+    ref_syms = {0x8048f8: ReferenceSymbol("age_x1.rpm", 0x8048f8, "ram_global")}
+    result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms, window_bytes=8)
+    assert len(result) == 1
+    assert result[0].new_address == 0x805abc
+
+
+def test_ram_address_below_range_skipped():
+    """ref addr 0x7fffc is a flash address — must not propagate via RAM path."""
+    ref_refs = {0x1000: [_mk_ram_ref(8, 0x7fffc, "flash_x")]}
+    new_refs = {0x2000: [_mk_ram_ref(8, 0x805abc, None)]}
+    matches = [MatchedFunction("f", 0x1000, 0x2000, similarity=0.97)]
+    ref_syms = {0x7fffc: ReferenceSymbol("flash_x", 0x7fffc, "data")}
+    result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms)
+    assert result == []
+
+
+def test_ram_conflict_degrades_confidence():
+    """Same symbol proposed at two different new addresses — confidence='low'."""
+    ref_refs = {
+        0x1000: [_mk_ram_ref(8, 0x8048f8, "age_x1.rpm")],
+        0x3000: [_mk_ram_ref(8, 0x8048f8, "age_x1.rpm")],
+    }
+    new_refs = {
+        0x2000: [_mk_ram_ref(8, 0x805abc, None)],
+        0x4000: [_mk_ram_ref(8, 0x805bcd, None)],
+    }
+    matches = [
+        MatchedFunction("f1", 0x1000, 0x2000, similarity=0.97),
+        MatchedFunction("f2", 0x3000, 0x4000, similarity=0.97),
+    ]
+    ref_syms = {0x8048f8: ReferenceSymbol("age_x1.rpm", 0x8048f8, "ram_global")}
+    result = propagate_ram_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].confidence == "low"
