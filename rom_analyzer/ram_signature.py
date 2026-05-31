@@ -47,7 +47,7 @@ def match_by_ram_signature(
         ref_sigs: RAM signatures from reference ROM (func_addr -> set of var names).
         new_sigs: RAM signatures from new ROM (func_addr -> set of var names).
         existing_matches: Already-matched functions to exclude from signature matching.
-        ref_symbols_by_addr: Reference symbols (for validation).
+        ref_symbols_by_addr: Used for ref_name lookup; missing entries fall back to FUN_<hex>.
         min_shared: Minimum shared variables required to consider a match.
         min_jaccard: Minimum Jaccard similarity (0.0-1.0) for candidate matches.
 
@@ -73,7 +73,8 @@ def match_by_ram_signature(
                 continue
             ref_candidates.setdefault(ref_addr, []).append((j, new_addr))
 
-    # Resolve ref-side ties → new_addr → [(best_jaccard, ref_addr)]
+    # Filter ref-side ties: drop any ref func whose best Jaccard ties across multiple new funcs.
+    # Survivors: new_addr → [(best_jaccard, ref_addr)]
     new_to_best: dict[int, list[tuple[float, int]]] = {}
     for ref_addr, cands in ref_candidates.items():
         best_j = max(j for j, _ in cands)

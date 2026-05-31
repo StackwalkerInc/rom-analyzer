@@ -86,6 +86,14 @@ def test_match_already_matched_ref_skipped():
     assert result == []
 
 
+def test_match_already_matched_new_skipped():
+    ref_sigs = {0x1000: frozenset({"rpm", "load", "tps", "duty"})}
+    new_sigs = {0x5000: frozenset({"rpm", "load", "tps", "duty"})}
+    existing = [_match(0x9999, 0x5000)]  # new 0x5000 already matched
+    result = match_by_ram_signature(ref_sigs, new_sigs, existing, {})
+    assert result == []
+
+
 def test_match_ambiguous_ref_side():
     # one ref func ties against two new funcs at the same Jaccard → no match
     sig = frozenset({"rpm", "load", "tps", "duty"})
