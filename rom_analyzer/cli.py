@@ -277,6 +277,7 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         propagated_all = propagated_fns + ram_globals + data_labels
 
         # [5.5/7] MUT table identification (cross-ROM only)
+        _mut_table_ghidra_applied = False
         if not is_self_diff and new_run.data_refs:
             mut_result = find_mut_table_in_run(matches, new_run, rom_bytes)
             if mut_result is not None:
@@ -292,11 +293,16 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                     (s for s in ref_symbols if s.name == "flash_mut_variables_table"), None
                 )
                 ref_table_addr = ref_table_sym.address if ref_table_sym is not None else 0
+                # data_labels (step [5/7]) may have already emitted flash_mut_variables_table
+                # if the data-ref offset in get_mut_pointer aligned between ref and new ROM.
+                # The MUT pass is authoritative; remove any prior entry for this name.
+                propagated_all = [p for p in propagated_all if p.name != "flash_mut_variables_table"]
                 propagated_all.append(
                     mut_table_to_propagated_symbol(mut_result, ref_table_addr)
                 )
                 if enrich_project:
                     apply_mut_table_in_ghidra(project, new_prog_name, mut_result)
+                    _mut_table_ghidra_applied = True
             else:
                 click.echo(
                     "   warning: MUT table not identified via get_mut_pointer data refs"
@@ -378,8 +384,15 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         click.echo(f"\nDone. Outputs in {out_dir}/")
 
         if enrich_project:
-            click.echo(f"[+] Enriching Ghidra project with {len(propagated_all)} propagated symbols")
-            n = apply_labels(project, new_prog_name, propagated_all,
+            # apply_mut_table_in_ghidra already set the void*[N] datatype + label for
+            # flash_mut_variables_table.  Exclude it here to avoid a redundant label
+            # write and a duplicate bookmark at the same address.
+            labels_for_apply = (
+                [p for p in propagated_all if p.name != "flash_mut_variables_table"]
+                if _mut_table_ghidra_applied else propagated_all
+            )
+            click.echo(f"[+] Enriching Ghidra project with {len(labels_for_apply)} propagated symbols")
+            n = apply_labels(project, new_prog_name, labels_for_apply,
                              add_comments=inline_source_annotations)
             click.echo(f"    Applied {n} label(s) to {rom_path.name} Ghidra project")
     finally:
