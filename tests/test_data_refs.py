@@ -173,6 +173,7 @@ def test_scalar_read_takes_precedence():
     assert result[0].name == "flash_fuel_map_rpm_axis"
     assert result[0].new_address == 0xc350
     assert result[0].source == "data_refs"
+    assert result[0].confidence == "medium"
 
 
 def test_scalar_window_applies():
@@ -189,3 +190,19 @@ def test_scalar_window_applies():
     assert result[0].name == "flash_boost_map_rpm_axis"
     assert result[0].new_address == 0xd4a0
     assert result[0].source == "data_refs_scalar"
+    assert result[0].confidence == "medium"
+
+
+def test_scalar_ref_new_read_propagates():
+    """ref=SCALAR, new=READ — filter does not fire; propagated with source='data_refs'."""
+    ref_refs = {0x1000: [_mk_ref(8, 0xb2fa, "flash_fuel_map_rpm_axis",
+                                 DataRefType.SCALAR)]}
+    new_refs = {0x2000: [_mk_ref(8, 0xc350, None, DataRefType.READ)]}
+    matches = [MatchedFunction("fuel_map_reader", 0x1000, 0x2000, similarity=0.97)]
+    ref_syms = {0xb2fa: ReferenceSymbol("flash_fuel_map_rpm_axis", 0xb2fa, "data")}
+    result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
+    assert len(result) == 1
+    assert result[0].name == "flash_fuel_map_rpm_axis"
+    assert result[0].new_address == 0xc350
+    assert result[0].source == "data_refs"
+    assert result[0].confidence == "high"
