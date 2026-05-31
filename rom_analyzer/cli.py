@@ -27,6 +27,7 @@ from rom_analyzer.ghidra import (
 )
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
 from rom_analyzer.propagate import propagate_function_labels
+from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
 from rom_analyzer.xml_io import load_reference_symbols
@@ -284,6 +285,35 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
 
         propagated_all = propagated_fns + ram_globals + data_labels + ram_labels
 
+        # [5.25/7] RAM-signature match + second propagation pass
+        sig_matches: list[MatchedFunction] = []
+        ram_labels_p2: list[PropagatedSymbol] = []
+        data_labels_p2: list[PropagatedSymbol] = []
+        if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs and ram_labels:
+            click.echo("[5.25/7] RAM-signature matching")
+            ref_label_map = {s.address: s.name for s in ref_symbols if s.category == "ram_global"}
+            new_label_map = {ps.new_address: ps.name for ps in ram_labels}
+            ref_sigs = build_ram_signatures(ref_run.ram_data_refs, ref_label_map)
+            new_sigs = build_ram_signatures(new_run.ram_data_refs, new_label_map)
+            sig_matches = match_by_ram_signature(ref_sigs, new_sigs, matches, ref_symbols_by_addr)
+            click.echo(f"   ram-signature matches: {len(sig_matches)}")
+            if sig_matches:
+                extended_matches = matches + sig_matches
+                fn_labels_p2 = propagate_function_labels(ref_symbols, sig_matches)
+                ram_labels_p2 = propagate_ram_labels(
+                    ref_run.ram_data_refs, new_run.ram_data_refs,
+                    extended_matches, ref_symbols_by_addr,
+                )
+                if ref_run.data_refs and new_run.data_refs:
+                    data_labels_p2 = propagate_data_labels(
+                        ref_run.data_refs, new_run.data_refs,
+                        extended_matches, ref_symbols_by_addr,
+                    )
+                click.echo(f"   ram labels (p2): {len(ram_labels_p2)}")
+                click.echo(f"   data labels (p2): {len(data_labels_p2)}")
+                propagated_all += fn_labels_p2 + ram_labels_p2 + data_labels_p2
+                matches = extended_matches
+
         # [5.5/7] MUT table identification (cross-ROM only)
         _mut_table_ghidra_applied = False
         if not is_self_diff and new_run.data_refs:
@@ -381,7 +411,12 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             else str(len(data_labels))
         )
         report.write(f"- Propagated data labels: {label_summary}\n")
-        report.write(f"- Propagated RAM labels: {len(ram_labels)}\n\n")
+        report.write(f"- Propagated RAM labels: {len(ram_labels)}\n")
+        if sig_matches:
+            report.write(f"- RAM-signature matches: {len(sig_matches)}\n")
+            report.write(f"- Propagated RAM labels (p2): {len(ram_labels_p2)}\n")
+            report.write(f"- Propagated data labels (p2): {len(data_labels_p2)}\n")
+        report.write("\n")
         src_counts: dict[str, int] = {}
         for m in matches:
             src_counts[m.source] = src_counts.get(m.source, 0) + 1
