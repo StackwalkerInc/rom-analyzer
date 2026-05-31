@@ -11,7 +11,7 @@ from rom_analyzer.callgraph import (
     bootstrap_anchors, bfs_preseed, gap_fill, bytecode_identity_match,
 )
 from rom_analyzer.crc import Instruction, extract_crc_region
-from rom_analyzer.data_refs import propagate_data_labels
+from rom_analyzer.data_refs import propagate_data_labels, propagate_ram_labels
 from rom_analyzer.diff import run_vt_diff
 from rom_analyzer.emit_ld import (
     emit_crc_region_toml,
@@ -274,7 +274,15 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
         else:
             data_labels = []
 
-        propagated_all = propagated_fns + ram_globals + data_labels
+        if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs:
+            ram_labels = propagate_ram_labels(
+                ref_run.ram_data_refs, new_run.ram_data_refs, matches, ref_symbols_by_addr
+            )
+            click.echo(f"   RAM labels propagated: {len(ram_labels)}")
+        else:
+            ram_labels = []
+
+        propagated_all = propagated_fns + ram_globals + data_labels + ram_labels
 
         # [5.5/7] MUT table identification (cross-ROM only)
         _mut_table_ghidra_applied = False
@@ -372,7 +380,8 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             if scalar_count
             else str(len(data_labels))
         )
-        report.write(f"- Propagated data labels: {label_summary}\n\n")
+        report.write(f"- Propagated data labels: {label_summary}\n")
+        report.write(f"- Propagated RAM labels: {len(ram_labels)}\n\n")
         src_counts: dict[str, int] = {}
         for m in matches:
             src_counts[m.source] = src_counts.get(m.source, 0) + 1
