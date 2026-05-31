@@ -131,7 +131,7 @@ def test_scalar_symmetric_propagated():
     ref_refs = {0x1000: [_mk_ref(8, 0xb2fa, "flash_fuel_map_rpm_axis",
                                  DataRefType.SCALAR)]}
     new_refs = {0x2000: [_mk_ref(8, 0xc350, None, DataRefType.SCALAR)]}
-    matches = [MatchedFunction("fuel_map_reader", 0x1000, 0x2000, similarity=0.90)]
+    matches = [MatchedFunction("fuel_map_reader", 0x1000, 0x2000, similarity=0.97)]
     ref_syms = {0xb2fa: ReferenceSymbol("flash_fuel_map_rpm_axis", 0xb2fa, "data")}
     result = propagate_data_labels(ref_refs, new_refs, matches, ref_syms)
     assert len(result) == 1
