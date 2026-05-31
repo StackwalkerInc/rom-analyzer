@@ -46,3 +46,62 @@ def test_build_signatures_empty_no_entry():
     label_map = {}  # nothing resolvable
     result = build_ram_signatures(refs, label_map)
     assert 0x1000 not in result
+
+
+# --- match_by_ram_signature ---
+
+def test_match_clean():
+    ref_sigs = {0x1000: frozenset({"rpm", "load", "tps", "duty"})}
+    new_sigs = {0x5000: frozenset({"rpm", "load", "tps", "duty"})}
+    result = match_by_ram_signature(ref_sigs, new_sigs, [], {0x1000: _sym("calc", 0x1000)})
+    assert len(result) == 1
+    assert result[0].ref_address == 0x1000
+    assert result[0].new_address == 0x5000
+    assert result[0].source == "ram_signature"
+    assert result[0].similarity == pytest.approx(1.0)
+    assert result[0].ref_name == "calc"
+
+
+def test_match_below_jaccard():
+    # shared=3, union=7 → Jaccard≈0.43, below default 0.6
+    ref_sigs = {0x1000: frozenset({"rpm", "load", "tps", "duty", "ect", "iat", "baro"})}
+    new_sigs = {0x5000: frozenset({"rpm", "load", "tps"})}
+    result = match_by_ram_signature(ref_sigs, new_sigs, [], {})
+    assert result == []
+
+
+def test_match_below_min_shared():
+    # Jaccard=1.0 but only 2 names → below min_shared=3
+    ref_sigs = {0x1000: frozenset({"rpm", "load"})}
+    new_sigs = {0x5000: frozenset({"rpm", "load"})}
+    result = match_by_ram_signature(ref_sigs, new_sigs, [], {})
+    assert result == []
+
+
+def test_match_already_matched_ref_skipped():
+    ref_sigs = {0x1000: frozenset({"rpm", "load", "tps", "duty"})}
+    new_sigs = {0x5000: frozenset({"rpm", "load", "tps", "duty"})}
+    existing = [_match(0x1000, 0x9000)]  # ref 0x1000 already matched
+    result = match_by_ram_signature(ref_sigs, new_sigs, existing, {})
+    assert result == []
+
+
+def test_match_ambiguous_ref_side():
+    # one ref func ties against two new funcs at the same Jaccard → no match
+    sig = frozenset({"rpm", "load", "tps", "duty"})
+    ref_sigs = {0x1000: sig}
+    new_sigs = {0x5000: sig, 0x6000: sig}
+    result = match_by_ram_signature(ref_sigs, new_sigs, [], {0x1000: _sym("calc", 0x1000)})
+    assert result == []
+
+
+def test_match_ambiguous_new_side():
+    # two ref funcs both match one new func at the same Jaccard → no match
+    sig = frozenset({"rpm", "load", "tps", "duty"})
+    ref_sigs = {0x1000: sig, 0x2000: sig}
+    new_sigs = {0x5000: sig}
+    result = match_by_ram_signature(
+        ref_sigs, new_sigs, [],
+        {0x1000: _sym("calc_a", 0x1000), 0x2000: _sym("calc_b", 0x2000)},
+    )
+    assert result == []

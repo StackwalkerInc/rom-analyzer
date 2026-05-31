@@ -54,4 +54,50 @@ def match_by_ram_signature(
     Returns:
         List of new MatchedFunction objects found by signature similarity.
     """
-    raise NotImplementedError
+    already_ref = {m.ref_address for m in existing_matches}
+    already_new = {m.new_address for m in existing_matches}
+
+    # ref_addr → [(jaccard, new_addr)]
+    ref_candidates: dict[int, list[tuple[float, int]]] = {}
+    for ref_addr, ref_sig in ref_sigs.items():
+        if ref_addr in already_ref:
+            continue
+        for new_addr, new_sig in new_sigs.items():
+            if new_addr in already_new:
+                continue
+            shared = ref_sig & new_sig
+            if len(shared) < min_shared:
+                continue
+            j = len(shared) / len(ref_sig | new_sig)
+            if j < min_jaccard:
+                continue
+            ref_candidates.setdefault(ref_addr, []).append((j, new_addr))
+
+    # Resolve ref-side ties → new_addr → [(best_jaccard, ref_addr)]
+    new_to_best: dict[int, list[tuple[float, int]]] = {}
+    for ref_addr, cands in ref_candidates.items():
+        best_j = max(j for j, _ in cands)
+        best_new = [na for j, na in cands if j == best_j]
+        if len(best_new) > 1:
+            continue  # ambiguous: multiple new funcs tied for this ref func
+        new_addr = best_new[0]
+        new_to_best.setdefault(new_addr, []).append((best_j, ref_addr))
+
+    results: list[MatchedFunction] = []
+    for new_addr, ref_cands in new_to_best.items():
+        best_j = max(j for j, _ in ref_cands)
+        best_refs = [ra for j, ra in ref_cands if j == best_j]
+        if len(best_refs) > 1:
+            continue  # ambiguous: multiple ref funcs tied for this new func
+        ref_addr = best_refs[0]
+        sym = ref_symbols_by_addr.get(ref_addr)
+        ref_name = sym.name if sym else f"FUN_{ref_addr:08x}"
+        results.append(MatchedFunction(
+            ref_name=ref_name,
+            ref_address=ref_addr,
+            new_address=new_addr,
+            similarity=best_j,
+            source="ram_signature",
+        ))
+
+    return results
