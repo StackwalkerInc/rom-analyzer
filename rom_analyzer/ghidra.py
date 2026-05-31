@@ -3,8 +3,13 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from typing import TYPE_CHECKING
+
 from rom_analyzer.data_refs import DataRef, collect_data_refs_within
 from rom_analyzer.types import PropagatedSymbol, ReferenceSymbol
+
+if TYPE_CHECKING:
+    from rom_analyzer.mut_table import MutTableResult
 
 
 @dataclass
@@ -373,3 +378,43 @@ def apply_labels(
                             pass
         program.save("Apply labels", pyghidra.task_monitor())
         return count
+
+
+def apply_mut_table_in_ghidra(
+    project,
+    prog_name: str,
+    result: "MutTableResult",
+) -> None:
+    """Apply void*[N] datatype and flash_mut_variables_table label in the Ghidra project.
+
+    Also applies WordDataType and flash_mut_variables_table_size label at size_address.
+    Follows the same open-program-context pattern as apply_labels.
+    """
+    import pyghidra
+    from ghidra.program.model.data import ArrayDataType, PointerDataType, WordDataType
+    from ghidra.program.model.listing import DataUtilities
+    from ghidra.program.model.symbol import SourceType
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        addr_space = program.getAddressFactory().getDefaultAddressSpace()
+        with pyghidra.transaction(program, "Label MUT table"):
+            # Apply void*[N] to the table base address
+            table_addr = addr_space.getAddress(result.table_address)
+            arr_dt = ArrayDataType(PointerDataType(), result.table_size, 4)
+            DataUtilities.createData(
+                program, table_addr, arr_dt, -1,
+                DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
+            )
+            program.getSymbolTable().createLabel(
+                table_addr, "flash_mut_variables_table", SourceType.USER_DEFINED
+            )
+            # Apply WordDataType (uint16_t) to the size scalar
+            size_addr = addr_space.getAddress(result.size_address)
+            DataUtilities.createData(
+                program, size_addr, WordDataType(), -1,
+                DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
+            )
+            program.getSymbolTable().createLabel(
+                size_addr, "flash_mut_variables_table_size", SourceType.USER_DEFINED
+            )
+        program.save("MUT table labels", pyghidra.task_monitor())
