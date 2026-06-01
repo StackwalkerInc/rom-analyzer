@@ -486,3 +486,26 @@ def apply_data_types(
                     print(f"   warning: could not apply {d.datatype} at {d.address:#x}: {e}")
         program.save("Apply data types", pyghidra.task_monitor())
     return count
+
+
+def decompile_function(project, prog_name: str, address: int) -> str:
+    """Return the decompiled C source for the function at *address*.
+
+    Raises ValueError if no function exists at the given address.
+    """
+    import pyghidra
+    from ghidra.app.decompiler import DecompInterface
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        addr_space = program.getAddressFactory().getDefaultAddressSpace()
+        addr = addr_space.getAddress(address)
+        func = program.getFunctionManager().getFunctionAt(addr)
+        if func is None:
+            raise ValueError(f"No function at {address:#x} in {prog_name}")
+        decomp = DecompInterface()
+        decomp.openProgram(program)
+        result = decomp.decompileFunction(func, 30, pyghidra.task_monitor())
+        decomp.dispose()
+        if result is None or not result.decompileCompleted():
+            raise ValueError(f"Decompilation failed for function at {address:#x}")
+        return result.getDecompiledFunction().getC()
