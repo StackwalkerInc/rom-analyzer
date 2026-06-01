@@ -398,7 +398,7 @@ def apply_mut_table_in_ghidra(
     """
     import pyghidra
     from ghidra.program.model.data import ArrayDataType, PointerDataType, WordDataType
-    from ghidra.program.model.listing import DataUtilities
+    from ghidra.program.model.data import DataUtilities
     from ghidra.program.model.symbol import SourceType
 
     with pyghidra.program_context(project, f"/{prog_name}") as program:
@@ -462,7 +462,7 @@ def apply_data_types(
     Returns the number of definitions successfully applied.
     """
     import pyghidra
-    from ghidra.program.model.listing import DataUtilities
+    from ghidra.program.model.data import DataUtilities
 
     with pyghidra.program_context(project, f"/{prog_name}") as program:
         addr_space = program.getAddressFactory().getDefaultAddressSpace()
