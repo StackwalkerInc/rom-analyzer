@@ -57,3 +57,10 @@ class RamFreeBlock:
     end: int
     length: int
     note: str
+
+
+@dataclass(frozen=True)
+class DataTypeDefinition:
+    address: int
+    datatype: str   # raw XML string, e.g. "byte[23]", "pointer32"
+    size: int
