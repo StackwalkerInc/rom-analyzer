@@ -22,7 +22,7 @@ from rom_analyzer.emit_ld import (
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
-    apply_labels, apply_mut_table_in_ghidra, fetch_instructions_at,
+    apply_data_types, apply_labels, apply_mut_table_in_ghidra, fetch_instructions_at,
     ghidriff_program_name, import_and_dump, setup_environment,
 )
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
@@ -30,7 +30,7 @@ from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
-from rom_analyzer.xml_io import load_reference_symbols
+from rom_analyzer.xml_io import load_data_type_definitions, load_reference_symbols
 
 
 VARIANT_TO_LANGUAGE = {
@@ -102,6 +102,7 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     map_txt_path = Path(map_txt) if map_txt else None
     ref_symbols = load_reference_symbols(reference, flash_txt=flash_txt_path, map_txt=map_txt_path)
     ref_symbols_by_addr = {s.address: s for s in ref_symbols}
+    data_type_defs = load_data_type_definitions(reference)
 
     crc_step_addr = next(
         (s.address for s in ref_symbols if s.name == "rom_crc_check_step"),
@@ -445,6 +446,9 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             n = apply_labels(project, new_prog_name, labels_for_apply,
                              add_comments=inline_source_annotations)
             click.echo(f"    Applied {n} label(s) to {rom_path.name} Ghidra project")
+            if data_type_defs:
+                m = apply_data_types(project, new_prog_name, data_type_defs)
+                click.echo(f"    Applied {m} data type definition(s)")
     finally:
         project.close()
 
