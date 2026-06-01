@@ -1,5 +1,7 @@
-from rom_analyzer.types import ReferenceSymbol
-from rom_analyzer.xml_io import load_reference_symbols
+from pathlib import Path
+
+from rom_analyzer.types import DataTypeDefinition, ReferenceSymbol
+from rom_analyzer.xml_io import load_data_type_definitions, load_reference_symbols
 
 
 def test_load_reference_symbols_categorizes_by_address(fixtures_dir):
@@ -61,11 +63,6 @@ def test_load_reference_symbols_xml_wins_on_conflict(fixtures_dir):
     )
     # No duplication — exactly one entry for engine_rpm
     assert sum(1 for s in syms if s.name == "engine_rpm") == 1
-
-
-from pathlib import Path
-from rom_analyzer.types import DataTypeDefinition
-from rom_analyzer.xml_io import load_data_type_definitions
 
 
 def _write_xml(tmp_path, content):
