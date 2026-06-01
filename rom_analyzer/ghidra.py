@@ -422,3 +422,65 @@ def apply_mut_table_in_ghidra(
                 size_addr, "flash_mut_variables_table_size", SourceType.USER_DEFINED
             )
         program.save("MUT table labels", pyghidra.task_monitor())
+
+
+def _resolve_datatype(type_str: str):
+    """Map an XML DATATYPE string to a Ghidra DataType, or None if unrecognised."""
+    import re
+    from ghidra.program.model.data import (
+        ArrayDataType, ByteDataType, DWordDataType,
+        PointerDataType, WordDataType,
+    )
+    s = type_str.strip()
+    m = re.fullmatch(r'(byte|uint8_t)\[(\d+)\]', s)
+    if m:
+        return ArrayDataType(ByteDataType(), int(m.group(2)), 1)
+    m = re.fullmatch(r'(uint16_t|word)\[(\d+)\]', s)
+    if m:
+        return ArrayDataType(WordDataType(), int(m.group(2)), 2)
+    m = re.fullmatch(r'(uint32_t|dword)\[(\d+)\]', s)
+    if m:
+        return ArrayDataType(DWordDataType(), int(m.group(2)), 4)
+    scalar = {
+        'byte': ByteDataType(), 'uint8_t': ByteDataType(),
+        'uint16_t': WordDataType(), 'word': WordDataType(),
+        'uint32_t': DWordDataType(), 'dword': DWordDataType(),
+        'pointer32': PointerDataType(),
+    }
+    return scalar.get(s)
+
+
+def apply_data_types(
+    project,
+    prog_name: str,
+    data_defs: "list[DataTypeDefinition]",
+) -> int:
+    """Apply DEFINED_DATA type definitions to an already-imported program.
+
+    Returns the number of definitions successfully applied.
+    """
+    import pyghidra
+    from ghidra.program.model.listing import DataUtilities
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        addr_space = program.getAddressFactory().getDefaultAddressSpace()
+        count = 0
+        with pyghidra.transaction(program, "Apply data types"):
+            for d in data_defs:
+                dt = _resolve_datatype(d.datatype)
+                if dt is None:
+                    print(f"   warning: unrecognised datatype '{d.datatype}' at {d.address:#x} — skipped")
+                    continue
+                addr = addr_space.getAddress(d.address)
+                if addr is None:
+                    continue
+                try:
+                    DataUtilities.createData(
+                        program, addr, dt, -1,
+                        DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
+                    )
+                    count += 1
+                except Exception as e:
+                    print(f"   warning: could not apply {d.datatype} at {d.address:#x}: {e}")
+        program.save("Apply data types", pyghidra.task_monitor())
+    return count
