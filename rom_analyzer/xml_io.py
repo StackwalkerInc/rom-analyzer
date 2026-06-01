@@ -9,7 +9,7 @@ from pathlib import Path
 
 from lxml import etree
 
-from rom_analyzer.types import ReferenceSymbol, SymbolCategory
+from rom_analyzer.types import DataTypeDefinition, ReferenceSymbol, SymbolCategory
 
 
 def load_reference_symbols(
@@ -73,3 +73,26 @@ def _categorize(addr: int, function_entries: set[int]) -> SymbolCategory:
     if addr >= 0x800000:
         return "ram_global"
     return "data"
+
+
+def load_data_type_definitions(xml_path: Path) -> list[DataTypeDefinition]:
+    """Parse <DEFINED_DATA> elements from a Ghidra XML export."""
+    tree = etree.parse(str(xml_path))
+    root = tree.getroot()
+    results: list[DataTypeDefinition] = []
+    for elem in root.iter("DEFINED_DATA"):
+        addr_str = elem.get("ADDRESS")
+        datatype = elem.get("DATATYPE")
+        size_str = elem.get("SIZE")
+        if addr_str is None or datatype is None:
+            continue
+        try:
+            address = int(addr_str, 16)
+        except ValueError:
+            continue
+        try:
+            size = int(size_str, 0) if size_str is not None else 0
+        except ValueError:
+            size = 0
+        results.append(DataTypeDefinition(address=address, datatype=datatype, size=size))
+    return results
