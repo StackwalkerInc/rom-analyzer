@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -427,7 +428,6 @@ def apply_mut_table_in_ghidra(
 
 def _resolve_datatype(type_str: str):
     """Map an XML DATATYPE string to a Ghidra DataType, or None if unrecognised."""
-    import re
     from ghidra.program.model.data import (
         ArrayDataType, ByteDataType, DWordDataType,
         PointerDataType, WordDataType,
@@ -446,7 +446,8 @@ def _resolve_datatype(type_str: str):
         'byte': ByteDataType(), 'uint8_t': ByteDataType(),
         'uint16_t': WordDataType(), 'word': WordDataType(),
         'uint32_t': DWordDataType(), 'dword': DWordDataType(),
-        'pointer32': PointerDataType(),
+        'pointer': PointerDataType(), 'pointer32': PointerDataType(),
+        'undefined *': PointerDataType(),
     }
     return scalar.get(s)
 
