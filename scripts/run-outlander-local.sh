@@ -76,6 +76,7 @@ GHIDRA_HOME="$GHIDRA_HOME" \
     --project-name "$PROJECT_NAME" \
     --out "$OUT_DIR" \
     --enrich-project \
+    --inline-source-annotations \
     "${CLEAN_FLAG[@]}"
 
 echo ""
