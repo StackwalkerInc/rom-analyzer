@@ -10,6 +10,7 @@ from rom_analyzer.types import PropagatedSymbol, ReferenceSymbol
 
 if TYPE_CHECKING:
     from rom_analyzer.mut_table import MutTableResult
+    from rom_analyzer.types import DataTypeDefinition
 
 
 @dataclass
