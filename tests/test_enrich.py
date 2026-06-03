@@ -1,9 +1,4 @@
 """Tests for enrich.py: signature parser, type mapper, register allocator, XML enricher."""
-from pathlib import Path
-
-import pytest
-from lxml import etree
-
 from rom_analyzer.parsers import Param, ParsedSignature, parse_function_signature
 
 

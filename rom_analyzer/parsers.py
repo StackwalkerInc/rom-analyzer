@@ -156,5 +156,5 @@ def parse_colt_map(path: Path) -> Iterable[MapEntry]:
             )
 
 
-def parse_function_signature(decl: str) -> "ParsedSignature | None":
+def parse_function_signature(decl: str) -> ParsedSignature | None:
     return None  # stub — implemented in Task 2
