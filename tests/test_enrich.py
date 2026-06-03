@@ -270,3 +270,4 @@ def test_enrich_adds_new_symbol(tmp_path):
     assert sym is not None
     assert sym.get("NAME") == "adc_run"
     assert sym.get("SOURCE_TYPE") == "USER_DEFINED"
+    assert sym.get("TYPE") == "global"

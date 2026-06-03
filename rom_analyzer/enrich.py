@@ -170,6 +170,7 @@ def _upsert_symbol(
         existing = sym_by_addr[address]
         if existing.get("SOURCE_TYPE") != "IMPORTED":
             existing.set("NAME", name)
+            existing.set("TYPE", sym_type)
     else:
         new_sym = etree.Element("SYMBOL")
         new_sym.set("ADDRESS", f"{address:08x}")
@@ -235,7 +236,7 @@ def enrich_reference_xml(
 
     if xml_sym_table is not None:
         for entry in flash_fns:
-            _upsert_symbol(xml_sym_table, xml_sym_by_addr, entry.address, entry.name, "function")
+            _upsert_symbol(xml_sym_table, xml_sym_by_addr, entry.address, entry.name, "global")
         for entry in flash_data:
             _upsert_symbol(xml_sym_table, xml_sym_by_addr, entry.address, entry.name, "global")
         for entry in map_entries:
