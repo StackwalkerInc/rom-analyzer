@@ -23,6 +23,7 @@ dev = [
 
 [project.scripts]
 rom-analyzer = "rom_analyzer.cli:main"
+enrich-reference = "rom_analyzer.enrich:cli"
 
 [tool.pytest.ini_options]
 markers = [
