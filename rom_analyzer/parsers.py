@@ -27,6 +27,19 @@ class MapEntry:
     raw_declaration: str
 
 
+@dataclass(frozen=True)
+class Param:
+    type_str: str  # raw C type: "uint16_t", "uint8_t *", "struct foo *"
+    name: str
+
+
+@dataclass(frozen=True)
+class ParsedSignature:
+    return_type: str      # raw return type: "uint16_t", "void", "uint8_t *"
+    name: str
+    params: list[Param]   # [] for void / no-arg functions
+
+
 def parse_colt_flash(path: Path) -> Iterable[FlashEntry]:
     """
     Parse colt_flash.txt symbol table.
@@ -141,3 +154,7 @@ def parse_colt_map(path: Path) -> Iterable[MapEntry]:
                 is_function=is_function,
                 raw_declaration=declaration,
             )
+
+
+def parse_function_signature(decl: str) -> "ParsedSignature | None":
+    return None  # stub — implemented in Task 2
