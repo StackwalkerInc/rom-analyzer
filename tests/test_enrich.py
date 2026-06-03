@@ -126,3 +126,147 @@ def test_assign_registers_overflow_to_stack():
     result = assign_arg_registers(params)
     regs = [r for _, r in result]
     assert regs == ["R0", "R1", "R2", "R3", None]
+
+
+from pathlib import Path
+from lxml import etree
+from rom_analyzer.enrich import enrich_reference_xml
+
+
+# ---------------------------------------------------------------------------
+# XML enrichment integration tests (tmp_path; no Ghidra)
+# ---------------------------------------------------------------------------
+
+_MINIMAL_XML = """\
+<?xml version="1.0" standalone="yes"?>
+<PROGRAM NAME="test" IMAGE_BASE="00000000">
+    <SYMBOL_TABLE>
+        <SYMBOL ADDRESS="0004f440" NAME="FUN_0004f440" NAMESPACE="" TYPE="function" SOURCE_TYPE="ANALYSIS" PRIMARY="y" />
+    </SYMBOL_TABLE>
+    <FUNCTIONS>
+        <FUNCTION ENTRY_POINT="0004f440" NAME="FUN_0004f440" LIBRARY_FUNCTION="n">
+            <ADDRESS_RANGE START="0004f440" END="0004f473" />
+            <STACK_FRAME LOCAL_VAR_SIZE="0x0" PARAM_OFFSET="0x0" RETURN_ADDR_SIZE="0x0" />
+        </FUNCTION>
+    </FUNCTIONS>
+</PROGRAM>
+"""
+
+_FLASH_ONE_FUNC = (
+    "Address\t\tSize\tDeclaration\n"
+    "0x04f440\t0x34\tuint16_t ps16_divu32_16(uint32_t l, uint16_t r)\n"
+)
+
+_FLASH_MISSING_FUNC = (
+    "Address\t\tSize\tDeclaration\n"
+    "0x01533c\t0x38\tvoid adc_run(int ch, uint16_t *result)\n"
+)
+
+_XML_WITH_STALE_TYPEINFO = """\
+<?xml version="1.0" standalone="yes"?>
+<PROGRAM NAME="test" IMAGE_BASE="00000000">
+    <SYMBOL_TABLE>
+        <SYMBOL ADDRESS="0004f440" NAME="FUN_0004f440" NAMESPACE="" TYPE="function" SOURCE_TYPE="ANALYSIS" PRIMARY="y" />
+    </SYMBOL_TABLE>
+    <FUNCTIONS>
+        <FUNCTION ENTRY_POINT="0004f440" NAME="FUN_0004f440" LIBRARY_FUNCTION="n">
+            <RETURN_TYPE DATATYPE="undefined" />
+            <ADDRESS_RANGE START="0004f440" END="0004f473" />
+            <TYPEINFO_CMT>stale signature</TYPEINFO_CMT>
+            <STACK_FRAME LOCAL_VAR_SIZE="0x0" PARAM_OFFSET="0x0" RETURN_ADDR_SIZE="0x0" />
+            <REGISTER_VAR NAME="old_param" REGISTER="R0" DATATYPE="undefined" />
+        </FUNCTION>
+    </FUNCTIONS>
+</PROGRAM>
+"""
+
+
+def _setup(tmp_path, xml_content, flash_content):
+    xml_path = tmp_path / "test.xml"
+    flash_path = tmp_path / "flash.txt"
+    xml_path.write_text(xml_content)
+    flash_path.write_text(flash_content)
+    return xml_path, flash_path
+
+
+def test_enrich_updates_name_and_injects_type_info(tmp_path):
+    xml_path, flash_path = _setup(tmp_path, _MINIMAL_XML, _FLASH_ONE_FUNC)
+    enrich_reference_xml(xml_path, flash_path)
+    root = etree.parse(str(xml_path)).getroot()
+
+    fn = root.find(".//FUNCTION[@ENTRY_POINT='0004f440']")
+    assert fn is not None
+    assert fn.get("NAME") == "ps16_divu32_16"
+
+    rt = fn.find("RETURN_TYPE")
+    assert rt is not None
+    assert rt.get("DATATYPE") == "uint16_t"
+    assert rt.get("DATATYPE_NAMESPACE") == "/stdint.h"
+    assert rt.get("SIZE") == "0x2"
+
+    ti = fn.find("TYPEINFO_CMT")
+    assert ti is not None
+    assert "ps16_divu32_16" in ti.text
+
+    rvs = fn.findall("REGISTER_VAR")
+    assert len(rvs) == 2
+    assert rvs[0].get("REGISTER") == "R0"
+    assert rvs[0].get("NAME") == "l"
+    assert rvs[0].get("DATATYPE") == "uint32_t"
+    assert rvs[1].get("REGISTER") == "R1"
+    assert rvs[1].get("NAME") == "r"
+    assert rvs[1].get("DATATYPE") == "uint16_t"
+
+
+def test_enrich_dtd_child_order(tmp_path):
+    xml_path, flash_path = _setup(tmp_path, _MINIMAL_XML, _FLASH_ONE_FUNC)
+    enrich_reference_xml(xml_path, flash_path)
+    fn = etree.parse(str(xml_path)).getroot().find(".//FUNCTION[@ENTRY_POINT='0004f440']")
+    tags = [c.tag for c in fn]
+    assert tags.index("RETURN_TYPE") < tags.index("ADDRESS_RANGE")
+    assert tags.index("TYPEINFO_CMT") < tags.index("STACK_FRAME")
+    sf_idx = tags.index("STACK_FRAME")
+    assert all(i > sf_idx for i, t in enumerate(tags) if t == "REGISTER_VAR")
+
+
+def test_enrich_replaces_stale_type_annotations(tmp_path):
+    xml_path, flash_path = _setup(tmp_path, _XML_WITH_STALE_TYPEINFO, _FLASH_ONE_FUNC)
+    enrich_reference_xml(xml_path, flash_path)
+    fn = etree.parse(str(xml_path)).getroot().find(".//FUNCTION[@ENTRY_POINT='0004f440']")
+    assert fn.find("TYPEINFO_CMT").text != "stale signature"
+    assert fn.find("RETURN_TYPE").get("DATATYPE") == "uint16_t"
+    assert len(fn.findall("REGISTER_VAR")) == 2
+
+
+def test_enrich_adds_missing_function(tmp_path):
+    xml_path, flash_path = _setup(tmp_path, _MINIMAL_XML, _FLASH_MISSING_FUNC)
+    enrich_reference_xml(xml_path, flash_path)
+    root = etree.parse(str(xml_path)).getroot()
+
+    fn = root.find(".//FUNCTION[@ENTRY_POINT='0001533c']")
+    assert fn is not None
+    assert fn.get("NAME") == "adc_run"
+
+    ar = fn.find("ADDRESS_RANGE")
+    assert ar.get("START") == "0001533c"
+    assert ar.get("END") == "00015373"  # 0x1533c + 0x38 - 1 = 0x15373
+
+    rvs = fn.findall("REGISTER_VAR")
+    assert len(rvs) == 2   # ch → R0, result → R1
+
+
+def test_enrich_updates_symbol_name(tmp_path):
+    xml_path, flash_path = _setup(tmp_path, _MINIMAL_XML, _FLASH_ONE_FUNC)
+    enrich_reference_xml(xml_path, flash_path)
+    sym = etree.parse(str(xml_path)).getroot().find(".//SYMBOL[@ADDRESS='0004f440']")
+    assert sym is not None
+    assert sym.get("NAME") == "ps16_divu32_16"
+
+
+def test_enrich_adds_new_symbol(tmp_path):
+    xml_path, flash_path = _setup(tmp_path, _MINIMAL_XML, _FLASH_MISSING_FUNC)
+    enrich_reference_xml(xml_path, flash_path)
+    sym = etree.parse(str(xml_path)).getroot().find(".//SYMBOL[@ADDRESS='0001533c']")
+    assert sym is not None
+    assert sym.get("NAME") == "adc_run"
+    assert sym.get("SOURCE_TYPE") == "USER_DEFINED"
