@@ -306,6 +306,39 @@ def fetch_instructions_at(
             return instrs or None
 
 
+def fetch_call_sites(
+    project,
+    prog_name: str,
+    func_address: int,
+) -> list[dict] | None:
+    """Return call instructions inside the function containing func_address.
+
+    Each entry: {"address": int, "target": int} where target is the resolved
+    call destination (masked to uint32).  Returns None if no function is found.
+    """
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        func_mgr = program.getFunctionManager()
+        addr = program.getAddressFactory().getDefaultAddressSpace().getAddress(func_address)
+        f = func_mgr.getFunctionContaining(addr)
+        if f is None:
+            return None
+
+        listing = program.getListing()
+        ref_mgr = program.getReferenceManager()
+        out: list[dict] = []
+        for instr in listing.getInstructions(f.getBody(), True):
+            instr_addr = instr.getAddress().getOffset() & 0xFFFFFFFF
+            for ref in ref_mgr.getReferencesFrom(instr.getAddress()):
+                if ref.getReferenceType().isCall():
+                    out.append({
+                        "address": instr_addr,
+                        "target": ref.getToAddress().getOffset() & 0xFFFFFFFF,
+                    })
+        return out
+
+
 def apply_labels(
     project,
     prog_name: str,
