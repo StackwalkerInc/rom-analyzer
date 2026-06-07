@@ -417,10 +417,13 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                 else:
                     cm = match_by_ref.get(ref_container) if ref_container is not None else None
                     new_container = cm.new_address if cm is not None else None
-                # sio0_tx_count is a RAM global; these Colt ROMs share the RAM map, so
-                # its address is identity. If wrong for a given ROM, no reads are found
-                # and the binding degrades to VERIFY (safe).
-                txcount_new = txcount_ref
+                # sio0_tx_count moves between ROMs (the Colt RAM map is NOT identity),
+                # so anchor on its PROPAGATED new-ROM address. Fall back to the
+                # reference address (identity) only if propagation didn't carry it;
+                # if that address is wrong no reads are found and the binding degrades
+                # to VERIFY (safe).
+                prop_by_name = {p.name: p.new_address for p in propagated_all}
+                txcount_new = prop_by_name.get("sio0_tx_count", txcount_ref)
                 if ref_container is not None and new_container is not None:
                     expected = new_container + (kline_ref_addr - ref_container)
                     reads = fetch_data_read_sites(
