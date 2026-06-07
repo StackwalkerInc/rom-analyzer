@@ -23,11 +23,12 @@ from rom_analyzer.emit_ld import (
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
-    apply_data_types, apply_labels, apply_mut_table_in_ghidra, fetch_call_sites,
-    fetch_function_entry, fetch_instructions_at,
+    apply_data_types, apply_labels, apply_mut_table_in_ghidra,
+    fetch_function_entry, fetch_callers_of, fetch_data_read_sites,
+    fetch_instructions_at,
     ghidriff_program_name, import_and_dump, setup_environment,
 )
-from rom_analyzer.mode23_bindings import CallSite, resolve_splice_site
+from rom_analyzer.mode23_bindings import resolve_unique_site, resolve_nearest_site
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
@@ -398,52 +399,41 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             match_by_name = {m.ref_name: m for m in matches if m.ref_name}
             ref_prog_name = ghidriff_program_name(reference_rom)
 
-            # K-Line splice: anchored at obd_rest_handler_injection_location.
+            # K-Line: the injection replaces the dispatcher's `lduh sio0_tx_count`
+            # return-load. Anchor on the read of sio0_tx_count inside the matched
+            # dispatcher nearest the reference's relative offset.
             kline_ref_addr = next(
                 (s.address for s in ref_symbols
                  if s.name == "obd_rest_handler_injection_location"), None)
-            if kline_ref_addr is not None and ref_run is not None:
-                ref_sites = fetch_call_sites(project, ref_prog_name, kline_ref_addr) or []
-                ref_target = next(
-                    (cs["target"] for cs in ref_sites if cs["address"] == kline_ref_addr),
-                    None)
-                # Acceptable target in the new ROM (identity for self-diff).
-                kline_targets: set[int] = set()
-                if ref_target is not None:
-                    if is_self_diff:
-                        kline_targets.add(ref_target)
-                    else:
-                        tm = match_by_ref.get(ref_target)
-                        if tm is not None:
-                            kline_targets.add(tm.new_address)
-                # Container function in the new ROM (identity for self-diff).
+            txcount_ref = next(
+                (s.address for s in ref_symbols if s.name == "sio0_tx_count"), None)
+            if kline_ref_addr is not None and txcount_ref is not None and ref_run is not None:
                 ref_container = fetch_function_entry(project, ref_prog_name, kline_ref_addr)
-                new_container_entry = None
-                if ref_container is not None:
-                    if is_self_diff:
-                        new_container_entry = ref_container
-                    else:
-                        cm = match_by_ref.get(ref_container)
-                        new_container_entry = cm.new_address if cm is not None else None
-                new_sites = []
-                if new_container_entry is not None:
-                    new_sites = [
-                        CallSite(c["address"], c["target"])
-                        for c in (fetch_call_sites(project, new_prog_name, new_container_entry) or [])
-                    ]
-                res = resolve_splice_site(new_sites, kline_targets)
+                if is_self_diff:
+                    new_container = ref_container
+                else:
+                    cm = match_by_ref.get(ref_container) if ref_container is not None else None
+                    new_container = cm.new_address if cm is not None else None
+                # sio0_tx_count is a RAM global; these Colt ROMs share the RAM map, so
+                # its address is identity. If wrong for a given ROM, no reads are found
+                # and the binding degrades to VERIFY (safe).
+                txcount_new = txcount_ref
+                if ref_container is not None and new_container is not None:
+                    expected = new_container + (kline_ref_addr - ref_container)
+                    reads = fetch_data_read_sites(
+                        project, new_prog_name, txcount_new, new_container)
+                    res = resolve_nearest_site(reads, expected)
+                else:
+                    res = resolve_nearest_site([], 0)
                 mode23_lines.append(
                     emit_mode23_binding_line("obd_rest_handler_injection_location", res))
 
-            # CAN splice: the call to canrx12_15_process inside can0_slot12_rx_update.
-            can_container = match_by_name.get("can0_slot12_rx_update")
+            # CAN: trampoline replaces the call to canrx12_15_process. Anchor on the
+            # caller(s) of the matched dispatcher (independent of any container symbol).
             can_target = match_by_name.get("canrx12_15_process")
-            if can_container is not None and can_target is not None:
-                can_sites = [
-                    CallSite(c["address"], c["target"])
-                    for c in (fetch_call_sites(project, new_prog_name, can_container.new_address) or [])
-                ]
-                res = resolve_splice_site(can_sites, {can_target.new_address})
+            if can_target is not None:
+                callers = fetch_callers_of(project, new_prog_name, can_target.new_address)
+                res = resolve_unique_site(callers)
                 mode23_lines.append(
                     emit_mode23_binding_line("canrx12_15_process_call_location", res))
             for ln in mode23_lines:

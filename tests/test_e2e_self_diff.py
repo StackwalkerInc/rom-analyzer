@@ -78,8 +78,12 @@ def test_self_diff_matches_goldens(tmp_path):
         "adc_run should appear as a function entry in description.ld"
     )
 
-    # mode 0x23: self-diff maps the splice site to itself at 0x5ef34, high confidence.
+    # mode 0x23: self-diff maps the K-Line splice to itself at 0x5ef34 (high conf).
     desc = (out_dir / "description.ld").read_text()
     assert "obd_rest_handler_injection_location = 0x5ef34;" in desc, (
         "K-Line mode-0x23 splice should resolve to 0x5ef34 in self-diff"
+    )
+    # CAN splice line must be present (resolved or VERIFY — value not asserted).
+    assert "canrx12_15_process_call_location" in desc, (
+        "CAN mode-0x23 splice binding line should be emitted"
     )
