@@ -397,7 +397,6 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             click.echo("[7/7] Resolving mode-0x23 splice-site bindings")
             match_by_ref = {m.ref_address: m for m in matches}
             match_by_name = {m.ref_name: m for m in matches if m.ref_name}
-            ref_prog_name = ghidriff_program_name(reference_rom)
 
             # K-Line: the injection replaces the dispatcher's `lduh sio0_tx_count`
             # return-load. Anchor on the read of sio0_tx_count inside the matched
@@ -408,6 +407,10 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
             txcount_ref = next(
                 (s.address for s in ref_symbols if s.name == "sio0_tx_count"), None)
             if kline_ref_addr is not None and txcount_ref is not None and ref_run is not None:
+                # Only the K-Line block needs the reference program; resolve its
+                # name here so --emit-mode23 doesn't touch the reference ROM when
+                # the reference is unavailable.
+                ref_prog_name = ghidriff_program_name(reference_rom)
                 ref_container = fetch_function_entry(project, ref_prog_name, kline_ref_addr)
                 if is_self_diff:
                     new_container = ref_container
