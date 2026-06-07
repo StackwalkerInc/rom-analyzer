@@ -4,6 +4,7 @@ from io import StringIO
 
 import tomli_w
 
+from rom_analyzer.mode23_bindings import SpliceResolution
 from rom_analyzer.types import (
     CrcRegion,
     FlashFreeBlock,
@@ -54,6 +55,25 @@ def emit_description_ld(
         out.write("\n")
 
     return out.getvalue()
+
+
+def emit_mode23_binding_line(name: str, res: SpliceResolution) -> str:
+    """Render one splice-site binding for appending to description.ld.
+
+    High confidence -> plain ld assignment.
+    Otherwise       -> a /* VERIFY */ comment a human must confirm.
+    """
+    if res.confidence == "high" and res.address is not None:
+        return f"{name} = 0x{res.address:x};\n"
+    if res.address is not None:
+        return (
+            f"/* VERIFY: {name} = 0x{res.address:x}; "
+            f"(low confidence — confirm in Ghidra) */\n"
+        )
+    return (
+        f"/* VERIFY: {name} = <unresolved> "
+        f"(no matching call site — locate manually) */\n"
+    )
 
 
 def emit_omni_stub(

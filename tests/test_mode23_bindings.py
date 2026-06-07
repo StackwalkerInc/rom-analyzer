@@ -38,3 +38,37 @@ def test_empty_targets_is_unresolved():
     res = resolve_splice_site(sites, acceptable_targets=set())
     assert res.address is None
     assert res.confidence == "low"
+
+
+from rom_analyzer.emit_ld import emit_mode23_binding_line
+from rom_analyzer.mode23_bindings import SpliceResolution
+
+
+def test_emit_high_confidence_is_plain_assignment():
+    line = emit_mode23_binding_line(
+        "obd_rest_handler_injection_location",
+        SpliceResolution(address=0x5f100, confidence="high"),
+    )
+    assert line == "obd_rest_handler_injection_location = 0x5f100;\n"
+
+
+def test_emit_low_confidence_is_verify_comment():
+    line = emit_mode23_binding_line(
+        "obd_rest_handler_injection_location",
+        SpliceResolution(address=0x5f100, confidence="low"),
+    )
+    assert line == (
+        "/* VERIFY: obd_rest_handler_injection_location = 0x5f100; "
+        "(low confidence — confirm in Ghidra) */\n"
+    )
+
+
+def test_emit_unresolved_is_verify_comment_without_address():
+    line = emit_mode23_binding_line(
+        "obd_rest_handler_injection_location",
+        SpliceResolution(address=None, confidence="low"),
+    )
+    assert line == (
+        "/* VERIFY: obd_rest_handler_injection_location = <unresolved> "
+        "(no matching call site — locate manually) */\n"
+    )
