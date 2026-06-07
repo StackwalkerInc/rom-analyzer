@@ -359,6 +359,61 @@ def fetch_function_entry(
         return int(f.getEntryPoint().getOffset()) & 0xFFFFFFFF
 
 
+def fetch_callers_of(
+    project,
+    prog_name: str,
+    target_address: int,
+) -> list[int]:
+    """Return the addresses of call instructions that call target_address.
+
+    Uses the reference manager's references-to the target, filtered to CALL
+    references. Addresses masked to uint32, sorted, de-duplicated.
+    """
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        ref_mgr = program.getReferenceManager()
+        target = program.getAddressFactory().getDefaultAddressSpace().getAddress(target_address)
+        out: set[int] = set()
+        for ref in ref_mgr.getReferencesTo(target):
+            if ref.getReferenceType().isCall():
+                out.add(ref.getFromAddress().getOffset() & 0xFFFFFFFF)
+        return sorted(out)
+
+
+def fetch_data_read_sites(
+    project,
+    prog_name: str,
+    target_address: int,
+    container_entry: int,
+) -> list[int]:
+    """Return addresses of instructions inside the function at container_entry
+    that READ target_address.
+
+    Uses references-to the target, filtered to those whose from-address lies in
+    the containing function's body and whose reference type is a data read.
+    Addresses masked to uint32, sorted, de-duplicated. Empty if the container
+    function is not found.
+    """
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        func_mgr = program.getFunctionManager()
+        af = program.getAddressFactory().getDefaultAddressSpace()
+        container = func_mgr.getFunctionContaining(af.getAddress(container_entry))
+        if container is None:
+            return []
+        body = container.getBody()
+        ref_mgr = program.getReferenceManager()
+        target = af.getAddress(target_address)
+        out: set[int] = set()
+        for ref in ref_mgr.getReferencesTo(target):
+            from_addr = ref.getFromAddress()
+            if body.contains(from_addr) and ref.getReferenceType().isRead():
+                out.add(from_addr.getOffset() & 0xFFFFFFFF)
+        return sorted(out)
+
+
 def apply_labels(
     project,
     prog_name: str,
