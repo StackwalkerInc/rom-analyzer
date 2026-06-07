@@ -339,6 +339,26 @@ def fetch_call_sites(
         return out
 
 
+def fetch_function_entry(
+    project,
+    prog_name: str,
+    address: int,
+) -> int | None:
+    """Return the entry-point address of the function containing `address`.
+
+    Returns None if no function contains it.
+    """
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        func_mgr = program.getFunctionManager()
+        addr = program.getAddressFactory().getDefaultAddressSpace().getAddress(address)
+        f = func_mgr.getFunctionContaining(addr)
+        if f is None:
+            return None
+        return int(f.getEntryPoint().getOffset()) & 0xFFFFFFFF
+
+
 def apply_labels(
     project,
     prog_name: str,

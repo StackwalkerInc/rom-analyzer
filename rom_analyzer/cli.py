@@ -17,14 +17,17 @@ from rom_analyzer.emit_ld import (
     emit_crc_region_toml,
     emit_description_ld,
     emit_flash_free_toml,
+    emit_mode23_binding_line,
     emit_omni_stub,
     emit_ram_free_toml,
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
-    apply_data_types, apply_labels, apply_mut_table_in_ghidra, fetch_instructions_at,
+    apply_data_types, apply_labels, apply_mut_table_in_ghidra, fetch_call_sites,
+    fetch_function_entry, fetch_instructions_at,
     ghidriff_program_name, import_and_dump, setup_environment,
 )
+from rom_analyzer.mode23_bindings import CallSite, resolve_splice_site
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
@@ -74,9 +77,12 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               help="Apply propagated symbols back into the Ghidra project for the new ROM")
 @click.option("--inline-source-annotations", is_flag=True, default=False,
               help="Write heuristic source as a pre-comment at each labeled address")
+@click.option("--emit-mode23", is_flag=True, default=False,
+              help="Resolve and append the mode-0x23 code splice-site bindings to description.ld")
 def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
-         reference_name, clean_project, enrich_project, inline_source_annotations):
+         reference_name, clean_project, enrich_project, inline_source_annotations,
+         emit_mode23):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -385,13 +391,75 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
 
         # [7/7] Emit outputs
         click.echo("[7/7] Emitting outputs")
-        (out_dir / "description.ld").write_text(emit_description_ld(
+        mode23_lines: list[str] = []
+        if emit_mode23:
+            click.echo("[7/7] Resolving mode-0x23 splice-site bindings")
+            match_by_ref = {m.ref_address: m for m in matches}
+            match_by_name = {m.ref_name: m for m in matches if m.ref_name}
+            ref_prog_name = ghidriff_program_name(reference_rom)
+
+            # K-Line splice: anchored at obd_rest_handler_injection_location.
+            kline_ref_addr = next(
+                (s.address for s in ref_symbols
+                 if s.name == "obd_rest_handler_injection_location"), None)
+            if kline_ref_addr is not None and ref_run is not None:
+                ref_sites = fetch_call_sites(project, ref_prog_name, kline_ref_addr) or []
+                ref_target = next(
+                    (cs["target"] for cs in ref_sites if cs["address"] == kline_ref_addr),
+                    None)
+                # Acceptable target in the new ROM (identity for self-diff).
+                kline_targets: set[int] = set()
+                if ref_target is not None:
+                    if is_self_diff:
+                        kline_targets.add(ref_target)
+                    else:
+                        tm = match_by_ref.get(ref_target)
+                        if tm is not None:
+                            kline_targets.add(tm.new_address)
+                # Container function in the new ROM (identity for self-diff).
+                ref_container = fetch_function_entry(project, ref_prog_name, kline_ref_addr)
+                new_container_entry = None
+                if ref_container is not None:
+                    if is_self_diff:
+                        new_container_entry = ref_container
+                    else:
+                        cm = match_by_ref.get(ref_container)
+                        new_container_entry = cm.new_address if cm is not None else None
+                new_sites = []
+                if new_container_entry is not None:
+                    new_sites = [
+                        CallSite(c["address"], c["target"])
+                        for c in (fetch_call_sites(project, new_prog_name, new_container_entry) or [])
+                    ]
+                res = resolve_splice_site(new_sites, kline_targets)
+                mode23_lines.append(
+                    emit_mode23_binding_line("obd_rest_handler_injection_location", res))
+
+            # CAN splice: the call to canrx12_15_process inside can0_slot12_rx_update.
+            can_container = match_by_name.get("can0_slot12_rx_update")
+            can_target = match_by_name.get("canrx12_15_process")
+            if can_container is not None and can_target is not None:
+                can_sites = [
+                    CallSite(c["address"], c["target"])
+                    for c in (fetch_call_sites(project, new_prog_name, can_container.new_address) or [])
+                ]
+                res = resolve_splice_site(can_sites, {can_target.new_address})
+                mode23_lines.append(
+                    emit_mode23_binding_line("canrx12_15_process_call_location", res))
+            for ln in mode23_lines:
+                click.echo("   " + ln.rstrip())
+
+        _desc = emit_description_ld(
             propagated_all,
             source_rom=rom_path.name,
             reference_name=reference_name,
             variant=language_id,
             match_summary=match_summary,
-        ))
+        )
+        if mode23_lines:
+            _desc += "\n/* mode 0x23 splice-site bindings (--emit-mode23) */\n"
+            _desc += "".join(mode23_lines)
+        (out_dir / "description.ld").write_text(_desc)
         (out_dir / "omni.ld.stub").write_text(emit_omni_stub(flash_blocks, ram_globals))
         (out_dir / "crc-region.toml").write_text(
             emit_crc_region_toml(crc) if crc else "# CRC region not detected\n"

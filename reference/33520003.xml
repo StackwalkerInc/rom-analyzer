@@ -7864,6 +7864,7 @@
         <SYMBOL ADDRESS="0001d0a4" NAME="calc_adc_full_coolant_temp_filtered" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y"/>
         <SYMBOL ADDRESS="0001fc38" NAME="update_asc_and_overrev_target_torque_output_limits" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y"/>
         <SYMBOL ADDRESS="0003b4f4" NAME="flash_mut_variables_table" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y"/>
+        <SYMBOL ADDRESS="0005ef34" NAME="obd_rest_handler_injection_location" NAMESPACE="" TYPE="global" SOURCE_TYPE="USER_DEFINED" PRIMARY="y"/>
         <SYMBOL ADDRESS="00800000" NAME="IVECT" NAMESPACE="" TYPE="global" SOURCE_TYPE="IMPORTED" PRIMARY="y"/>
         <SYMBOL ADDRESS="00800004" NAME="IMASK" NAMESPACE="" TYPE="global" SOURCE_TYPE="IMPORTED" PRIMARY="y"/>
         <SYMBOL ADDRESS="00800006" NAME="SBICR" NAMESPACE="" TYPE="global" SOURCE_TYPE="IMPORTED" PRIMARY="y"/>

@@ -44,6 +44,7 @@ def test_self_diff_matches_goldens(tmp_path):
             "--variant", "fp8000",
             "--reference", str(REFERENCE_XML),
             "--out", str(out_dir),
+            "--emit-mode23",
         ],
         check=True,
     )
@@ -75,4 +76,10 @@ def test_self_diff_matches_goldens(tmp_path):
     )
     assert "adc_run" in content, (
         "adc_run should appear as a function entry in description.ld"
+    )
+
+    # mode 0x23: self-diff maps the splice site to itself at 0x5ef34, high confidence.
+    desc = (out_dir / "description.ld").read_text()
+    assert "obd_rest_handler_injection_location = 0x5ef34;" in desc, (
+        "K-Line mode-0x23 splice should resolve to 0x5ef34 in self-diff"
     )
