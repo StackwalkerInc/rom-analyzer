@@ -326,6 +326,40 @@ def fetch_function_entry(
         return int(f.getEntryPoint().getOffset()) & 0xFFFFFFFF
 
 
+def fetch_r0_imm_before(
+    project,
+    prog_name: str,
+    call_site: int,
+    max_back: int = 6,
+) -> int | None:
+    """Return the immediate of the nearest `ldi r0,#imm` preceding `call_site`.
+
+    Walks backward through the disassembly listing up to `max_back` instructions.
+    Returns None if no `ldi r0` is found (caller falls back to a raw-byte decode).
+    """
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        listing = program.getListing()
+        af = program.getAddressFactory().getDefaultAddressSpace()
+        addr = af.getAddress(call_site)
+        cur = listing.getInstructionBefore(addr)
+        steps = 0
+        while cur is not None and steps < max_back:
+            mnem = str(cur.getMnemonicString())
+            if (
+                mnem == "ldi"
+                and cur.getNumOperands() >= 1
+                and str(cur.getDefaultOperandRepresentation(0)) == "r0"
+            ):
+                scalar = cur.getScalar(1)
+                if scalar is not None:
+                    return int(scalar.getValue()) & 0xFF
+            cur = listing.getInstructionBefore(cur.getMinAddress())
+            steps += 1
+        return None
+
+
 def fetch_callers_of(
     project,
     prog_name: str,
