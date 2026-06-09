@@ -139,3 +139,10 @@ def test_decode_ldi_r0_before_returns_none_when_absent():
 def test_decode_ldi_r0_before_ignores_ldi_to_other_register():
     rom = bytes([0x61, 0x02, 0xf0, 0x00, 0xfe, 0x00, 0x00, 0x94])
     assert decode_ldi_r0_before(rom, call_site=4) is None
+
+
+def test_decode_ldi_r0_before_skips_0x60_inside_32bit_instruction():
+    # A 32-bit instruction (first byte 0xff, bit15 set) spanning offsets 0..3 has
+    # 0x60 as its interior byte at offset 2. That is NOT an `ldi r0` start.
+    rom = bytes([0xff, 0x00, 0x60, 0x05, 0xfe, 0x00, 0x00, 0x94])
+    assert decode_ldi_r0_before(rom, call_site=4) is None

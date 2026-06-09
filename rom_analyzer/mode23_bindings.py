@@ -18,6 +18,8 @@ class SpliceResolution:
     confidence: ConfidenceTier
 
 
+# Retained for its unit tests and potential reuse; the CAN pass now uses
+# resolve_can_call_sites (two sites). The K-Line pass still uses resolve_nearest_site.
 def resolve_unique_site(sites: list[int]) -> SpliceResolution:
     """Resolve a splice from candidate addresses where exactly one is expected.
 
@@ -90,15 +92,25 @@ def decode_ldi_r0_before(rom: bytes, call_site: int, max_back: int = 12) -> int 
 
     M32R 16-bit `ldi Rdest,#imm8` is `0110 dddd iiii iiii`; for r0 the first byte
     is 0x60 and the second is the immediate. Scans backward in 2-byte steps up to
-    `max_back` bytes. Returns None if no `ldi r0` is found. Raw-byte fallback for
-    when the Ghidra listing path (fetch_r0_imm_before) yields nothing.
+    `max_back` bytes. A candidate 0x60 is accepted only when it begins a 16-bit
+    instruction, not when it is the interior halfword of a 32-bit instruction:
+    M32R 32-bit instructions have bit 15 set in their first halfword (first byte
+    >= 0x80), so a preceding halfword with the high bit set means this 0x60 is an
+    interior byte and is skipped. Returns None if no `ldi r0` is found. Raw-byte
+    fallback for when the Ghidra listing path (fetch_r0_imm_before) yields nothing.
+
+    Note: a fallback heuristic; it assumes the scan starts on a 16-bit boundary
+    (call sites are 16-bit aligned). The Ghidra-listing path is the alignment-aware
+    primary.
     """
-    lo = max(call_site - max_back, 0)
-    for off in range(call_site - 2, lo - 1, -2):
+    for off in range(call_site - 2, max(call_site - max_back, 0) - 1, -2):
         if off + 1 >= len(rom):
             continue
-        if rom[off] == 0x60:  # ldi r0,#imm8
-            return rom[off + 1]
+        if rom[off] != 0x60:  # not `ldi r0,#imm8`
+            continue
+        if off - 2 >= 0 and (rom[off - 2] & 0x80) != 0:
+            continue  # interior halfword of a 32-bit instruction, not a real ldi
+        return rom[off + 1]
     return None
 
 

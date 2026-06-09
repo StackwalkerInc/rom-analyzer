@@ -349,7 +349,7 @@ def fetch_r0_imm_before(
             mnem = str(cur.getMnemonicString())
             if (
                 mnem == "ldi"
-                and cur.getNumOperands() >= 1
+                and cur.getNumOperands() >= 2
                 and str(cur.getDefaultOperandRepresentation(0)) == "r0"
             ):
                 scalar = cur.getScalar(1)
