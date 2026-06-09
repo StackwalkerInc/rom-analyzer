@@ -32,6 +32,23 @@ def resolve_unique_site(sites: list[int]) -> SpliceResolution:
     return SpliceResolution(address=None, confidence="low")
 
 
+def decode_ldi_r0_before(rom: bytes, call_site: int, max_back: int = 12) -> int | None:
+    """Return the #imm of the nearest `ldi r0,#imm8` preceding `call_site`.
+
+    M32R 16-bit `ldi Rdest,#imm8` is `0110 dddd iiii iiii`; for r0 the first byte
+    is 0x60 and the second is the immediate. Scans backward in 2-byte steps up to
+    `max_back` bytes. Returns None if no `ldi r0` is found. Raw-byte fallback for
+    when the Ghidra listing path (fetch_r0_imm_before) yields nothing.
+    """
+    lo = max(call_site - max_back, 0)
+    for off in range(call_site - 2, lo - 1, -2):
+        if off + 1 >= len(rom):
+            continue
+        if rom[off] == 0x60:  # ldi r0,#imm8
+            return rom[off + 1]
+    return None
+
+
 def resolve_nearest_site(sites: list[int], expected: int) -> SpliceResolution:
     """Resolve a splice from candidates, preferring the one nearest `expected`.
 

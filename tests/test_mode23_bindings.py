@@ -3,6 +3,7 @@ from rom_analyzer.mode23_bindings import (
     SpliceResolution,
     resolve_nearest_site,
     resolve_unique_site,
+    decode_ldi_r0_before,
 )
 
 
@@ -77,3 +78,23 @@ def test_resolve_nearest_site_multiple_no_exact_is_medium_nearest():
     res = resolve_nearest_site([0x100, 0x180], 0x170)
     assert res.address == 0x180
     assert res.confidence == "medium"
+
+
+def test_decode_ldi_r0_before_finds_immediate_just_before_call():
+    rom = bytes([0x60, 0x02, 0xf0, 0x00, 0xfe, 0x00, 0x00, 0x94])
+    assert decode_ldi_r0_before(rom, call_site=4) == 2
+
+
+def test_decode_ldi_r0_before_short_bl_site():
+    rom = bytes([0x60, 0x01, 0xf0, 0x00, 0x7e, 0x5e, 0xf0, 0x00])
+    assert decode_ldi_r0_before(rom, call_site=4) == 1
+
+
+def test_decode_ldi_r0_before_returns_none_when_absent():
+    rom = bytes([0xf0, 0x00, 0xf0, 0x00, 0xfe, 0x00, 0x00, 0x94])
+    assert decode_ldi_r0_before(rom, call_site=4) is None
+
+
+def test_decode_ldi_r0_before_ignores_ldi_to_other_register():
+    rom = bytes([0x61, 0x02, 0xf0, 0x00, 0xfe, 0x00, 0x00, 0x94])
+    assert decode_ldi_r0_before(rom, call_site=4) is None
