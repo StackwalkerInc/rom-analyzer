@@ -4,6 +4,10 @@ from rom_analyzer.mode23_bindings import (
     resolve_nearest_site,
     resolve_unique_site,
     decode_ldi_r0_before,
+    CanSiteBinding,
+    SLOT12_NAME,
+    SLOT15_NAME,
+    resolve_can_call_sites,
 )
 
 
@@ -78,6 +82,43 @@ def test_resolve_nearest_site_multiple_no_exact_is_medium_nearest():
     res = resolve_nearest_site([0x100, 0x180], 0x170)
     assert res.address == 0x180
     assert res.confidence == "medium"
+
+
+def test_resolve_can_call_sites_happy_two_callers_slots_2_and_1():
+    bindings, verify = resolve_can_call_sites(
+        callers=[0x49dc4, 0x49e9c],
+        slot_of={0x49dc4: 2, 0x49e9c: 1},
+    )
+    by_name = {b.name: b for b in bindings}
+    assert by_name[SLOT12_NAME].resolution.address == 0x49dc4
+    assert by_name[SLOT12_NAME].resolution.confidence == "high"
+    assert by_name[SLOT15_NAME].resolution.address == 0x49e9c
+    assert by_name[SLOT15_NAME].resolution.confidence == "high"
+    assert verify == "/* VERIFY: canrx12 slot=2, canrx15 slot=1 (matches hardcoded trampoline) */\n"
+
+
+def test_resolve_can_call_sites_wrong_number_of_callers_is_low_and_flagged():
+    bindings, verify = resolve_can_call_sites(callers=[0x49dc4], slot_of={0x49dc4: 2})
+    assert all(b.resolution.confidence == "low" for b in bindings)
+    assert verify.startswith("/* VERIFY: expected 2")
+
+
+def test_resolve_can_call_sites_unexpected_slots_is_low_and_flagged():
+    bindings, verify = resolve_can_call_sites(
+        callers=[0x49dc4, 0x49e9c], slot_of={0x49dc4: 2, 0x49e9c: 3},
+    )
+    assert all(b.resolution.confidence == "low" for b in bindings)
+    assert verify.startswith("/* VERIFY: expected 2")
+    names = {b.name for b in bindings}
+    assert names == {SLOT12_NAME, SLOT15_NAME}
+
+
+def test_resolve_can_call_sites_missing_slot_is_low_and_flagged():
+    bindings, verify = resolve_can_call_sites(
+        callers=[0x49dc4, 0x49e9c], slot_of={0x49dc4: 2, 0x49e9c: None},
+    )
+    assert all(b.resolution.confidence == "low" for b in bindings)
+    assert verify.startswith("/* VERIFY: expected 2")
 
 
 def test_decode_ldi_r0_before_finds_immediate_just_before_call():
