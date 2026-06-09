@@ -83,7 +83,11 @@ def test_self_diff_matches_goldens(tmp_path):
     assert "obd_rest_handler_injection_location = 0x5ef34;" in desc, (
         "K-Line mode-0x23 splice should resolve to 0x5ef34 in self-diff"
     )
-    # CAN splice line must be present (resolved or VERIFY — value not asserted).
-    assert "canrx12_15_process_call_location" in desc, (
-        "CAN mode-0x23 splice binding line should be emitted"
+    # CAN: both call-site bindings (slot 12 / slot 15) must be emitted as named
+    # symbols (resolved or VERIFY — addresses come from the golden comparison above).
+    assert "canrx12_15_call_location_slot12" in desc, (
+        "slot-12 CAN mode-0x23 splice binding should be emitted"
+    )
+    assert "canrx12_15_call_location_slot15" in desc, (
+        "slot-15 CAN mode-0x23 splice binding should be emitted"
     )

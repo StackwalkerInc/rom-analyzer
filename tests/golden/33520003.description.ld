@@ -4514,4 +4514,6 @@ unused_call680b0 = 0x680b0;
 
 /* mode 0x23 splice-site bindings (--emit-mode23) */
 obd_rest_handler_injection_location = 0x5ef34;
-/* VERIFY: canrx12_15_process_call_location = 0x49078; (low confidence — confirm in Ghidra) */
+/* VERIFY: canrx12_15_call_location_slot12 = 0x49078; (low confidence — confirm in Ghidra) */
+/* VERIFY: canrx12_15_call_location_slot15 = 0x49150; (low confidence — confirm in Ghidra) */
+/* VERIFY: expected 2 callers with slots {2,1}; got 2 [0x49078:slot=None, 0x49150:slot=None] — confirm each site's buffer by hand */
