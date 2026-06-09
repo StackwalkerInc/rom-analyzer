@@ -25,10 +25,14 @@ from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
     apply_data_types, apply_labels, apply_mut_table_in_ghidra,
     fetch_function_entry, fetch_callers_of, fetch_data_read_sites,
-    fetch_instructions_at,
+    fetch_instructions_at, fetch_r0_imm_before,
     ghidriff_program_name, import_and_dump, setup_environment,
 )
-from rom_analyzer.mode23_bindings import resolve_unique_site, resolve_nearest_site
+from rom_analyzer.mode23_bindings import (
+    resolve_nearest_site,
+    resolve_can_call_sites,
+    decode_ldi_r0_before,
+)
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
 from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
@@ -434,14 +438,24 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
                 mode23_lines.append(
                     emit_mode23_binding_line("obd_rest_handler_injection_location", res))
 
-            # CAN: trampoline replaces the call to canrx12_15_process. Anchor on the
-            # caller(s) of the matched dispatcher (independent of any container symbol).
+            # CAN: the trampoline replaces the call to canrx12_15_process at BOTH
+            # call sites (slot 12 / canrx12_data and slot 15 / canrx15_data). Anchor
+            # on the callers of the matched dispatcher; label each by the slot
+            # immediate (`ldi r0,#N`) preceding it.
             can_target = match_by_name.get("canrx12_15_process")
             if can_target is not None:
                 callers = fetch_callers_of(project, new_prog_name, can_target.new_address)
-                res = resolve_unique_site(callers)
-                mode23_lines.append(
-                    emit_mode23_binding_line("canrx12_15_process_call_location", res))
+                slot_of: dict[int, int | None] = {}
+                for c in callers:
+                    imm = fetch_r0_imm_before(project, new_prog_name, c)
+                    if imm is None:
+                        imm = decode_ldi_r0_before(rom_bytes, c)
+                    slot_of[c] = imm
+                can_bindings, can_verify = resolve_can_call_sites(callers, slot_of)
+                for b in can_bindings:
+                    mode23_lines.append(
+                        emit_mode23_binding_line(b.name, b.resolution))
+                mode23_lines.append(can_verify)
             for ln in mode23_lines:
                 click.echo("   " + ln.rstrip())
 
