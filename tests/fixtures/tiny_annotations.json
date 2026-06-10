@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "rom_id": "33520003",
+  "rom_sha256": "aabbcc",
+  "symbols": [
+    {
+      "name": "flash_fuel_map_rpm_axis",
+      "address": "0xb2fa",
+      "category": "data",
+      "data_type": "byte[23]",
+      "confidence": "high",
+      "source": "colt_flash",
+      "verified_by": null,
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "engine_rpm",
+      "address": "0x804e5c",
+      "category": "ram_global",
+      "confidence": "verified",
+      "source": "colt_map",
+      "verified_by": "amarkelov",
+      "session": "33520003-manual-20260610T143000Z",
+      "timestamp": "2026-06-10T14:30:00Z"
+    }
+  ],
+  "functions": [
+    {
+      "name": "adc_run",
+      "entry_point": "0x1533c",
+      "confidence": "high",
+      "source": "colt_flash",
+      "verified_by": null,
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {"name": "ch", "storage": "R0", "type": "int"}
+      ]
+    }
+  ],
+  "struct_definitions": [],
+  "comments": [
+    {
+      "address": "0x804ef4",
+      "type": "end-of-line",
+      "text": "2kph per discrete",
+      "verified_by": "amarkelov",
+      "session": "33520003-manual-20260610T143000Z",
+      "timestamp": "2026-06-10T14:30:00Z"
+    }
+  ]
+}
