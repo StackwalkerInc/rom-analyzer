@@ -1,7 +1,11 @@
 from pathlib import Path
 
 from rom_analyzer.types import DataTypeDefinition, ReferenceSymbol
-from rom_analyzer.xml_io import load_data_type_definitions, load_reference_symbols
+from rom_analyzer.xml_io import (
+    load_data_type_definitions,
+    load_reference_symbols,
+    load_reference_symbols_from_json,
+)
 
 
 def test_load_reference_symbols_categorizes_by_address(fixtures_dir):
@@ -110,3 +114,19 @@ def test_load_data_type_definitions_empty(tmp_path):
 </PROGRAM>""")
     result = load_data_type_definitions(xml)
     assert result == []
+
+
+def test_load_reference_symbols_from_json(fixtures_dir):
+    syms = load_reference_symbols_from_json(fixtures_dir / "tiny_annotations.json")
+    by_name = {s.name: s for s in syms}
+    assert by_name["flash_fuel_map_rpm_axis"] == ReferenceSymbol(
+        "flash_fuel_map_rpm_axis", 0xB2FA, "data"
+    )
+    assert by_name["engine_rpm"] == ReferenceSymbol("engine_rpm", 0x804E5C, "ram_global")
+    assert by_name["adc_run"] == ReferenceSymbol("adc_run", 0x1533C, "function")
+
+
+def test_load_reference_symbols_from_json_no_duplicates(fixtures_dir):
+    syms = load_reference_symbols_from_json(fixtures_dir / "tiny_annotations.json")
+    names = [s.name for s in syms]
+    assert len(names) == len(set(names))

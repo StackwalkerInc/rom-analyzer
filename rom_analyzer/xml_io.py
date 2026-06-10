@@ -75,6 +75,23 @@ def _categorize(addr: int, function_entries: set[int]) -> SymbolCategory:
     return "data"
 
 
+def load_reference_symbols_from_json(json_path: Path) -> list[ReferenceSymbol]:
+    """Load ReferenceSymbol list from an annotations.json file.
+
+    Symbols (data/ram_global) and functions are merged into a single list.
+    Function entries carry category "function" with entry_point as their address.
+    """
+    from rom_analyzer.annotations_io import load_annotations
+
+    store = load_annotations(json_path)
+    results: list[ReferenceSymbol] = []
+    for s in store.symbols:
+        results.append(ReferenceSymbol(s.name, s.address, s.category))
+    for f in store.functions:
+        results.append(ReferenceSymbol(f.name, f.entry_point, "function"))
+    return results
+
+
 def load_data_type_definitions(xml_path: Path) -> list[DataTypeDefinition]:
     """Parse <DEFINED_DATA> elements from a Ghidra XML export."""
     tree = etree.parse(str(xml_path))
