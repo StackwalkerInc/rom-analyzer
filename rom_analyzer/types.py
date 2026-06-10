@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 SymbolCategory = Literal["function", "data", "ram_global"]
-ConfidenceTier = Literal["high", "medium", "low"]
+ConfidenceTier = Literal["auto", "inferred", "low", "medium", "high", "verified"]
 CrcBand = Literal["partial_crc", "full_crc_only", "unprotected"]
 
 
