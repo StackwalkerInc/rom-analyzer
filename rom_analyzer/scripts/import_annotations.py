@@ -8,6 +8,7 @@
 
 import json
 import os
+import re
 import sys
 
 # Make rom_analyzer importable from Script Manager
@@ -43,7 +44,6 @@ _COMMENT_TYPE_MAP = {
 # ---------------------------------------------------------------------------
 
 def _resolve_datatype(type_str):
-    import re
     s = type_str.strip()
     m = re.fullmatch(r'(byte|uint8_t)\[(\d+)\]', s)
     if m:
@@ -126,8 +126,7 @@ def main():
                     if dt is not None:
                         try:
                             DataUtilities.createData(
-                                program, addr, dt, dt.getLength(),
-                                False,
+                                program, addr, dt, -1,
                                 DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
                             )
                         except Exception:
