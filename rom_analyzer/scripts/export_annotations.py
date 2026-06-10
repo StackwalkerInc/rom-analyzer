@@ -150,14 +150,13 @@ def _collect_symbols_and_functions(program):
 def _collect_comments(program):
     """
     Return dict keyed by (hex_addr, type_str) → {"address":…, "type":…, "text":…}.
+    Uses getCommentAddressIterator so only addresses with comments are visited.
     """
     listing = program.getListing()
     comments = {}
 
-    addr = program.getMinAddress()
-    max_addr = program.getMaxAddress()
-
-    while addr is not None and addr.compareTo(max_addr) <= 0:
+    addr_set = program.getMemory().getLoadedAndInitializedAddressSet()
+    for addr in listing.getCommentAddressIterator(addr_set, True):
         for type_int, type_str in _COMMENT_TYPES.items():
             text = listing.getComment(addr, type_int)
             if text:
@@ -167,10 +166,6 @@ def _collect_comments(program):
                     "type": type_str,
                     "text": text,
                 }
-        try:
-            addr = addr.next()
-        except Exception:
-            break
 
     return comments
 
@@ -235,7 +230,7 @@ def _merge_entry(key_label, new_entry, existing_by_key, prov, interactive):
         return existing, "kept"
 
 
-def _merge_comment(key, new_comment, existing_comments, prov, interactive):
+def _merge_comment(key, new_comment, existing_comments, prov):
     """Merge one comment entry. key is (hex_addr, type_str)."""
     existing = existing_comments.get(key)
 
@@ -357,7 +352,7 @@ def main():
     # --- Merge comments ---
     n_cmt_added = n_cmt_replaced = n_cmt_unchanged = 0
     for key, entry in new_comments.items():
-        _, status = _merge_comment(key, entry, ex_comments, prov, interactive)
+        _, status = _merge_comment(key, entry, ex_comments, prov)
         if status == "added":
             n_cmt_added += 1
         elif status in ("replaced", "overwritten"):
