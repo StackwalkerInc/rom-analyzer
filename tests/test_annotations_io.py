@@ -122,6 +122,17 @@ def test_save_omits_empty_params(tmp_path):
     assert "params" not in data["functions"][0]
 
 
+def test_save_omits_none_verified_by(tmp_path):
+    store = AnnotationStore(
+        schema_version=1, rom_id="test", rom_sha256="",
+        symbols=[AnnotationSymbol("foo", 0x100, "data", verified_by=None)],
+    )
+    p = tmp_path / "out.json"
+    save_annotations(p, store)
+    data = json.loads(p.read_text())
+    assert "verified_by" not in data["symbols"][0]
+
+
 def test_save_writes_atomically(tmp_path):
     store = AnnotationStore(schema_version=1, rom_id="x", rom_sha256="")
     p = tmp_path / "out.json"

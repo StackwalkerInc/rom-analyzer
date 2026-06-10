@@ -156,10 +156,11 @@ def save_annotations(path: Path, store: AnnotationStore) -> None:
         d.update({
             "confidence": s.confidence,
             "source": s.source,
-            "verified_by": s.verified_by,
             "session": s.session,
             "timestamp": s.timestamp,
         })
+        if s.verified_by is not None:
+            d["verified_by"] = s.verified_by
         return d
 
     def _fn(f: AnnotationFunction) -> dict:
@@ -168,10 +169,11 @@ def save_annotations(path: Path, store: AnnotationStore) -> None:
             "entry_point": f"0x{f.entry_point:x}",
             "confidence": f.confidence,
             "source": f.source,
-            "verified_by": f.verified_by,
             "session": f.session,
             "timestamp": f.timestamp,
         }
+        if f.verified_by is not None:
+            d["verified_by"] = f.verified_by
         if f.return_type is not None:
             d["return_type"] = f.return_type
         if f.params:
@@ -192,14 +194,16 @@ def save_annotations(path: Path, store: AnnotationStore) -> None:
         }
 
     def _comment(c: AnnotationComment) -> dict:
-        return {
+        d: dict = {
             "address": f"0x{c.address:x}",
             "type": c.type,
             "text": c.text,
-            "verified_by": c.verified_by,
             "session": c.session,
             "timestamp": c.timestamp,
         }
+        if c.verified_by is not None:
+            d["verified_by"] = c.verified_by
+        return d
 
     data = {
         "schema_version": store.schema_version,
