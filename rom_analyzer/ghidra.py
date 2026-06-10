@@ -124,7 +124,7 @@ def _overlay_from_annotations(program, store: "AnnotationStore") -> None:
         if addr is None:
             continue
         try:
-            flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
+            flat.createLabel(addr, s.name, True, SourceType.IMPORTED)
         except Exception:
             pass
         if s.data_type is not None:
@@ -143,7 +143,7 @@ def _overlay_from_annotations(program, store: "AnnotationStore") -> None:
         if addr is None:
             continue
         try:
-            flat.createLabel(addr, f.name, True, SourceType.USER_DEFINED)
+            flat.createLabel(addr, f.name, True, SourceType.IMPORTED)
         except Exception:
             pass
         try:

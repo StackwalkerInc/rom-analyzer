@@ -116,7 +116,7 @@ def main():
                 if addr is None:
                     continue
                 try:
-                    flat.createLabel(addr, sym["name"], True, SourceType.USER_DEFINED)
+                    flat.createLabel(addr, sym["name"], True, SourceType.IMPORTED)
                     count += 1
                 except Exception:
                     pass
@@ -143,7 +143,7 @@ def main():
                 if addr is None:
                     continue
                 try:
-                    flat.createLabel(addr, fn["name"], True, SourceType.USER_DEFINED)
+                    flat.createLabel(addr, fn["name"], True, SourceType.IMPORTED)
                     count += 1
                 except Exception:
                     pass
