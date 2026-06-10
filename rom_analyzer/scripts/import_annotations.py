@@ -135,6 +135,8 @@ def main():
                 pass
 
         # --- Apply functions ---
+        # return_type and params are stored but not applied — function signatures
+        # require ParameterImpl + Function.updateFunction(), deferred.
         for fn in data.get("functions", []):
             try:
                 addr = flat.toAddr(int(fn["entry_point"], 16))

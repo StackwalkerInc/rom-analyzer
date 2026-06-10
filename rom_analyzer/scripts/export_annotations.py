@@ -191,7 +191,9 @@ def _merge_entry(key_label, new_entry, existing_by_key, prov, interactive):
         return result, "added"
 
     if existing.get("confidence") != "verified":
-        # Overwrite non-verified entry
+        # Overwrite non-verified entry. Fields that Ghidra doesn't emit (e.g.
+        # data_type set by enrich) are not carried forward — run enrich again if
+        # the JSON was generated from scratch and you need those fields back.
         result = dict(new_entry)
         result.update(prov)
         existing_by_key[key_label] = result

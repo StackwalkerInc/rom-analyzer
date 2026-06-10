@@ -150,6 +150,8 @@ def _overlay_from_annotations(program, store: "AnnotationStore") -> None:
             flat.createFunction(addr, f.name)
         except Exception:
             pass
+        # return_type and params are stored but not applied here — function
+        # signatures require ParameterImpl + Function.updateFunction(), deferred.
 
     comment_type_map = {
         "end-of-line": CodeUnit.EOL_COMMENT,
