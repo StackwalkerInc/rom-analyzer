@@ -38,14 +38,6 @@ _COMMENT_TYPES = {
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _now_iso():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def _now_compact():
-    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-
-
 def _hex_addr(addr):
     return "0x%x" % addr.getOffset()
 
@@ -87,7 +79,13 @@ def _extract_params(func):
     params = []
     for p in func.getParameters():
         reg = p.getRegister()
-        storage = reg.getName() if reg is not None else "stack"
+        if reg is not None:
+            storage = reg.getName()
+        else:
+            try:
+                storage = "stack+%d" % p.getStackOffset()
+            except Exception:
+                storage = "stack"
         params.append({
             "name": p.getName(),
             "storage": storage,
@@ -128,7 +126,7 @@ def _collect_symbols_and_functions(program):
                 "entry_point": hex_addr,
             }
             ret_type = func.getReturnType().getName()
-            if ret_type not in ("void", "undefined"):
+            if not (ret_type == "void" or ret_type.startswith("undefined")):
                 entry["return_type"] = ret_type
             params = _extract_params(func)
             if params:
@@ -161,7 +159,7 @@ def _collect_comments(program):
 
     while addr is not None and addr.compareTo(max_addr) <= 0:
         for type_int, type_str in _COMMENT_TYPES.items():
-            text = listing.getComment(type_int, addr)
+            text = listing.getComment(addr, type_int)
             if text:
                 key = ("0x%x" % addr.getOffset(), type_str)
                 comments[key] = {
@@ -252,34 +250,18 @@ def _merge_comment(key, new_comment, existing_comments, prov, interactive):
         return result, "added"
 
     if existing.get("text") == new_comment["text"]:
-        # Unchanged — preserve as-is
+        # Unchanged — preserve as-is (no provenance bump)
         return existing, "unchanged"
 
-    # Text changed — ask or keep
-    if interactive:
-        try:
-            title = "annotations.json comment conflict"
-            message = (
-                "Comment at %s (%s) changed.\nOld: %s\nNew: %s\nReplace?"
-                % (key[0], key[1], existing["text"], new_comment["text"])
-            )
-            replace = askYesNo(title, message)  # type: ignore[name-defined]
-        except Exception:
-            replace = False
-    else:
-        replace = False
-
-    if replace:
-        result = dict(new_comment)
-        result.update({
-            "verified_by": prov["verified_by"],
-            "session": prov["session"],
-            "timestamp": prov["timestamp"],
-        })
-        existing_comments[key] = result
-        return result, "replaced"
-    else:
-        return existing, "kept"
+    # Text changed — always overwrite (spec: "new or changed text overwrites")
+    result = dict(new_comment)
+    result.update({
+        "verified_by": prov["verified_by"],
+        "session": prov["session"],
+        "timestamp": prov["timestamp"],
+    })
+    existing_comments[key] = result
+    return result, "replaced"
 
 
 # ---------------------------------------------------------------------------
@@ -300,8 +282,9 @@ def main():
     program = getCurrentProgram()  # type: ignore[name-defined]
     rom_id = program.getName().split("-")[0]
 
-    ts = _now_iso()
-    compact = _now_compact()
+    _now = datetime.now(timezone.utc)
+    ts = _now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    compact = _now.strftime("%Y%m%dT%H%M%SZ")
 
     if len(script_args) >= 2:
         session = script_args[1]
