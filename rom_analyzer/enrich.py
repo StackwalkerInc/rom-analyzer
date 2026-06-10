@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import click
 from lxml import etree
@@ -16,6 +17,9 @@ from rom_analyzer.parsers import (
     parse_colt_map,
     parse_function_signature,
 )
+
+if TYPE_CHECKING:
+    from rom_analyzer.annotations_io import AnnotationComment, AnnotationStore
 
 _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
 
@@ -247,7 +251,7 @@ def enrich_reference_xml(
     tree.write(str(xml_path), xml_declaration=True, pretty_print=True)
 
 
-def _load_xml_comments(xml_path: Path) -> list:
+def _load_xml_comments(xml_path: Path) -> list[AnnotationComment]:
     from rom_analyzer.annotations_io import AnnotationComment
     tree = etree.parse(str(xml_path))
     root = tree.getroot()
