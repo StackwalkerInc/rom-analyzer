@@ -1,5 +1,7 @@
 """Reference XML enrichment with type annotations from colt_flash.txt."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -245,6 +247,107 @@ def enrich_reference_xml(
     tree.write(str(xml_path), xml_declaration=True, pretty_print=True)
 
 
+def _load_xml_comments(xml_path: Path) -> list:
+    from rom_analyzer.annotations_io import AnnotationComment
+    tree = etree.parse(str(xml_path))
+    root = tree.getroot()
+    results = []
+    for c in root.iterfind(".//COMMENT"):
+        addr_str = c.get("ADDRESS")
+        ctype = c.get("TYPE", "")
+        text = c.text or ""
+        if addr_str is None or not text.strip():
+            continue
+        results.append(AnnotationComment(
+            address=int(addr_str, 16),
+            type=ctype,
+            text=text.strip(),
+        ))
+    return results
+
+
+def enrich_to_annotations(
+    xml_path: Path,
+    flash_txt: Path,
+    map_txt: Path | None = None,
+    rom_sha256: str = "",
+) -> AnnotationStore:
+    """Convert enriched reference data into an AnnotationStore.
+
+    All entries get confidence="high" — run the Ghidra export script to promote
+    individual entries to "verified" after a manual session.
+    """
+    from rom_analyzer.annotations_io import (
+        AnnotationFunction,
+        AnnotationParam,
+        AnnotationStore,
+        AnnotationSymbol,
+    )
+    from rom_analyzer.xml_io import load_data_type_definitions, load_reference_symbols
+
+    flash_all = list(parse_colt_flash(flash_txt))
+    flash_addrs: set[int] = {e.address for e in flash_all}
+    flash_sigs: dict[int, ParsedSignature] = {}
+    for entry in flash_all:
+        if entry.is_function:
+            sig = parse_function_signature(entry.raw_declaration)
+            if sig is not None:
+                flash_sigs[entry.address] = sig
+
+    map_entries = list(parse_colt_map(map_txt)) if map_txt is not None else []
+    map_addrs: set[int] = {e.address for e in map_entries}
+
+    ref_syms = load_reference_symbols(xml_path, flash_txt, map_txt)
+    data_def_by_addr = {d.address: d for d in load_data_type_definitions(xml_path)}
+
+    symbols: list[AnnotationSymbol] = []
+    functions: list[AnnotationFunction] = []
+
+    for s in ref_syms:
+        source = (
+            "colt_flash" if s.address in flash_addrs
+            else "colt_map" if s.address in map_addrs
+            else "xml"
+        )
+        if s.category == "function":
+            sig = flash_sigs.get(s.address)
+            params = []
+            if sig is not None:
+                for param, reg in assign_arg_registers(sig.params):
+                    params.append(AnnotationParam(
+                        name=param.name,
+                        storage=reg if reg is not None else "stack",
+                        type=param.type_str,
+                    ))
+            functions.append(AnnotationFunction(
+                name=s.name,
+                entry_point=s.address,
+                confidence="high",
+                source=source,
+                return_type=sig.return_type if sig is not None else None,
+                params=params,
+            ))
+        else:
+            dt = data_def_by_addr.get(s.address)
+            symbols.append(AnnotationSymbol(
+                name=s.name,
+                address=s.address,
+                category=s.category,
+                data_type=dt.datatype if dt is not None else None,
+                confidence="high",
+                source=source,
+            ))
+
+    return AnnotationStore(
+        schema_version=1,
+        rom_id=xml_path.stem,
+        rom_sha256=rom_sha256,
+        symbols=symbols,
+        functions=functions,
+        comments=_load_xml_comments(xml_path),
+    )
+
+
 @click.command()
 @click.option("--xml", "xml_path", type=click.Path(path_type=Path),
               default=_REFERENCE_DIR / "33520003.xml", show_default=True)
@@ -254,7 +357,15 @@ def enrich_reference_xml(
 @click.option("--map", "map_txt",
               type=click.Path(exists=True, dir_okay=False, path_type=Path),
               default=_REFERENCE_DIR / "colt_map.txt", show_default=True)
-def cli(xml_path: Path, flash_txt: Path, map_txt: Path) -> None:
+@click.option("--emit-json", "emit_json", is_flag=True, default=False,
+              help="Write <xml>.json alongside the enriched XML.")
+def cli(xml_path: Path, flash_txt: Path, map_txt: Path, emit_json: bool) -> None:
     """Enrich reference/33520003.xml in-place with type annotations from colt_flash.txt."""
     enrich_reference_xml(xml_path, flash_txt, map_txt)
+    if emit_json:
+        from rom_analyzer.annotations_io import save_annotations
+        store = enrich_to_annotations(xml_path, flash_txt, map_txt)
+        out = xml_path.with_suffix(".json")
+        save_annotations(out, store)
+        click.echo(f"Wrote {out}")
     click.echo(f"Enriched {xml_path}")

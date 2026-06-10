@@ -271,3 +271,73 @@ def test_enrich_adds_new_symbol(tmp_path):
     assert sym.get("NAME") == "adc_run"
     assert sym.get("SOURCE_TYPE") == "USER_DEFINED"
     assert sym.get("TYPE") == "global"
+
+
+# ---------------------------------------------------------------------------
+# enrich_to_annotations
+# ---------------------------------------------------------------------------
+
+import json
+import shutil
+from rom_analyzer.enrich import enrich_to_annotations
+from click.testing import CliRunner
+from rom_analyzer.enrich import cli as enrich_cli
+
+
+def test_enrich_to_annotations_symbols(fixtures_dir):
+    store = enrich_to_annotations(
+        fixtures_dir / "tiny_ghidra.xml",
+        fixtures_dir / "tiny_colt_flash.txt",
+        fixtures_dir / "tiny_colt_map.txt",
+    )
+    by_name = {s.name: s for s in store.symbols}
+    assert "flash_fuel_map_rpm_axis" in by_name
+    assert by_name["flash_fuel_map_rpm_axis"].category == "data"
+    assert by_name["flash_fuel_map_rpm_axis"].source == "colt_flash"
+    assert "eeprom.block" in by_name or "engine_rpm" in by_name  # from map_txt
+
+
+def test_enrich_to_annotations_functions(fixtures_dir):
+    store = enrich_to_annotations(
+        fixtures_dir / "tiny_ghidra.xml",
+        fixtures_dir / "tiny_colt_flash.txt",
+        fixtures_dir / "tiny_colt_map.txt",
+    )
+    by_name = {f.name: f for f in store.functions}
+    assert "adc_run" in by_name or "rom_crc_check_step" in by_name
+
+
+def test_enrich_to_annotations_rom_id(fixtures_dir):
+    store = enrich_to_annotations(
+        fixtures_dir / "tiny_ghidra.xml",
+        fixtures_dir / "tiny_colt_flash.txt",
+    )
+    assert store.rom_id == "tiny_ghidra"
+
+
+def test_enrich_to_annotations_confidence_is_high(fixtures_dir):
+    store = enrich_to_annotations(
+        fixtures_dir / "tiny_ghidra.xml",
+        fixtures_dir / "tiny_colt_flash.txt",
+    )
+    assert all(s.confidence == "high" for s in store.symbols)
+    assert all(f.confidence == "high" for f in store.functions)
+
+
+def test_cli_emit_json(fixtures_dir, tmp_path):
+    xml = tmp_path / "tiny_ghidra.xml"
+    shutil.copy(fixtures_dir / "tiny_ghidra.xml", xml)
+    runner = CliRunner()
+    result = runner.invoke(enrich_cli, [
+        "--xml", str(xml),
+        "--flash", str(fixtures_dir / "tiny_colt_flash.txt"),
+        "--map", str(fixtures_dir / "tiny_colt_map.txt"),
+        "--emit-json",
+    ])
+    assert result.exit_code == 0, result.output
+    out = tmp_path / "tiny_ghidra.json"
+    assert out.exists()
+    data = json.loads(out.read_text())
+    assert data["schema_version"] == 1
+    assert len(data["symbols"]) > 0
+    assert len(data["functions"]) > 0
