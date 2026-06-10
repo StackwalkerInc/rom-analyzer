@@ -109,6 +109,68 @@ def _overlay_symbols(program, ref_symbols: list[ReferenceSymbol]) -> None:
                 pass
 
 
+def _overlay_from_annotations(program, store: "AnnotationStore") -> None:
+    """Apply an AnnotationStore to an already-imported program (must be in a transaction)."""
+    from ghidra.program.model.data import DataUtilities
+    from ghidra.program.model.listing import CodeUnit
+    from ghidra.program.model.symbol import SourceType
+    from ghidra.program.flatapi import FlatProgramAPI
+
+    flat = FlatProgramAPI(program)
+    listing = program.getListing()
+
+    for s in store.symbols:
+        addr = flat.toAddr(s.address)
+        if addr is None:
+            continue
+        try:
+            flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
+        except Exception:
+            pass
+        if s.data_type is not None:
+            dt = _resolve_datatype(s.data_type)
+            if dt is not None:
+                try:
+                    DataUtilities.createData(
+                        program, addr, dt, -1,
+                        DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
+                    )
+                except Exception:
+                    pass
+
+    for f in store.functions:
+        addr = flat.toAddr(f.entry_point)
+        if addr is None:
+            continue
+        try:
+            flat.createLabel(addr, f.name, True, SourceType.USER_DEFINED)
+        except Exception:
+            pass
+        try:
+            flat.createFunction(addr, f.name)
+        except Exception:
+            pass
+
+    comment_type_map = {
+        "end-of-line": CodeUnit.EOL_COMMENT,
+        "pre": CodeUnit.PRE_COMMENT,
+        "post": CodeUnit.POST_COMMENT,
+        "plate": CodeUnit.PLATE_COMMENT,
+        "repeatable": CodeUnit.REPEATABLE_COMMENT,
+    }
+    for c in store.comments:
+        addr = flat.toAddr(c.address)
+        if addr is None:
+            continue
+        ghidra_type = comment_type_map.get(c.type)
+        if ghidra_type is None:
+            continue
+        try:
+            listing.setComment(addr, ghidra_type, c.text)
+        except Exception:
+            pass
+
+
 def _dump_program(
     program,
     crc_step_address: int | None = None,
@@ -256,7 +318,7 @@ def import_and_dump(
             with pyghidra.transaction(program, "Overlay annotations"):
                 _overlay_from_annotations(program, store)
             program.save("Annotation overlay", pyghidra.task_monitor())
-        elif ref_symbols_for_overlay:
+        elif ref_symbols_for_overlay:  # annotations_path takes priority when both are given
             with pyghidra.transaction(program, "Overlay symbols"):
                 _overlay_symbols(program, ref_symbols_for_overlay)
             program.save("Symbol overlay", pyghidra.task_monitor())
@@ -567,69 +629,6 @@ def _resolve_datatype(type_str: str):
         'undefined *': PointerDataType(),
     }
     return scalar.get(s)
-
-
-def _overlay_from_annotations(program, store: "AnnotationStore") -> None:
-    """Apply an AnnotationStore to an already-imported program (must be in a transaction)."""
-    from ghidra.program.model.data import DataUtilities
-    from ghidra.program.model.listing import CodeUnit
-    from ghidra.program.model.symbol import SourceType
-    from ghidra.program.flatapi import FlatProgramAPI
-
-    flat = FlatProgramAPI(program)
-    listing = program.getListing()
-    addr_space = program.getAddressFactory().getDefaultAddressSpace()
-
-    for s in store.symbols:
-        addr = flat.toAddr(s.address)
-        if addr is None:
-            continue
-        try:
-            flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
-        except Exception:
-            pass
-        if s.data_type is not None:
-            dt = _resolve_datatype(s.data_type)
-            if dt is not None:
-                try:
-                    DataUtilities.createData(
-                        program, addr, dt, -1,
-                        DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
-                    )
-                except Exception:
-                    pass
-
-    for f in store.functions:
-        addr = flat.toAddr(f.entry_point)
-        if addr is None:
-            continue
-        try:
-            flat.createLabel(addr, f.name, True, SourceType.USER_DEFINED)
-        except Exception:
-            pass
-        try:
-            flat.createFunction(addr, f.name)
-        except Exception:
-            pass
-
-    comment_type_map = {
-        "end-of-line": CodeUnit.EOL_COMMENT,
-        "pre": CodeUnit.PRE_COMMENT,
-        "post": CodeUnit.POST_COMMENT,
-        "plate": CodeUnit.PLATE_COMMENT,
-        "repeatable": CodeUnit.REPEATABLE_COMMENT,
-    }
-    for c in store.comments:
-        addr = addr_space.getAddress(c.address)
-        if addr is None:
-            continue
-        ghidra_type = comment_type_map.get(c.type)
-        if ghidra_type is None:
-            continue
-        try:
-            listing.setComment(addr, ghidra_type, c.text)
-        except Exception:
-            pass
 
 
 def apply_data_types(
