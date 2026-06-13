@@ -157,3 +157,66 @@ class TestParseDtcTable:
         assert len(entries) == 1
         assert entries[0].word == 16
         assert entries[0].bit == 15
+
+
+# ---------------------------------------------------------------------------
+# Task 5: emit_dtc_map_toml / emit_obd_pid_symbols
+# ---------------------------------------------------------------------------
+
+class TestEmitDtcMapToml:
+    def test_empty_entries(self):
+        from rom_analyzer.emit_ld import emit_dtc_map_toml
+        result = emit_dtc_map_toml([])
+        assert "dtc" in result
+
+    def test_single_entry_no_setters(self):
+        from rom_analyzer.obd_analysis import DTCEntry
+        from rom_analyzer.emit_ld import emit_dtc_map_toml
+        e = DTCEntry(word=0, bit=0, p_code=100, p_code_str="P0100",
+                     std_name="maf_circuit_malfunction")
+        result = emit_dtc_map_toml([e])
+        assert "P0100" in result
+        assert "maf_circuit_malfunction" in result
+
+    def test_entry_with_setter(self):
+        from rom_analyzer.obd_analysis import DTCEntry, DTCSetterInfo
+        from rom_analyzer.emit_ld import emit_dtc_map_toml
+        setter = DTCSetterInfo(call_site_addr=0x1000, caller_addr=0x2000,
+                               caller_name="some_fn", is_set=True)
+        e = DTCEntry(word=1, bit=2, p_code=300, p_code_str="P0300",
+                     std_name="random_multiple_cylinder_misfire", setters=[setter])
+        result = emit_dtc_map_toml([e])
+        assert "0x1000" in result
+        assert "some_fn" in result
+
+    def test_output_is_valid_toml(self):
+        import tomllib
+        from rom_analyzer.obd_analysis import DTCEntry
+        from rom_analyzer.emit_ld import emit_dtc_map_toml
+        e = DTCEntry(word=0, bit=0, p_code=100, p_code_str="P0100", std_name=None)
+        raw = emit_dtc_map_toml([e])
+        parsed = tomllib.loads(raw)
+        assert len(parsed["dtc"]) == 1
+
+
+class TestEmitObdPidSymbols:
+    def test_empty_returns_empty(self):
+        from rom_analyzer.emit_ld import emit_obd_pid_symbols
+        assert emit_obd_pid_symbols([]) == ""
+
+    def test_known_pid_uses_std_name(self):
+        from rom_analyzer.obd_analysis import OBDPidEntry
+        from rom_analyzer.emit_ld import emit_obd_pid_symbols
+        e = OBDPidEntry(mode=1, pid=0x0C, ram_addr=0x805e26,
+                        ram_size=2, std_name="engine_rpm", confidence="high")
+        result = emit_obd_pid_symbols([e])
+        assert "PROVIDE(engine_rpm" in result
+        assert "0x805e26" in result
+
+    def test_unknown_pid_uses_placeholder_name(self):
+        from rom_analyzer.obd_analysis import OBDPidEntry
+        from rom_analyzer.emit_ld import emit_obd_pid_symbols
+        e = OBDPidEntry(mode=0x18, pid=0x01, ram_addr=0x805000,
+                        ram_size=2, std_name=None, confidence="medium")
+        result = emit_obd_pid_symbols([e])
+        assert "oem_mode18_pid_01_source" in result

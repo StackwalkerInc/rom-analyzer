@@ -142,3 +142,41 @@ def emit_ram_free_toml(blocks: list[RamFreeBlock]) -> str:
         for b in blocks
     ]}
     return tomli_w.dumps(data)
+
+
+def emit_dtc_map_toml(dtc_entries: list) -> str:
+    """Render dtc-map.toml: DTC (word, bit) → P-code + standard name + setter call sites."""
+    rows = []
+    for e in dtc_entries:
+        row: dict = {
+            "word": e.word,
+            "bit": e.bit,
+            "p_code": e.p_code_str,
+        }
+        if e.std_name:
+            row["std_name"] = e.std_name
+        if e.setters:
+            row["setters"] = [
+                {
+                    "call_site": f"0x{s.call_site_addr:x}",
+                    "caller": f"0x{s.caller_addr:x}",
+                    "is_set": s.is_set,
+                    **({"caller_name": s.caller_name} if s.caller_name else {}),
+                }
+                for s in e.setters
+            ]
+        rows.append(row)
+    return tomli_w.dumps({"dtc": rows})
+
+
+def emit_obd_pid_symbols(pid_entries: list) -> str:
+    """Render OBD PID source RAM addresses as PROVIDE() lines for description.ld."""
+    if not pid_entries:
+        return ""
+    out = StringIO()
+    out.write("\n/* OBD PID source RAM addresses (auto-discovered by --emit-obd) */\n")
+    for p in pid_entries:
+        name = p.std_name or f"oem_mode{p.mode:02x}_pid_{p.pid:02x}_source"
+        comment = f"  /* mode={p.mode:#x} pid={p.pid:#x} confidence={p.confidence} */"
+        out.write(f"PROVIDE({name} = 0x{p.ram_addr:x});{comment}\n")
+    return out.getvalue()
