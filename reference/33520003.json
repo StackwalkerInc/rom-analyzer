@@ -46231,7 +46231,127 @@
       "return_type": "void"
     }
   ],
-  "struct_definitions": [],
+  "struct_definitions": [
+    {
+      "name": "cylinder_bank",
+      "size": 468,
+      "members": []
+    },
+    {
+      "name": "map8_desc",
+      "size": 4,
+      "members": [
+        {
+          "name": "type",
+          "offset": 0,
+          "type": "uint8_t"
+        },
+        {
+          "name": "offset",
+          "offset": 1,
+          "type": "uint8_t"
+        },
+        {
+          "name": "axis_dst_fp_offset",
+          "offset": 2,
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "map16_desc",
+      "size": 6,
+      "members": [
+        {
+          "name": "type",
+          "offset": 0,
+          "type": "uint16_t"
+        },
+        {
+          "name": "offset",
+          "offset": 2,
+          "type": "uint16_t"
+        },
+        {
+          "name": "axis_dst_fp_offset",
+          "offset": 4,
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "map8_3d_pure_description",
+      "size": 20,
+      "members": [
+        {
+          "name": "xsize",
+          "offset": 0,
+          "type": "uint16_t"
+        },
+        {
+          "name": "xaxis",
+          "offset": 4,
+          "type": "uint8_t *"
+        },
+        {
+          "name": "ysize",
+          "offset": 8,
+          "type": "uint16_t"
+        },
+        {
+          "name": "yaxis",
+          "offset": 12,
+          "type": "uint8_t *"
+        },
+        {
+          "name": "mapdata",
+          "offset": 16,
+          "type": "uint8_t *"
+        }
+      ]
+    },
+    {
+      "name": "map16_3d_pure_description",
+      "size": 20,
+      "members": [
+        {
+          "name": "xsize",
+          "offset": 0,
+          "type": "uint16_t"
+        },
+        {
+          "name": "xaxis",
+          "offset": 4,
+          "type": "uint16_t *"
+        },
+        {
+          "name": "ysize",
+          "offset": 8,
+          "type": "uint16_t"
+        },
+        {
+          "name": "yaxis",
+          "offset": 12,
+          "type": "uint16_t *"
+        },
+        {
+          "name": "mapdata",
+          "offset": 16,
+          "type": "uint16_t *"
+        }
+      ]
+    },
+    {
+      "name": "axis_desc",
+      "size": 0,
+      "members": []
+    },
+    {
+      "name": "feedbak_bank",
+      "size": 0,
+      "members": []
+    }
+  ],
   "comments": [
     {
       "address": "0x804ef4",
