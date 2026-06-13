@@ -34,7 +34,7 @@ from rom_analyzer.ghidra import (
     ghidriff_program_name, import_and_dump, setup_environment,
 )
 from rom_analyzer.merge import (
-    SOURCE_PRIORITY, match_rank, merge_matches, arbitrate_symbols,
+    match_rank, merge_matches, arbitrate_symbols,
 )
 from rom_analyzer.mode23_bindings import (
     resolve_nearest_site,
@@ -353,6 +353,9 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
 
     language_id = VARIANT_TO_LANGUAGE[variant]
 
+    if fast:
+        click.echo("   warning: --fast not yet implemented; running full pipeline")
+
     # Build the selected reference set from the registry (or fall back to
     # legacy --reference / --reference-rom flags when the registry is absent).
     if registry_path.exists():
@@ -448,7 +451,6 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
 
         # [5.5/7] MUT table identification (cross-ROM only)
         _mut_table_ghidra_applied = False
-        _primary_is_self_diff = rom_path.resolve() == primary.rom_path.resolve()
         if not _primary_is_self_diff and new_run.data_refs:
             mut_result = find_mut_table_in_run(matches, new_run, rom_bytes)
             if mut_result is not None:
