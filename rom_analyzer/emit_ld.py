@@ -13,12 +13,21 @@ from rom_analyzer.types import (
 )
 
 
+def _provenance_comment(s: PropagatedSymbol, show: bool) -> str:
+    if not show or not s.reference:
+        return ""
+    if not s.family_match and s.category in ("data", "ram_global"):
+        return f"  /* VERIFY: cross-family from {s.reference} */"
+    return f"  /* from {s.reference} */"
+
+
 def emit_description_ld(
     symbols: list[PropagatedSymbol],
     source_rom: str,
     reference_name: str,
     variant: str,
     match_summary: str,
+    show_provenance: bool = False,
 ) -> str:
     """Render a description.ld fragment."""
     by_cat: dict[str, list[PropagatedSymbol]] = {
@@ -39,19 +48,22 @@ def emit_description_ld(
     if by_cat["data"]:
         out.write("/* Flash table addresses */\n")
         for s in by_cat["data"]:
-            out.write(f"{s.name} = 0x{s.new_address:x};\n")
+            out.write(f"{s.name} = 0x{s.new_address:x};"
+                      f"{_provenance_comment(s, show_provenance)}\n")
         out.write("\n")
 
     if by_cat["ram_global"]:
         out.write("/* RAM globals */\n")
         for s in by_cat["ram_global"]:
-            out.write(f"{s.name} = 0x{s.new_address:x};\n")
+            out.write(f"{s.name} = 0x{s.new_address:x};"
+                      f"{_provenance_comment(s, show_provenance)}\n")
         out.write("\n")
 
     if by_cat["function"]:
         out.write("/* Function entry points */\n")
         for s in by_cat["function"]:
-            out.write(f"{s.name} = 0x{s.new_address:x};\n")
+            out.write(f"{s.name} = 0x{s.new_address:x};"
+                      f"{_provenance_comment(s, show_provenance)}\n")
         out.write("\n")
 
     return out.getvalue()
@@ -179,4 +191,35 @@ def emit_obd_pid_symbols(pid_entries: list) -> str:
         name = p.std_name or f"oem_mode{p.mode:02x}_pid_{p.pid:02x}_source"
         comment = f"  /* mode={p.mode:#x} pid={p.pid:#x} confidence={p.confidence} */"
         out.write(f"PROVIDE({name} = 0x{p.ram_addr:x});{comment}\n")
+    return out.getvalue()
+
+
+def emit_reference_conflicts_md(disagreements, cross_family) -> str:
+    """Render reference-conflicts.md: addresses where references disagreed on a
+    name, plus cross-family RAM/data labels needing manual confirmation.
+
+    `disagreements` is list[merge.Disagreement]; `cross_family` is the subset of
+    final PropagatedSymbols with family_match=False."""
+    out = StringIO()
+    out.write("# Reference conflicts\n\n")
+
+    out.write("## Disagreements\n\n")
+    if disagreements:
+        out.write("| address | winner | candidates |\n")
+        out.write("|---|---|---|\n")
+        for d in sorted(disagreements, key=lambda d: d.new_address):
+            cands = ", ".join(f"{rid}:{name}" for rid, name in d.candidates)
+            out.write(f"| 0x{d.new_address:x} | {d.winner} | {cands} |\n")
+    else:
+        out.write("_None._\n")
+
+    out.write("\n## Cross-family VERIFY\n\n")
+    if cross_family:
+        out.write("| address | name | from | category |\n")
+        out.write("|---|---|---|---|\n")
+        for s in sorted(cross_family, key=lambda s: s.new_address):
+            out.write(f"| 0x{s.new_address:x} | {s.name} | {s.reference} | {s.category} |\n")
+    else:
+        out.write("_None._\n")
+
     return out.getvalue()
