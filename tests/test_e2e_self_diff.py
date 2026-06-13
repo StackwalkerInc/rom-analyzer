@@ -93,6 +93,55 @@ def test_self_diff_matches_goldens(tmp_path):
     )
 
 
+REGISTRY = REPO_ROOT / "reference" / "registry.toml"
+
+
+@pytest.mark.e2e
+def test_single_entry_registry_matches_goldens(tmp_path):
+    """A registry with only 33520003 must reproduce the single-reference
+    goldens byte-for-byte (show_provenance is off for a lone reference)."""
+    if not LOCAL_ROM.exists() or not REGISTRY.exists():
+        pytest.skip("requires local ROM + registry.toml")
+    out_dir = tmp_path / "out"
+    subprocess.run(
+        [ROM_ANALYZER, str(LOCAL_ROM), "--variant", "fp8000",
+         "--registry", str(REGISTRY), "--reference-id", "33520003",
+         "--out", str(out_dir), "--emit-mode23"],
+        check=True,
+    )
+    for filename in ("description.ld", "omni.ld.stub", "crc-region.toml",
+                     "flash-free.toml", "ram-free.toml"):
+        expected = (GOLDEN_DIR / f"33520003.{filename}").read_text()
+        actual = (out_dir / filename).read_text()
+        assert expected == actual, f"{filename} drift under single-entry registry"
+    # Provenance must NOT appear for a lone reference (backward compatible).
+    assert "/* from" not in (out_dir / "description.ld").read_text()
+
+
+@pytest.mark.e2e
+def test_multi_reference_emits_conflicts_and_provenance(tmp_path):
+    """Two references (when a second bin+json is available) produce a conflicts
+    report and provenance comments. Skips unless a second reference is usable."""
+    if not LOCAL_ROM.exists() or not REGISTRY.exists():
+        pytest.skip("requires local ROM + registry.toml")
+    from rom_analyzer.registry import load_registry, partition_available
+    usable, _ = partition_available(load_registry(REGISTRY))
+    fp8000 = [e for e in usable if e.variant == "fp8000"]
+    if len(fp8000) < 2:
+        pytest.skip("multi-reference e2e needs ≥2 usable fp8000 references")
+    out_dir = tmp_path / "out"
+    subprocess.run(
+        [ROM_ANALYZER, str(LOCAL_ROM), "--variant", "fp8000",
+         "--registry", str(REGISTRY), "--out", str(out_dir)],
+        check=True,
+    )
+    conflicts = out_dir / "reference-conflicts.md"
+    assert conflicts.exists()
+    md = conflicts.read_text()
+    assert "## Disagreements" in md and "## Cross-family VERIFY" in md
+    assert "/* from" in (out_dir / "description.ld").read_text()
+
+
 @pytest.mark.e2e
 def test_emit_obd_produces_dtc_map(tmp_path):
     if not LOCAL_ROM.exists():

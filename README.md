@@ -31,6 +31,69 @@ docker run --rm -v "$PWD":/host ghcr.io/rcusstackwalker/rom-analyzer:latest \
     /host/my-rom.bin --variant fp8000 --out /host/out
 ```
 
+## Multi-reference
+
+rom-analyzer can diff a target ROM against multiple annotated references simultaneously,
+arbitrate conflicts, and flag cross-family symbols that need hand-verification.
+
+### registry.toml format
+
+`reference/registry.toml` is the source of truth for available references. Each entry pairs
+an annotation JSON (under `reference/`) with a ROM bin (under `roms/`, gitignored):
+
+```toml
+[[reference]]
+id = "33520003"
+json = "33520003.json"
+rom = "Z27AG_JDM_5MT_1860B104.bin"
+family = "z27ag"
+variant = "fp8000"
+priority = 100
+features = ["obd", "mut", "crc", "mode23"]
+notes = "primary Z27AG reference (Z27AG_JDM_5MT_1860B104)"
+```
+
+`variant` must match `--variant`; `priority` (higher = preferred) arbitrates when two
+references disagree on a symbol address.
+
+### Default behaviour
+
+When `reference/registry.toml` exists, rom-analyzer automatically selects all
+`variant`-compatible registered references whose ROM bin is present in `roms/` and runs the
+full matching + propagation pipeline against each. Results are merged by priority before
+emitting outputs.
+
+### Flags
+
+- `--registry PATH` — path to registry TOML (default: `reference/registry.toml`).
+  If the file is absent, falls back to `--reference`/`--reference-rom` (legacy mode).
+- `--reference-id ID` — restrict to this registry id (repeatable; can pass multiple times).
+- `--exclude-id ID` — drop this registry id from the selected set (repeatable).
+- `--fast` — accepted but not yet implemented; reserved for greedy incremental matching.
+
+### New outputs with >1 reference
+
+- `reference-conflicts.md` — two sections: `## Disagreements` (two references mapped the
+  same symbol to different addresses, arbitrated by priority) and `## Cross-family VERIFY`
+  (symbols carried from a reference whose `family` differs from the primary — safe to use
+  but should be confirmed in Ghidra).
+- `description.ld` gains `/* from <id> */` provenance comments after each symbol when more
+  than one reference contributed. Single-reference runs are unchanged (no comments emitted).
+
+### Authoring a reference
+
+1. Run rom-analyzer on the new ROM and enrich its Ghidra project with `--enrich-project`.
+2. Export annotations: `python rom_analyzer/scripts/export_annotations.py`.
+3. Place the output as `reference/<id>.json`.
+4. Add a `[[reference]]` entry to `reference/registry.toml`.
+5. Commit the JSON and updated registry (no ROM binary — gitignored).
+
+### Backward compatibility
+
+If `registry.toml` is absent, the `--reference` (JSON path) and `--reference-rom` (bin
+path) legacy flags are used exactly as before. Existing single-reference invocations are
+fully unchanged.
+
 ## Outputs
 
 - `description.ld` — function-entry symbols and RAM globals with addresses, ready for `mmc-patches`. Note: v0.1 does NOT yet propagate flash data labels (fuel-map / table addresses); that's v0.2 work.
