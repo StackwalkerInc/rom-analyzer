@@ -579,8 +579,8 @@ def fetch_dtc_helpers_structural(
 def fetch_dtc_call_sites(
     project,
     prog_name: str,
-    set_addr: int,
-    reset_addr: int,
+    set_addr: int | None,
+    reset_addr: int | None,
     max_back: int = 8,
 ) -> list[dict]:
     """Enumerate every call to probably_set_dtc and probably_reset_dtc.
@@ -603,7 +603,7 @@ def fetch_dtc_call_sites(
         af = program.getAddressFactory().getDefaultAddressSpace()
 
         for is_set, target_addr in [(True, set_addr), (False, reset_addr)]:
-            if not target_addr:
+            if target_addr is None:
                 continue
             target = af.getAddress(target_addr)
 
