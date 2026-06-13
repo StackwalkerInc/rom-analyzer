@@ -41729,7 +41729,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct head *"
+          "type": "const struct cylinder_bank *"
         }
       ]
     },
@@ -44491,7 +44491,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct map8_description * *"
+          "type": "const struct map8_desc * *"
         }
       ]
     },
@@ -44507,7 +44507,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct map16_description * *"
+          "type": "const struct map16_desc * *"
         }
       ]
     },
@@ -44743,7 +44743,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct head *"
+          "type": "const struct cylinder_bank *"
         },
         {
           "name": "rear_sensor",
