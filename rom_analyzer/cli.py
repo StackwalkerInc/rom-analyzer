@@ -362,7 +362,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
 
         # [5.75/7] OBD PID + DTC analysis
         obd_result = None
-        obd_pid_lines: list[str] = []
+        obd_pid_text: str = ""
         if emit_obd:
             from rom_analyzer.obd_analysis import run_obd_analysis
             click.echo("[5.75/7] OBD PID + DTC analysis")
@@ -372,7 +372,12 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
                 (p for p in propagated_all if p.name == "flash_trouble_code_table"),
                 None,
             )
-            dtc_table_addr_new = dtc_table_sym.new_address if dtc_table_sym else 0x12948
+            if dtc_table_sym is not None:
+                dtc_table_addr_new = dtc_table_sym.new_address
+            else:
+                # 0x12948 is the 33520003 reference-ROM address; safe only if ROM map is identical
+                click.echo("   warning: flash_trouble_code_table not propagated; using reference-ROM fallback 0x12948")
+                dtc_table_addr_new = 0x12948
 
             # Build (mode, entry_addr) pairs from matched functions
             _handler_refs = [
@@ -402,7 +407,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
             # Layer 2 fallback: structural opcode signature scan
             if set_addr is None or reset_addr is None:
                 click.echo(
-                    "   DTC helpers not in VTSession matches; trying structural scan"
+                    "   DTC helpers not fully resolved via VTSession; trying structural scan for missing one(s)"
                 )
                 scan_set, scan_reset = fetch_dtc_helpers_structural(
                     project, new_prog_name
@@ -436,7 +441,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
                 f"   DTC entries: {len(obd_result.dtc_entries)}, "
                 f"PID entries: {len(obd_result.pid_entries)}"
             )
-            obd_pid_lines = [emit_obd_pid_symbols(obd_result.pid_entries)]
+            obd_pid_text = emit_obd_pid_symbols(obd_result.pid_entries)
 
         # [6/7] Detect CRC, scan free space
         click.echo("[6/7] Detecting CRC, scanning free space")
@@ -549,7 +554,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         if mode23_lines:
             _desc += "\n/* mode 0x23 splice-site bindings (--emit-mode23) */\n"
             _desc += "".join(mode23_lines)
-        _desc += "".join(obd_pid_lines)
+        _desc += obd_pid_text
         (out_dir / "description.ld").write_text(_desc)
         (out_dir / "omni.ld.stub").write_text(emit_omni_stub(flash_blocks, ram_globals))
         (out_dir / "crc-region.toml").write_text(
