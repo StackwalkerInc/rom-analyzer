@@ -2,6 +2,7 @@
 
 import os
 import sys
+from dataclasses import dataclass, replace
 from io import StringIO
 from pathlib import Path
 
@@ -22,6 +23,7 @@ from rom_analyzer.emit_ld import (
     emit_omni_stub,
     emit_obd_pid_symbols,
     emit_ram_free_toml,
+    emit_reference_conflicts_md,
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
@@ -31,15 +33,21 @@ from rom_analyzer.ghidra import (
     fetch_instructions_at, fetch_r0_imm_before,
     ghidriff_program_name, import_and_dump, setup_environment,
 )
+from rom_analyzer.merge import (
+    SOURCE_PRIORITY, match_rank, merge_matches, arbitrate_symbols,
+)
 from rom_analyzer.mode23_bindings import (
     resolve_nearest_site,
     resolve_can_call_sites,
     decode_ldi_r0_before,
 )
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
-from rom_analyzer.propagate import propagate_function_labels
+from rom_analyzer.propagate import propagate_function_labels, apply_reference_provenance
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
 from rom_analyzer.ram_space import find_free_ram_blocks
+from rom_analyzer.registry import (
+    ReferenceEntry, load_registry, select_references, partition_available,
+)
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
 from rom_analyzer.annotations_io import load_annotations, load_reference_symbols
 from rom_analyzer.types import DataTypeDefinition
@@ -51,6 +59,232 @@ VARIANT_TO_LANGUAGE = {
 }
 
 _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
+
+
+@dataclass
+class ReferenceResult:
+    entry: ReferenceEntry
+    matches: list          # list[MatchedFunction], tagged with reference=entry.id
+    propagated: list       # list[PropagatedSymbol], tagged + family-gated
+    ref_run: object        # ImportRun handle (for single-source passes), may be None
+    ref_symbols: list      # list[ReferenceSymbol] for this reference
+    # Detail fields for the match-report (primary reference only)
+    data_labels: list      # list[PropagatedSymbol]
+    ram_labels: list       # list[PropagatedSymbol]
+    sig_matches: list      # list[MatchedFunction]
+    ram_labels_p2: list    # list[PropagatedSymbol]
+    data_labels_p2: list   # list[PropagatedSymbol]
+
+
+def analyze_against_reference(project, entry, language_id, rom_path, rom_bytes,
+                              new_run, new_prog_name, target_family,
+                              inline_source_annotations):
+    """Run the full matching + propagation pipeline for ONE reference against
+    the already-imported target. Returns reference-tagged, family-gated results."""
+
+    reference_rom = entry.rom_path
+    reference = entry.json_path
+
+    is_self_diff = rom_path.resolve() == reference_rom.resolve()
+
+    # [1/7] Load enriched reference symbols
+    click.echo(f"[1/7] Loading reference symbols from {reference}")
+    ref_symbols = load_reference_symbols(reference)
+    ref_symbols_by_addr = {s.address: s for s in ref_symbols}
+
+    crc_step_addr = next(
+        (s.address for s in ref_symbols if s.name == "rom_crc_check_step"),
+        None,
+    )
+    if crc_step_addr is None:
+        click.echo("   warning: rom_crc_check_step not in reference symbols; CRC detection skipped")
+
+    # [2/7] Import reference ROM into Ghidra + apply symbol overlay
+    click.echo(f"[2/7] Importing reference ROM into Ghidra: {reference_rom}")
+    if not reference_rom.exists():
+        click.echo(f"   warning: reference ROM not found at {reference_rom}; skipping reference import")
+        ref_run = None
+    else:
+        ref_run = import_and_dump(
+            project,
+            reference_rom, language_id,
+            crc_step_address=crc_step_addr,
+            ref_symbols_for_overlay=ref_symbols,
+            collect_data_refs_flag=(not is_self_diff),
+        )
+
+    # Call-graph bootstrap + BFS pre-seed (cross-ROM only)
+    anchors: list[MatchedFunction] = []
+    bfs_matches: list[MatchedFunction] = []
+    if not is_self_diff and ref_run is not None:
+        ref_bytes = reference_rom.read_bytes()
+        ref_symbols_by_name = {s.name: s for s in ref_symbols}
+        anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
+                                    ref_symbols_by_name, ref_symbols_by_addr)
+        bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
+                                                 ref_symbols_by_addr,
+                                                 ref_bytes=ref_bytes,
+                                                 new_bytes=rom_bytes)
+        by_src: dict[str, int] = {}
+        for a in anchors:
+            by_src[a.source] = by_src.get(a.source, 0) + 1
+        src_str = ", ".join(f"{s}: {n}" for s, n in sorted(by_src.items()))
+        click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
+        click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
+        if bfs_overlays:
+            # Deduplicate by new-ROM address: multiple BFS paths can converge on the
+            # same target; writing all of them as Ghidra labels creates spurious
+            # multi-label clutter that persists across runs.
+            seen_bfs: set[int] = set()
+            unique_bfs = []
+            for s in bfs_overlays:
+                if s.address not in seen_bfs:
+                    seen_bfs.add(s.address)
+                    unique_bfs.append(s)
+            bfs_propagated = [
+                PropagatedSymbol(s.name, 0, s.address, s.category, "medium",
+                                 source="callgraph_bfs", score=1.0)
+                for s in unique_bfs
+            ]
+            apply_labels(project, new_prog_name, bfs_propagated,
+                         add_comments=inline_source_annotations)
+
+    # [4/7] Diff (identity or VTSession)
+    if is_self_diff:
+        click.echo(f"[4/7] Self-diff detected; using identity matches")
+        matches = [
+            MatchedFunction(ref_name=s.name, ref_address=s.address,
+                            new_address=s.address, similarity=1.0,
+                            source="identity")
+            for s in ref_symbols if s.category == "function"
+        ]
+    elif ref_run is None:
+        click.echo("[4/7] Skipping diff — reference ROM unavailable")
+        matches = []
+    else:
+        click.echo(f"[4/7] Diffing via Ghidra VTSession")
+        ref_prog_name = ghidriff_program_name(reference_rom)
+        matches = run_vt_diff(project, ref_prog_name, new_prog_name)
+        gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
+                               ref_bytes=ref_bytes, new_bytes=rom_bytes)
+        click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
+        all_matches = matches + anchors + bfs_matches + gap_matches
+
+        identity_matches = bytecode_identity_match(
+            ref_bytes, rom_bytes, ref_run, new_run,
+            all_matches, ref_symbols_by_addr,
+        )
+        click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
+        matches = all_matches + identity_matches
+
+    # Deduplicate by ref_address — when multiple phases claimed the same
+    # reference function, keep the highest-ranked match.
+    # Within one reference, the reference-priority component is constant so {} is fine.
+    best_by_ref: dict[int, MatchedFunction] = {}
+    for m in matches:
+        if m.ref_address not in best_by_ref or match_rank(m, {}) > match_rank(best_by_ref[m.ref_address], {}):
+            best_by_ref[m.ref_address] = m
+    matches = list(best_by_ref.values())
+
+    # Deduplicate by new_address — when two different ref functions map to
+    # the same new address, keep only the highest-ranked match.
+    best_by_new: dict[int, MatchedFunction] = {}
+    for m in matches:
+        if m.new_address not in best_by_new or match_rank(m, {}) > match_rank(best_by_new[m.new_address], {}):
+            best_by_new[m.new_address] = m
+    matches = list(best_by_new.values())
+
+    # [5/7] Propagate symbols
+    click.echo("[5/7] Propagating symbols")
+    propagated_fns = propagate_function_labels(ref_symbols, matches)
+
+    new_ram_refs = set(new_run.ram_refs)
+    # Ram-global propagation by absolute address is only valid for same-ECU ROMs
+    # (identical RAM layout).  Cross-family analysis (e.g. Z27AG vs Outlander)
+    # must not copy reference RAM labels: a given fp-offset may hold a completely
+    # different variable in the target ECU.  For cross-ROM analysis, per-function
+    # RAM ref tracking would be required — that is not yet implemented.
+    if is_self_diff:
+        ram_globals = [
+            PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high",
+                             source="ram_global", score=1.0)
+            for s in ref_symbols
+            if s.category == "ram_global" and s.address in new_ram_refs
+        ]
+    else:
+        ram_globals = []
+
+    if not is_self_diff and ref_run is not None and ref_run.data_refs and new_run.data_refs:
+        data_labels = propagate_data_labels(
+            ref_run.data_refs, new_run.data_refs, matches, ref_symbols_by_addr
+        )
+        click.echo(f"   data labels propagated: {len(data_labels)}")
+    elif is_self_diff:
+        data_labels = [
+            PropagatedSymbol(s.name, s.address, s.address, "data", "high",
+                             source="identity", score=1.0)
+            for s in ref_symbols if s.category == "data"
+        ]
+    else:
+        data_labels = []
+
+    if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs:
+        ram_labels = propagate_ram_labels(
+            ref_run.ram_data_refs, new_run.ram_data_refs, matches, ref_symbols_by_addr
+        )
+        click.echo(f"   ram labels propagated: {len(ram_labels)}")
+    else:
+        ram_labels = []  # self-diff: ram_globals covers RAM vars by identity address
+
+    propagated_all = propagated_fns + ram_globals + data_labels + ram_labels
+
+    # [5.25/7] RAM-signature match + second propagation pass
+    sig_matches: list[MatchedFunction] = []
+    ram_labels_p2: list[PropagatedSymbol] = []
+    data_labels_p2: list[PropagatedSymbol] = []
+    if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs and ram_labels:
+        click.echo("[5.25/7] RAM-signature matching")
+        ref_label_map = {s.address: s.name for s in ref_symbols if s.category == "ram_global"}
+        new_label_map = {ps.new_address: ps.name for ps in ram_labels}
+        ref_sigs = build_ram_signatures(ref_run.ram_data_refs, ref_label_map)
+        new_sigs = build_ram_signatures(new_run.ram_data_refs, new_label_map)
+        sig_matches = match_by_ram_signature(ref_sigs, new_sigs, matches, ref_symbols_by_addr)
+        click.echo(f"   ram-signature matches: {len(sig_matches)}")
+        if sig_matches:
+            extended_matches = matches + sig_matches
+            fn_labels_p2 = propagate_function_labels(ref_symbols, sig_matches)
+            ram_labels_p2 = propagate_ram_labels(
+                ref_run.ram_data_refs, new_run.ram_data_refs,
+                extended_matches, ref_symbols_by_addr,
+            )
+            if ref_run.data_refs and new_run.data_refs:
+                data_labels_p2 = propagate_data_labels(
+                    ref_run.data_refs, new_run.data_refs,
+                    extended_matches, ref_symbols_by_addr,
+                )
+            click.echo(f"   ram labels (p2): {len(ram_labels_p2)}")
+            click.echo(f"   data labels (p2): {len(data_labels_p2)}")
+            propagated_all += fn_labels_p2 + ram_labels_p2 + data_labels_p2
+            matches = extended_matches
+
+    # Tag matches and propagated symbols with origin reference id, apply family gating
+    matches = [replace(m, reference=entry.id) for m in matches]
+    family_match = (entry.family == target_family)
+    propagated_all = apply_reference_provenance(
+        propagated_all, reference=entry.id, family_match=family_match)
+
+    return ReferenceResult(
+        entry=entry,
+        matches=matches,
+        propagated=propagated_all,
+        ref_run=ref_run,
+        ref_symbols=ref_symbols,
+        data_labels=data_labels,
+        ram_labels=ram_labels,
+        sig_matches=sig_matches,
+        ram_labels_p2=ram_labels_p2,
+        data_labels_p2=data_labels_p2,
+    )
 
 
 @click.command()
@@ -84,10 +318,23 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               help="Resolve and append the mode-0x23 code splice-site bindings to description.ld")
 @click.option("--emit-obd", is_flag=True, default=False,
               help="Extract OBD PID + DTC ground-truth labels and emit dtc-map.toml")
+@click.option("--registry", "registry_path", type=click.Path(path_type=Path),
+              default=_REFERENCE_DIR / "registry.toml",
+              help="Reference registry TOML (multi-reference). Falls back to "
+                   "--reference/--reference-rom if absent.")
+@click.option("--reference-id", "reference_ids", multiple=True,
+              help="Restrict to these registry reference ids (repeatable).")
+@click.option("--exclude-id", "exclude_ids", multiple=True,
+              help="Drop these registry reference ids (repeatable).")
+@click.option("--fast", is_flag=True, default=False,
+              help="Greedy incremental: match against the top-priority "
+                   "reference first, later references only fill gaps. "
+                   "(Accepted but not yet implemented — reserved for a future iteration.)")
 def main(rom_path, variant, reference, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
          reference_name, clean_project, enrich_project, inline_source_annotations,
-         emit_mode23, emit_obd):
+         emit_mode23, emit_obd,
+         registry_path, reference_ids, exclude_ids, fast):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -103,26 +350,38 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         if nested.exists():
             click.echo(f"--clean-project: removing {nested}")
             shutil.rmtree(nested)
-    is_self_diff = rom_path.resolve() == reference_rom.resolve()  # True implies reference_rom exists (rom_path has exists=True)
 
     language_id = VARIANT_TO_LANGUAGE[variant]
 
-    # [1/7] Load enriched reference symbols
-    click.echo(f"[1/7] Loading reference symbols from {reference}")
-    ref_store = load_annotations(reference)
-    ref_symbols = load_reference_symbols(reference)
-    ref_symbols_by_addr = {s.address: s for s in ref_symbols}
+    # Build the selected reference set from the registry (or fall back to
+    # legacy --reference / --reference-rom flags when the registry is absent).
+    if registry_path.exists():
+        entries = load_registry(registry_path)
+        selected = select_references(entries, variant=variant,
+                                     include_ids=list(reference_ids),
+                                     exclude_ids=list(exclude_ids))
+        selected, missing = partition_available(selected)
+        for e in missing:
+            click.echo(f"   skipping reference {e.id}: ROM bin not found at {e.rom_path}")
+        if not selected:
+            raise click.ClickException("No usable references (registry empty or all bins missing).")
+    else:
+        selected = [ReferenceEntry(
+            id=reference_name, json_path=reference, rom_path=reference_rom,
+            family="", variant=variant, priority=0, features=[], notes="")]
+
+    priority = {e.id: e.priority for e in selected}
+    target_family = selected[0].family   # primary (highest-priority) defines target family
+    primary = selected[0]
+    click.echo(f"[refs] {len(selected)} reference(s): "
+               + ", ".join(f"{e.id}(p{e.priority})" for e in selected))
+
+    # Load data type definitions from the primary reference for --enrich-project
+    _primary_ref_store = load_annotations(primary.json_path)
     data_type_defs = [
         DataTypeDefinition(s.address, s.data_type, 0)
-        for s in ref_store.symbols if s.data_type
+        for s in _primary_ref_store.symbols if s.data_type
     ]
-
-    crc_step_addr = next(
-        (s.address for s in ref_symbols if s.name == "rom_crc_check_step"),
-        None,
-    )
-    if crc_step_addr is None:
-        click.echo("   warning: rom_crc_check_step not in reference symbols; CRC detection skipped")
 
     # Start Ghidra JVM and open the project once for the full run.
     setup_environment(ghidra_home)
@@ -135,202 +394,62 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
     try:
         new_prog_name = ghidriff_program_name(rom_path)
 
-        # [2/7] Import reference ROM into Ghidra + apply symbol overlay
-        click.echo(f"[2/7] Importing reference ROM into Ghidra: {reference_rom}")
-        if not reference_rom.exists():
-            click.echo(f"   warning: reference ROM not found at {reference_rom}; skipping reference import")
-            ref_run = None
-        else:
-            ref_run = import_and_dump(
-                project,
-                reference_rom, language_id,
-                crc_step_address=crc_step_addr,
-                ref_symbols_for_overlay=ref_symbols,
-                collect_data_refs_flag=(not is_self_diff),
-            )
-
-        # [3/7] Import new ROM into Ghidra
+        # [3/7] Import new ROM into Ghidra (once, shared across all references)
         click.echo(f"[3/7] Importing new ROM into Ghidra: {rom_path}")
+        # Use the primary reference's crc_step_addr for the target import.
+        # The primary drives single-source passes anyway, so this is consistent.
+        _primary_ref_symbols_preview = load_reference_symbols(primary.json_path)
+        _primary_crc_step_addr = next(
+            (s.address for s in _primary_ref_symbols_preview if s.name == "rom_crc_check_step"),
+            None,
+        )
+        _primary_is_self_diff = rom_path.resolve() == primary.rom_path.resolve()
         new_run = import_and_dump(
             project,
             rom_path, language_id,
-            crc_step_address=crc_step_addr,
-            collect_data_refs_flag=(not is_self_diff),
+            crc_step_address=_primary_crc_step_addr,
+            collect_data_refs_flag=(not _primary_is_self_diff),
         )
 
         # Read ROM bytes now — used by call-graph bootstrap and CRC scan
         rom_bytes = rom_path.read_bytes()
 
-        # Call-graph bootstrap + BFS pre-seed (cross-ROM only)
-        anchors: list[MatchedFunction] = []
-        bfs_matches: list[MatchedFunction] = []
-        if not is_self_diff and ref_run is not None:
-            ref_bytes = reference_rom.read_bytes()
-            ref_symbols_by_name = {s.name: s for s in ref_symbols}
-            anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
-                                        ref_symbols_by_name, ref_symbols_by_addr)
-            bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
-                                                     ref_symbols_by_addr,
-                                                     ref_bytes=ref_bytes,
-                                                     new_bytes=rom_bytes)
-            by_src: dict[str, int] = {}
-            for a in anchors:
-                by_src[a.source] = by_src.get(a.source, 0) + 1
-            src_str = ", ".join(f"{s}: {n}" for s, n in sorted(by_src.items()))
-            click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
-            click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
-            if bfs_overlays:
-                # Deduplicate by new-ROM address: multiple BFS paths can converge on the
-                # same target; writing all of them as Ghidra labels creates spurious
-                # multi-label clutter that persists across runs.
-                seen_bfs: set[int] = set()
-                unique_bfs = []
-                for s in bfs_overlays:
-                    if s.address not in seen_bfs:
-                        seen_bfs.add(s.address)
-                        unique_bfs.append(s)
-                bfs_propagated = [
-                    PropagatedSymbol(s.name, 0, s.address, s.category, "medium",
-                                     source="callgraph_bfs", score=1.0)
-                    for s in unique_bfs
-                ]
-                apply_labels(project, new_prog_name, bfs_propagated,
-                             add_comments=inline_source_annotations)
+        # Run the full matching + propagation pipeline for each reference
+        results: list[ReferenceResult] = []
+        for entry in selected:
+            click.echo(f"[ref {entry.id}] matching")
+            results.append(analyze_against_reference(
+                project, entry, language_id, rom_path, rom_bytes,
+                new_run, new_prog_name, target_family, inline_source_annotations))
 
-        # [4/7] Diff (identity or VTSession)
-        if is_self_diff:
-            click.echo(f"[4/7] Self-diff detected; using identity matches")
-            matches = [
-                MatchedFunction(ref_name=s.name, ref_address=s.address,
-                                new_address=s.address, similarity=1.0,
-                                source="identity")
-                for s in ref_symbols if s.category == "function"
-            ]
-        elif ref_run is None:
-            click.echo("[4/7] Skipping diff — reference ROM unavailable")
-            matches = []
-        else:
-            click.echo(f"[4/7] Diffing via Ghidra VTSession")
-            ref_prog_name = ghidriff_program_name(reference_rom)
-            matches = run_vt_diff(project, ref_prog_name, new_prog_name)
-            gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
-                                   ref_bytes=ref_bytes, new_bytes=rom_bytes)
-            click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
-            all_matches = matches + anchors + bfs_matches + gap_matches
+        # Merge matches and arbitrate symbols across all references
+        matches = merge_matches([r.matches for r in results], priority)
+        all_propagated = [s for r in results for s in r.propagated]
+        propagated_all, disagreements = arbitrate_symbols(all_propagated, priority)
+        cross_family = [s for s in propagated_all if not s.family_match]
+        click.echo(f"[merge] {len(propagated_all)} symbols, "
+                   f"{len(disagreements)} disagreement(s), "
+                   f"{len(cross_family)} cross-family VERIFY")
+        show_provenance = len(selected) > 1
 
-            identity_matches = bytecode_identity_match(
-                ref_bytes, rom_bytes, ref_run, new_run,
-                all_matches, ref_symbols_by_addr,
-            )
-            click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
-            matches = all_matches + identity_matches
-
-        # Source priority — used in both dedup passes.
-        # Structural ROM-invariant sources (vector_table, icu_vector_table, mut_table)
-        # override bytecode-comparison matches.  Within a tier, higher similarity wins.
-        SOURCE_PRIORITY = {"vector_table": 3, "icu_vector_table": 3,
-                           "bytecode_identity": 2, "mut_table": 2,
-                           "callgraph_bfs": 1, "callgraph_gap": 1, "vt_diff": 0}
-        def _match_rank(m: MatchedFunction) -> tuple:
-            return (SOURCE_PRIORITY.get(m.source, 0), m.similarity)
-
-        # Deduplicate by ref_address — when multiple phases claimed the same
-        # reference function, keep the highest-ranked match.
-        best_by_ref: dict[int, MatchedFunction] = {}
-        for m in matches:
-            if m.ref_address not in best_by_ref or _match_rank(m) > _match_rank(best_by_ref[m.ref_address]):
-                best_by_ref[m.ref_address] = m
-        matches = list(best_by_ref.values())
-
-        # Deduplicate by new_address — when two different ref functions map to
-        # the same new address, keep only the highest-ranked match.
-        best_by_new: dict[int, MatchedFunction] = {}
-        for m in matches:
-            if m.new_address not in best_by_new or _match_rank(m) > _match_rank(best_by_new[m.new_address]):
-                best_by_new[m.new_address] = m
-        matches = list(best_by_new.values())
-
-        # [5/7] Propagate symbols
-        click.echo("[5/7] Propagating symbols")
-        propagated_fns = propagate_function_labels(ref_symbols, matches)
-
-        new_ram_refs = set(new_run.ram_refs)
-        # Ram-global propagation by absolute address is only valid for same-ECU ROMs
-        # (identical RAM layout).  Cross-family analysis (e.g. Z27AG vs Outlander)
-        # must not copy reference RAM labels: a given fp-offset may hold a completely
-        # different variable in the target ECU.  For cross-ROM analysis, per-function
-        # RAM ref tracking would be required — that is not yet implemented.
-        if is_self_diff:
-            ram_globals = [
-                PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high",
-                                 source="ram_global", score=1.0)
-                for s in ref_symbols
-                if s.category == "ram_global" and s.address in new_ram_refs
-            ]
-        else:
-            ram_globals = []
-
-        if not is_self_diff and ref_run is not None and ref_run.data_refs and new_run.data_refs:
-            data_labels = propagate_data_labels(
-                ref_run.data_refs, new_run.data_refs, matches, ref_symbols_by_addr
-            )
-            click.echo(f"   data labels propagated: {len(data_labels)}")
-        elif is_self_diff:
-            data_labels = [
-                PropagatedSymbol(s.name, s.address, s.address, "data", "high",
-                                 source="identity", score=1.0)
-                for s in ref_symbols if s.category == "data"
-            ]
-        else:
-            data_labels = []
-
-        if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs:
-            ram_labels = propagate_ram_labels(
-                ref_run.ram_data_refs, new_run.ram_data_refs, matches, ref_symbols_by_addr
-            )
-            click.echo(f"   ram labels propagated: {len(ram_labels)}")
-        else:
-            ram_labels = []  # self-diff: ram_globals covers RAM vars by identity address
-
-        propagated_all = propagated_fns + ram_globals + data_labels + ram_labels
-
-        # [5.25/7] RAM-signature match + second propagation pass
-        sig_matches: list[MatchedFunction] = []
-        ram_labels_p2: list[PropagatedSymbol] = []
-        data_labels_p2: list[PropagatedSymbol] = []
-        if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs and ram_labels:
-            click.echo("[5.25/7] RAM-signature matching")
-            ref_label_map = {s.address: s.name for s in ref_symbols if s.category == "ram_global"}
-            new_label_map = {ps.new_address: ps.name for ps in ram_labels}
-            ref_sigs = build_ram_signatures(ref_run.ram_data_refs, ref_label_map)
-            new_sigs = build_ram_signatures(new_run.ram_data_refs, new_label_map)
-            sig_matches = match_by_ram_signature(ref_sigs, new_sigs, matches, ref_symbols_by_addr)
-            click.echo(f"   ram-signature matches: {len(sig_matches)}")
-            if sig_matches:
-                extended_matches = matches + sig_matches
-                fn_labels_p2 = propagate_function_labels(ref_symbols, sig_matches)
-                ram_labels_p2 = propagate_ram_labels(
-                    ref_run.ram_data_refs, new_run.ram_data_refs,
-                    extended_matches, ref_symbols_by_addr,
-                )
-                if ref_run.data_refs and new_run.data_refs:
-                    data_labels_p2 = propagate_data_labels(
-                        ref_run.data_refs, new_run.data_refs,
-                        extended_matches, ref_symbols_by_addr,
-                    )
-                click.echo(f"   ram labels (p2): {len(ram_labels_p2)}")
-                click.echo(f"   data labels (p2): {len(data_labels_p2)}")
-                propagated_all += fn_labels_p2 + ram_labels_p2 + data_labels_p2
-                matches = extended_matches
+        # Single-source passes use the primary reference
+        primary_result = results[0]
+        ref_symbols = primary_result.ref_symbols
+        ref_run = primary_result.ref_run
+        ref_symbols_by_addr = {s.address: s for s in ref_symbols}
 
         named_ref_addrs = {s.address for s in ref_symbols if s.category == "function"}
         matched_count = sum(1 for m in matches if m.ref_address in named_ref_addrs)
         total_ref = len(named_ref_addrs)
         match_summary = f"{matched_count}/{total_ref} ({100.0 * matched_count / max(1, total_ref):.1f}%)"
 
+        # RAM globals for omni.ld.stub: use the primary reference's propagated symbols
+        ram_globals = [s for s in primary_result.propagated if s.category == "ram_global"]
+
         # [5.5/7] MUT table identification (cross-ROM only)
         _mut_table_ghidra_applied = False
-        if not is_self_diff and new_run.data_refs:
+        _primary_is_self_diff = rom_path.resolve() == primary.rom_path.resolve()
+        if not _primary_is_self_diff and new_run.data_refs:
             mut_result = find_mut_table_in_run(matches, new_run, rom_bytes)
             if mut_result is not None:
                 click.echo(
@@ -458,7 +577,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         # crc_step_addr is the *reference* ROM's address (wrong for the target ROM);
         # look up the matched address from VTSession/BFS and re-fetch instructions.
         _crc_instrs_raw: list[dict] | None = None
-        if is_self_diff:
+        if _primary_is_self_diff:
             if new_run.rom_crc_check_step:
                 _crc_instrs_raw = new_run.rom_crc_check_step["instructions"]
             else:
@@ -483,6 +602,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
             except Exception as e:
                 click.echo(f"   warning: CRC extraction failed: {e}")
 
+        new_ram_refs = set(new_run.ram_refs)
         flash_blocks = find_free_blocks(rom_bytes, crc, min_length=min_flash_block) if crc else []
         ram_blocks = find_free_ram_blocks(new_ram_refs, min_length=min_ram_block)
 
@@ -506,9 +626,9 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
                 # Only the K-Line block needs the reference program; resolve its
                 # name here so --emit-mode23 doesn't touch the reference ROM when
                 # the reference is unavailable.
-                ref_prog_name = ghidriff_program_name(reference_rom)
+                ref_prog_name = ghidriff_program_name(primary.rom_path)
                 ref_container = fetch_function_entry(project, ref_prog_name, kline_ref_addr)
-                if is_self_diff:
+                if _primary_is_self_diff:
                     new_container = ref_container
                 else:
                     cm = match_by_ref.get(ref_container) if ref_container is not None else None
@@ -554,9 +674,10 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         _desc = emit_description_ld(
             propagated_all,
             source_rom=rom_path.name,
-            reference_name=reference_name,
+            reference_name=("multi" if len(selected) > 1 else primary.id),
             variant=language_id,
             match_summary=match_summary,
+            show_provenance=show_provenance,
         )
         if mode23_lines:
             _desc += "\n/* mode 0x23 splice-site bindings (--emit-mode23) */\n"
@@ -575,10 +696,20 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
             dtc_map_path.write_text(emit_dtc_map_toml(obd_result.dtc_entries))
             click.echo(f"   wrote {dtc_map_path}")
 
+        (out_dir / "reference-conflicts.md").write_text(
+            emit_reference_conflicts_md(disagreements, cross_family))
+
+        # Detail fields from the primary reference for the match-report
+        data_labels = primary_result.data_labels
+        ram_labels = primary_result.ram_labels
+        sig_matches = primary_result.sig_matches
+        ram_labels_p2 = primary_result.ram_labels_p2
+        data_labels_p2 = primary_result.data_labels_p2
+
         report = StringIO()
         report.write("# rom-analyzer match report\n\n")
         report.write(f"Source ROM: {rom_path.name}\n")
-        report.write(f"Reference:  {reference_name}\n")
+        report.write(f"Reference:  {primary.id}\n")
         report.write(f"Variant:    {language_id}\n\n")
         report.write(f"## Summary\n- Matched functions: {match_summary}\n")
         scalar_count = sum(1 for d in data_labels if d.source == "data_refs_scalar")
@@ -606,6 +737,14 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
             report.write(f"## CRC region\n")
             report.write(f"- Full mode:    [{crc.full_start:#x}, {crc.full_end:#x})\n")
             report.write(f"- Partial mode: [{crc.partial_start:#x}, {crc.partial_end:#x})\n")
+
+        report.write("\n## References\n")
+        for r in results:
+            won = sum(1 for s in propagated_all if s.reference == r.entry.id)
+            report.write(f"- {r.entry.id} (priority {r.entry.priority}): "
+                         f"{len(r.matches)} matches, {won} symbols won\n")
+        report.write("\n")
+
         (out_dir / "match-report.md").write_text(report.getvalue())
 
         click.echo(f"\nDone. Outputs in {out_dir}/")
