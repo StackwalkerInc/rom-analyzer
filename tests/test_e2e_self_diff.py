@@ -91,3 +91,40 @@ def test_self_diff_matches_goldens(tmp_path):
     assert "canrx12_15_call_location_slot15" in desc, (
         "slot-15 CAN mode-0x23 splice binding should be emitted"
     )
+
+
+@pytest.mark.e2e
+def test_emit_obd_produces_dtc_map(tmp_path):
+    if not LOCAL_ROM.exists():
+        pytest.skip(
+            f"E2E test requires a user-supplied ROM at {LOCAL_ROM} "
+            f"(see README; ROMs are never distributed)"
+        )
+    out_dir = tmp_path / "out"
+    subprocess.run(
+        [
+            ROM_ANALYZER, str(LOCAL_ROM),
+            "--variant", "fp8000",
+            "--out", str(out_dir),
+            "--emit-obd",
+        ],
+        check=True,
+    )
+
+    dtc_map = out_dir / "dtc-map.toml"
+    assert dtc_map.exists(), "dtc-map.toml must be emitted with --emit-obd"
+
+    import tomllib
+    data = tomllib.loads(dtc_map.read_text())
+    dtc_entries = data.get("dtc", [])
+    assert len(dtc_entries) >= 50, (
+        f"Expected ≥50 DTC entries; got {len(dtc_entries)}"
+    )
+
+    high_conf_pid_syms = out_dir / "description.ld"
+    if high_conf_pid_syms.exists():
+        ld_content = high_conf_pid_syms.read_text()
+        # At least one standard OBD PID should appear as a PROVIDE symbol
+        assert "PROVIDE(engine_rpm" in ld_content or "PROVIDE(vehicle_speed" in ld_content, (
+            "Expected at least one standard OBD PID PROVIDE() symbol in description.ld"
+        )
