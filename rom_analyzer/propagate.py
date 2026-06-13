@@ -4,6 +4,8 @@ v1 handles function-entry labels only. Data label and RAM global propagation
 require Ghidra disassembly context and is handled at integration time in cli.py.
 """
 
+from dataclasses import replace
+
 from rom_analyzer.types import (
     ConfidenceTier,
     MatchedFunction,
@@ -58,4 +60,26 @@ def propagate_function_labels(
                 score=m.similarity,
             )
         )
+    return out
+
+
+def apply_reference_provenance(
+    symbols: list[PropagatedSymbol],
+    *,
+    reference: str,
+    family_match: bool,
+) -> list[PropagatedSymbol]:
+    """Stamp the origin reference id onto each symbol and apply cross-family
+    gating. Function-entry labels are cross-family safe and pass through with
+    family_match=True. RAM-global / flash-data labels from a different ECU
+    family are downgraded to 'low' confidence and marked family_match=False so
+    a human verifies them (their absolute addresses are family-specific)."""
+    out: list[PropagatedSymbol] = []
+    for s in symbols:
+        risky = s.category in ("data", "ram_global")
+        if not family_match and risky:
+            out.append(replace(s, reference=reference,
+                               confidence="low", family_match=False))
+        else:
+            out.append(replace(s, reference=reference, family_match=True))
     return out
