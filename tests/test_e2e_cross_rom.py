@@ -28,9 +28,7 @@ import pytest
 REPO_ROOT = Path(__file__).parent.parent
 OUTLANDER_ROM = REPO_ROOT / "roms" / "outlander-c7280011.bin"
 REFERENCE_ROM = REPO_ROOT / "roms" / "Z27AG_JDM_5MT_1860B104.bin"
-REFERENCE_XML = REPO_ROOT / "reference" / "33520003.xml"
-FLASH_TXT = REPO_ROOT / "reference" / "colt_flash.txt"
-MAP_TXT = REPO_ROOT / "reference" / "colt_map.txt"
+REFERENCE_JSON = REPO_ROOT / "reference" / "33520003.json"
 
 _VENV_BIN = Path(sys.executable).parent
 _ROM_ANALYZER_CMD = _VENV_BIN / "rom-analyzer"
@@ -60,9 +58,7 @@ def test_cross_rom_data_label_propagation(tmp_path):
         [
             ROM_ANALYZER, str(OUTLANDER_ROM),
             "--variant", "fp8000",
-            "--reference", str(REFERENCE_XML),
-            "--flash-txt", str(FLASH_TXT),
-            "--map-txt", str(MAP_TXT),
+            "--reference", str(REFERENCE_JSON),
             "--reference-rom", str(REFERENCE_ROM),
             "--project-dir", str(project_dir),
             "--project-name", "outlander-cross-rom-test",
@@ -97,9 +93,7 @@ def test_cross_rom_no_ram_global_propagation(tmp_path):
         [
             ROM_ANALYZER, str(OUTLANDER_ROM),
             "--variant", "fp8000",
-            "--reference", str(REFERENCE_XML),
-            "--flash-txt", str(FLASH_TXT),
-            "--map-txt", str(MAP_TXT),
+            "--reference", str(REFERENCE_JSON),
             "--reference-rom", str(REFERENCE_ROM),
             "--project-dir", str(project_dir),
             "--project-name", "outlander-cross-rom-test",

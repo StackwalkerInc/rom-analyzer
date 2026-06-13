@@ -24,13 +24,11 @@ OUT_DIR="$PROJECT_DIR/$PROJECT_NAME-out"
 
 OUTLANDER_ROM="roms/outlander-c7280011.bin"
 REFERENCE_ROM="roms/Z27AG_JDM_5MT_1860B104.bin"
-REFERENCE_XML="reference/33520003.xml"
-FLASH_TXT="reference/colt_flash.txt"
-MAP_TXT="reference/colt_map.txt"
+REFERENCE_JSON="reference/33520003.json"
 
 # ── prereq checks ─────────────────────────────────────────────────────────────
 
-for f in "$OUTLANDER_ROM" "$REFERENCE_ROM" "$REFERENCE_XML" "$FLASH_TXT" "$MAP_TXT"; do
+for f in "$OUTLANDER_ROM" "$REFERENCE_ROM" "$REFERENCE_JSON"; do
     [[ -f "$f" ]] || { echo "error: missing $f" >&2; exit 1; }
 done
 
@@ -67,9 +65,7 @@ GHIDRA_HOME="$GHIDRA_HOME" \
 "$ROM_ANALYZER" \
     "$OUTLANDER_ROM" \
     --variant fp8000 \
-    --reference "$REFERENCE_XML" \
-    --flash-txt "$FLASH_TXT" \
-    --map-txt "$MAP_TXT" \
+    --reference "$REFERENCE_JSON" \
     --reference-rom "$REFERENCE_ROM" \
     --ghidra-home "$GHIDRA_HOME" \
     --project-dir "$PROJECT_DIR" \
