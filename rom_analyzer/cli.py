@@ -16,15 +16,18 @@ from rom_analyzer.diff import run_vt_diff
 from rom_analyzer.emit_ld import (
     emit_crc_region_toml,
     emit_description_ld,
+    emit_dtc_map_toml,
     emit_flash_free_toml,
     emit_mode23_binding_line,
     emit_omni_stub,
+    emit_obd_pid_symbols,
     emit_ram_free_toml,
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
     apply_data_types, apply_labels, apply_mut_table_in_ghidra,
     fetch_function_entry, fetch_callers_of, fetch_data_read_sites,
+    fetch_dtc_helpers_structural,
     fetch_instructions_at, fetch_r0_imm_before,
     ghidriff_program_name, import_and_dump, setup_environment,
 )
@@ -79,10 +82,12 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               help="Write heuristic source as a pre-comment at each labeled address")
 @click.option("--emit-mode23", is_flag=True, default=False,
               help="Resolve and append the mode-0x23 code splice-site bindings to description.ld")
+@click.option("--emit-obd", is_flag=True, default=False,
+              help="Extract OBD PID + DTC ground-truth labels and emit dtc-map.toml")
 def main(rom_path, variant, reference, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
          reference_name, clean_project, enrich_project, inline_source_annotations,
-         emit_mode23):
+         emit_mode23, emit_obd):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
     \b
@@ -355,6 +360,84 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
                     "   warning: MUT table not identified via get_mut_pointer data refs"
                 )
 
+        # [5.75/7] OBD PID + DTC analysis
+        obd_result = None
+        obd_pid_lines: list[str] = []
+        if emit_obd:
+            from rom_analyzer.obd_analysis import run_obd_analysis
+            click.echo("[5.75/7] OBD PID + DTC analysis")
+
+            # Locate flash_trouble_code_table in the new ROM
+            dtc_table_sym = next(
+                (p for p in propagated_all if p.name == "flash_trouble_code_table"),
+                None,
+            )
+            dtc_table_addr_new = dtc_table_sym.new_address if dtc_table_sym else 0x12948
+
+            # Build (mode, entry_addr) pairs from matched functions
+            _handler_refs = [
+                (1,    "sio0_obd_request_data_by_pid"),
+                (2,    "obd_get_freeze_frame0"),
+                (0x18, "obd_mode18_handler"),
+                (0x59, "obd_mode59_handler"),
+            ]
+            match_by_name = {m.ref_name: m for m in matches if m.ref_name}
+            handler_entries: list[tuple[int, int]] = []
+            for mode, ref_name in _handler_refs:
+                m = match_by_name.get(ref_name)
+                if m is not None:
+                    handler_entries.append((mode, m.new_address))
+                else:
+                    click.echo(
+                        f"   warning: {ref_name} not matched; "
+                        f"mode {mode:#x} PID trace skipped"
+                    )
+
+            # Resolve DTC helper addresses: Layer 1 = VTSession match
+            set_match = match_by_name.get("probably_set_dtc")
+            reset_match = match_by_name.get("probably_reset_dtc")
+            set_addr = set_match.new_address if set_match else None
+            reset_addr = reset_match.new_address if reset_match else None
+
+            # Layer 2 fallback: structural opcode signature scan
+            if set_addr is None or reset_addr is None:
+                click.echo(
+                    "   DTC helpers not in VTSession matches; trying structural scan"
+                )
+                scan_set, scan_reset = fetch_dtc_helpers_structural(
+                    project, new_prog_name
+                )
+                # Layer 3 cross-check: warn if structural candidate has < 5 callers
+                if scan_set is not None:
+                    n_callers = len(fetch_callers_of(project, new_prog_name, scan_set))
+                    if n_callers < 5:
+                        click.echo(
+                            f"   warning: structural set_dtc candidate "
+                            f"{scan_set:#x} has only {n_callers} callers (expected ≥5)"
+                        )
+                set_addr = set_addr or scan_set
+                reset_addr = reset_addr or scan_reset
+
+            if set_addr is None and reset_addr is None:
+                click.echo(
+                    "   warning: could not identify DTC helper functions; "
+                    "setter attribution will be empty"
+                )
+
+            obd_result = run_obd_analysis(
+                project, new_prog_name,
+                rom_bytes,
+                dtc_table_addr_new,
+                handler_entries,
+                set_addr,
+                reset_addr,
+            )
+            click.echo(
+                f"   DTC entries: {len(obd_result.dtc_entries)}, "
+                f"PID entries: {len(obd_result.pid_entries)}"
+            )
+            obd_pid_lines = [emit_obd_pid_symbols(obd_result.pid_entries)]
+
         # [6/7] Detect CRC, scan free space
         click.echo("[6/7] Detecting CRC, scanning free space")
 
@@ -466,6 +549,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         if mode23_lines:
             _desc += "\n/* mode 0x23 splice-site bindings (--emit-mode23) */\n"
             _desc += "".join(mode23_lines)
+        _desc += "".join(obd_pid_lines)
         (out_dir / "description.ld").write_text(_desc)
         (out_dir / "omni.ld.stub").write_text(emit_omni_stub(flash_blocks, ram_globals))
         (out_dir / "crc-region.toml").write_text(
@@ -473,6 +557,10 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         )
         (out_dir / "flash-free.toml").write_text(emit_flash_free_toml(flash_blocks))
         (out_dir / "ram-free.toml").write_text(emit_ram_free_toml(ram_blocks))
+        if obd_result is not None:
+            dtc_map_path = out_dir / "dtc-map.toml"
+            dtc_map_path.write_text(emit_dtc_map_toml(obd_result.dtc_entries))
+            click.echo(f"   wrote {dtc_map_path}")
 
         report = StringIO()
         report.write("# rom-analyzer match report\n\n")
