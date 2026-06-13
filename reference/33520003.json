@@ -46229,6 +46229,99 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "trouble_code_translate",
+      "entry_point": "0x5e224",
+      "confidence": "high",
+      "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "word",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "bit",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sio0_obd_request_data_by_pid",
+      "entry_point": "0x5efa8",
+      "confidence": "high",
+      "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "pid",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "ptr",
+          "storage": "R1",
+          "type": "void *"
+        }
+      ]
+    },
+    {
+      "name": "obd_mode18_handler",
+      "entry_point": "0x5f454",
+      "confidence": "high",
+      "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "probably_reset_dtc",
+      "entry_point": "0x56f6c",
+      "confidence": "high",
+      "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "mask",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "idx",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "probably_set_dtc",
+      "entry_point": "0x56fec",
+      "confidence": "high",
+      "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "mask",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "idx",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
     }
   ],
   "struct_definitions": [
