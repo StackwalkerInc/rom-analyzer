@@ -2,10 +2,11 @@
 import sys
 from pathlib import Path
 from rom_analyzer.ghidra import setup_environment, import_and_dump, ghidriff_program_name, decompile_function
-from rom_analyzer.xml_io import load_reference_symbols
+from rom_analyzer.annotations_io import load_reference_symbols
 
 REPO = Path(__file__).resolve().parent.parent
 ROM = REPO / "roms" / "Z27AG_JDM_5MT_1860B104.bin"
+REF_JSON = REPO / "reference" / "33520003.json"
 LANG = "m32r:2:fp8000"
 PROJ_DIR = Path.home() / "rom-analyzer-projects" / "rom-analyzer"
 
@@ -24,9 +25,7 @@ def main() -> None:
     pyghidra.start()
     project = pyghidra.open_project(PROJ_DIR, "rom-analyzer", create=True)
     prog_name = ghidriff_program_name(ROM)
-    ref_symbols = load_reference_symbols(REPO / "reference" / "33520003.xml",
-                                         flash_txt=REPO / "reference" / "colt_flash.txt",
-                                         map_txt=REPO / "reference" / "colt_map.txt")
+    ref_symbols = load_reference_symbols(REF_JSON)
     import_and_dump(project, ROM, LANG, ref_symbols_for_overlay=ref_symbols)
     out = []
     for addr, name in TARGETS.items():

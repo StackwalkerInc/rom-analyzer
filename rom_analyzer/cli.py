@@ -38,9 +38,8 @@ from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
-from rom_analyzer.annotations_io import load_annotations
+from rom_analyzer.annotations_io import load_annotations, load_reference_symbols
 from rom_analyzer.types import DataTypeDefinition
-from rom_analyzer.xml_io import load_reference_symbols_from_json
 
 
 VARIANT_TO_LANGUAGE = {
@@ -106,7 +105,7 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
     # [1/7] Load enriched reference symbols
     click.echo(f"[1/7] Loading reference symbols from {reference}")
     ref_store = load_annotations(reference)
-    ref_symbols = load_reference_symbols_from_json(reference)
+    ref_symbols = load_reference_symbols(reference)
     ref_symbols_by_addr = {s.address: s for s in ref_symbols}
     data_type_defs = [
         DataTypeDefinition(s.address, s.data_type, 0)

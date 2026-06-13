@@ -11,7 +11,6 @@ requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
     "click >= 8.1, < 9",
-    "lxml >= 5, < 6",
     "tomli-w >= 1.0, < 2",
 ]
 
@@ -23,7 +22,6 @@ dev = [
 
 [project.scripts]
 rom-analyzer = "rom_analyzer.cli:main"
-enrich-reference = "rom_analyzer.enrich:cli"
 
 [tool.pytest.ini_options]
 markers = [

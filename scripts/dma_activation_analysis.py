@@ -18,13 +18,11 @@ from rom_analyzer.ghidra import (
     fetch_callers_of,
     fetch_function_entry,
 )
-from rom_analyzer.xml_io import load_reference_symbols
+from rom_analyzer.annotations_io import load_reference_symbols
 
 REPO = Path(__file__).resolve().parent.parent
 ROM = REPO / "roms" / "Z27AG_JDM_5MT_1860B104.bin"
-REF_XML = REPO / "reference" / "33520003.xml"
-FLASH_TXT = REPO / "reference" / "colt_flash.txt"
-MAP_TXT = REPO / "reference" / "colt_map.txt"
+REF_JSON = REPO / "reference" / "33520003.json"
 LANG = "m32r:2:fp8000"
 GHIDRA_HOME = Path("/opt/homebrew/opt/ghidra/libexec")
 PROJ_DIR = Path.home() / "rom-analyzer-projects" / "rom-analyzer"
@@ -65,7 +63,7 @@ def main() -> None:
     log = lines.append
 
     # Ensure imported + analyzed (idempotent; fast if cached). Overlay names for readable decomp.
-    ref_symbols = load_reference_symbols(REF_XML, flash_txt=FLASH_TXT, map_txt=MAP_TXT)
+    ref_symbols = load_reference_symbols(REF_JSON)
     log(f"# DMA activation control-flow report — {prog_name}")
     log(f"# reference symbols loaded: {len(ref_symbols)}")
     import_and_dump(project, ROM, LANG, ref_symbols_for_overlay=ref_symbols)

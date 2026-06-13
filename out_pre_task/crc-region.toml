@@ -1,0 +1,7 @@
+[full_flash]
+start = 0
+end = 524288
+
+[partial_flash]
+start = 65536
+end = 524288

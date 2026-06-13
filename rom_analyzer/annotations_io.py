@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
-from rom_analyzer.types import ConfidenceTier
+from rom_analyzer.types import ConfidenceTier, ReferenceSymbol
 
 
 @dataclass
@@ -217,3 +217,18 @@ def save_annotations(path: Path, store: AnnotationStore) -> None:
     tmp = path.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(data, indent=2) + "\n")
     tmp.replace(path)
+
+
+def load_reference_symbols(json_path: Path) -> list[ReferenceSymbol]:
+    """Load ReferenceSymbol list from an annotations.json file.
+
+    Symbols (data/ram_global) and functions are merged into a flat list
+    suitable for the diff/propagation pipeline in cli.py.
+    """
+    store = load_annotations(json_path)
+    results: list[ReferenceSymbol] = []
+    for s in store.symbols:
+        results.append(ReferenceSymbol(s.name, s.address, s.category))
+    for f in store.functions:
+        results.append(ReferenceSymbol(f.name, f.entry_point, "function"))
+    return results
