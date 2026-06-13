@@ -111,66 +111,8 @@ def _overlay_symbols(program, ref_symbols: list[ReferenceSymbol]) -> None:
 
 def _overlay_from_annotations(program, store: "AnnotationStore") -> None:
     """Apply an AnnotationStore to an already-imported program (must be in a transaction)."""
-    from ghidra.program.model.data import DataUtilities
-    from ghidra.program.model.listing import CodeUnit
-    from ghidra.program.model.symbol import SourceType
-    from ghidra.program.flatapi import FlatProgramAPI
-
-    flat = FlatProgramAPI(program)
-    listing = program.getListing()
-
-    for s in store.symbols:
-        addr = flat.toAddr(s.address)
-        if addr is None:
-            continue
-        try:
-            flat.createLabel(addr, s.name, True, SourceType.IMPORTED)
-        except Exception:
-            pass
-        if s.data_type is not None:
-            dt = _resolve_datatype(s.data_type)
-            if dt is not None:
-                try:
-                    DataUtilities.createData(
-                        program, addr, dt, -1,
-                        DataUtilities.ClearDataMode.CLEAR_ALL_CONFLICT_DATA,
-                    )
-                except Exception:
-                    pass
-
-    for f in store.functions:
-        addr = flat.toAddr(f.entry_point)
-        if addr is None:
-            continue
-        try:
-            flat.createLabel(addr, f.name, True, SourceType.IMPORTED)
-        except Exception:
-            pass
-        try:
-            flat.createFunction(addr, f.name)
-        except Exception:
-            pass
-        # return_type and params are stored but not applied here — function
-        # signatures require ParameterImpl + Function.updateFunction(), deferred.
-
-    comment_type_map = {
-        "end-of-line": CodeUnit.EOL_COMMENT,
-        "pre": CodeUnit.PRE_COMMENT,
-        "post": CodeUnit.POST_COMMENT,
-        "plate": CodeUnit.PLATE_COMMENT,
-        "repeatable": CodeUnit.REPEATABLE_COMMENT,
-    }
-    for c in store.comments:
-        addr = flat.toAddr(c.address)
-        if addr is None:
-            continue
-        ghidra_type = comment_type_map.get(c.type)
-        if ghidra_type is None:
-            continue
-        try:
-            listing.setComment(addr, ghidra_type, c.text)
-        except Exception:
-            pass
+    from rom_analyzer.ghidra_overlay import apply_annotations
+    apply_annotations(program, store)
 
 
 def _dump_program(
