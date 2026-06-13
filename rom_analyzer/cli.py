@@ -38,7 +38,9 @@ from rom_analyzer.propagate import propagate_function_labels
 from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
-from rom_analyzer.xml_io import load_data_type_definitions, load_reference_symbols
+from rom_analyzer.annotations_io import load_annotations
+from rom_analyzer.types import DataTypeDefinition
+from rom_analyzer.xml_io import load_reference_symbols_from_json
 
 
 VARIANT_TO_LANGUAGE = {
@@ -53,17 +55,11 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
 @click.argument("rom_path", type=click.Path(exists=True, dir_okay=False, path_type=Path))
 @click.option("--variant", type=click.Choice(["fp8000", "fpc000"]), required=True)
 @click.option("--reference", type=click.Path(exists=True, dir_okay=False, path_type=Path),
-              default=_REFERENCE_DIR / "33520003.xml",
-              help="Reference Ghidra XML (metadata-only; merged with colt_flash/map at load time)")
-@click.option("--flash-txt", type=click.Path(exists=True, dir_okay=False, path_type=Path),
-              default=_REFERENCE_DIR / "colt_flash.txt",
-              help="colt_flash.txt symbol table for enrichment (vendored in reference/)")
-@click.option("--map-txt", type=click.Path(exists=True, dir_okay=False, path_type=Path),
-              default=_REFERENCE_DIR / "colt_map.txt",
-              help="colt_map.txt RAM symbol table for enrichment (vendored in reference/)")
+              default=_REFERENCE_DIR / "33520003.json",
+              help="Reference annotations JSON (vendored in reference/)")
 @click.option("--reference-rom", type=click.Path(dir_okay=False, path_type=Path),
               default=Path(__file__).parent.parent / "roms" / "Z27AG_JDM_5MT_1860B104.bin",
-              help="The ROM bin that the reference XML was generated from (user-supplied at roms/)")
+              help="The reference ROM bin (user-supplied at roms/)")
 @click.option("--ghidra-home", type=click.Path(exists=True, file_okay=False, path_type=Path),
               default=os.environ.get("GHIDRA_HOME", "/opt/homebrew/opt/ghidra/libexec"))
 @click.option("--project-dir", type=click.Path(path_type=Path),
@@ -84,7 +80,7 @@ _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
               help="Write heuristic source as a pre-comment at each labeled address")
 @click.option("--emit-mode23", is_flag=True, default=False,
               help="Resolve and append the mode-0x23 code splice-site bindings to description.ld")
-def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra_home,
+def main(rom_path, variant, reference, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
          reference_name, clean_project, enrich_project, inline_source_annotations,
          emit_mode23):
@@ -108,12 +104,14 @@ def main(rom_path, variant, reference, flash_txt, map_txt, reference_rom, ghidra
     language_id = VARIANT_TO_LANGUAGE[variant]
 
     # [1/7] Load enriched reference symbols
-    click.echo(f"[1/7] Loading reference symbols from {reference} + colt_flash/map")
-    flash_txt_path = Path(flash_txt) if flash_txt else None
-    map_txt_path = Path(map_txt) if map_txt else None
-    ref_symbols = load_reference_symbols(reference, flash_txt=flash_txt_path, map_txt=map_txt_path)
+    click.echo(f"[1/7] Loading reference symbols from {reference}")
+    ref_store = load_annotations(reference)
+    ref_symbols = load_reference_symbols_from_json(reference)
     ref_symbols_by_addr = {s.address: s for s in ref_symbols}
-    data_type_defs = load_data_type_definitions(reference)
+    data_type_defs = [
+        DataTypeDefinition(s.address, s.data_type, 0)
+        for s in ref_store.symbols if s.data_type
+    ]
 
     crc_step_addr = next(
         (s.address for s in ref_symbols if s.name == "rom_crc_check_step"),
