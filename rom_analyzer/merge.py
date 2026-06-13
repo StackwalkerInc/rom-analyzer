@@ -49,7 +49,7 @@ def merge_matches(
 @dataclass(frozen=True)
 class Disagreement:
     new_address: int
-    candidates: list[tuple[str, str]]   # (reference_id, name), sorted
+    candidates: tuple[tuple[str, str], ...]   # (reference_id, name), sorted by id
     winner: str
 
 
@@ -77,7 +77,7 @@ def arbitrate_symbols(
         if len({s.name for s in group}) > 1:
             disagreements.append(Disagreement(
                 new_address=addr,
-                candidates=sorted((s.reference, s.name) for s in group),
+                candidates=tuple(sorted((s.reference, s.name) for s in group)),
                 winner=winner.name,
             ))
     return final, disagreements
