@@ -75,3 +75,85 @@ class TestStdDtcNames:
     def test_unknown_code_missing(self):
         from rom_analyzer.obd_std_pids import STD_DTC_NAMES
         assert 9999 not in STD_DTC_NAMES
+
+
+# ---------------------------------------------------------------------------
+# Task 2: parse_dtc_table + _bcd_to_int
+# ---------------------------------------------------------------------------
+
+class TestBcdToInt:
+    def test_p0100(self):
+        from rom_analyzer.obd_analysis import _bcd_to_int
+        assert _bcd_to_int(0x0100) == 100
+
+    def test_p0300(self):
+        from rom_analyzer.obd_analysis import _bcd_to_int
+        assert _bcd_to_int(0x0300) == 300
+
+    def test_p1234(self):
+        from rom_analyzer.obd_analysis import _bcd_to_int
+        assert _bcd_to_int(0x1234) == 1234
+
+    def test_zero(self):
+        from rom_analyzer.obd_analysis import _bcd_to_int
+        assert _bcd_to_int(0x0000) == 0
+
+
+class TestParseDtcTable:
+    TABLE_ADDR = 0x1000
+
+    def test_single_entry_at_word0_bit0(self):
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        rom = _make_rom({self.TABLE_ADDR: _bcd_encode(100)})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert len(entries) == 1
+        e = entries[0]
+        assert e.word == 0
+        assert e.bit == 0
+        assert e.p_code == 100
+        assert e.p_code_str == "P0100"
+
+    def test_zero_entries_filtered(self):
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        rom = _make_rom({})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert entries == []
+
+    def test_word_bit_index_mapping(self):
+        # word=1, bit=2 → offset within table = (1*16 + 2) * 2 = 36 bytes
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        offset = self.TABLE_ADDR + (1 * 16 + 2) * 2
+        rom = _make_rom({offset: _bcd_encode(300)})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert len(entries) == 1
+        assert entries[0].word == 1
+        assert entries[0].bit == 2
+        assert entries[0].p_code == 300
+
+    def test_std_name_known_code(self):
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        rom = _make_rom({self.TABLE_ADDR: _bcd_encode(100)})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert entries[0].std_name == "maf_circuit_malfunction"
+
+    def test_std_name_unknown_code_is_none(self):
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        rom = _make_rom({self.TABLE_ADDR: _bcd_encode(9999)})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert entries[0].std_name is None
+
+    def test_setters_initially_empty(self):
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        rom = _make_rom({self.TABLE_ADDR: _bcd_encode(100)})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert entries[0].setters == []
+
+    def test_last_cell_word16_bit15(self):
+        # word=16, bit=15 → offset = (16*16 + 15) * 2 = 542
+        from rom_analyzer.obd_analysis import parse_dtc_table
+        offset = self.TABLE_ADDR + (16 * 16 + 15) * 2
+        rom = _make_rom({offset: _bcd_encode(200)})
+        entries = parse_dtc_table(rom, self.TABLE_ADDR)
+        assert len(entries) == 1
+        assert entries[0].word == 16
+        assert entries[0].bit == 15
