@@ -22,6 +22,7 @@ class MatchedFunction:
     new_address: int
     similarity: float
     source: str = "vt_diff"
+    reference: str = ""        # origin reference id
 
 
 @dataclass(frozen=True)
@@ -33,6 +34,8 @@ class PropagatedSymbol:
     confidence: ConfidenceTier
     source: str = ""
     score: float = 0.0
+    reference: str = ""        # origin reference id
+    family_match: bool = True  # False ⇒ cross-family (RAM/data downgraded)
 
 
 @dataclass(frozen=True)
