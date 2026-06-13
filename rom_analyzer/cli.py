@@ -420,6 +420,13 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
                             f"   warning: structural set_dtc candidate "
                             f"{scan_set:#x} has only {n_callers} callers (expected ≥5)"
                         )
+                if scan_reset is not None:
+                    n_reset_callers = len(fetch_callers_of(project, new_prog_name, scan_reset))
+                    if n_reset_callers < 2:
+                        click.echo(
+                            f"   warning: structural reset_dtc candidate "
+                            f"{scan_reset:#x} has only {n_reset_callers} callers (expected ≥2)"
+                        )
                 set_addr = set_addr or scan_set
                 reset_addr = reset_addr or scan_reset
 
@@ -554,7 +561,8 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         if mode23_lines:
             _desc += "\n/* mode 0x23 splice-site bindings (--emit-mode23) */\n"
             _desc += "".join(mode23_lines)
-        _desc += obd_pid_text
+        if obd_pid_text:
+            _desc += obd_pid_text
         (out_dir / "description.ld").write_text(_desc)
         (out_dir / "omni.ld.stub").write_text(emit_omni_stub(flash_blocks, ram_globals))
         (out_dir / "crc-region.toml").write_text(

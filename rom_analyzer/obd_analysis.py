@@ -4,12 +4,8 @@ from __future__ import annotations
 
 import struct
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
 from rom_analyzer.obd_std_pids import STD_DTC_NAMES, STD_PIDS
-
-if TYPE_CHECKING:
-    pass
 
 
 @dataclass
@@ -127,8 +123,8 @@ def run_obd_analysis(
     if set_addr is not None or reset_addr is not None:
         call_sites = fetch_dtc_call_sites(
             project, prog_name,
-            set_addr or 0,
-            reset_addr or 0,
+            set_addr,
+            reset_addr,
         )
         dtc_by_key: dict[tuple[int, int], DTCEntry] = {
             (e.word, e.bit): e for e in dtc_entries
