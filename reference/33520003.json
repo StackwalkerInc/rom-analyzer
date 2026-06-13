@@ -40353,7 +40353,7 @@
         {
           "name": "bit_reorder",
           "storage": "R1",
-          "type": "uin8_t"
+          "type": "uint8_t"
         },
         {
           "name": "txbyte",
@@ -40714,6 +40714,15 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "main",
+      "entry_point": "0x1b810",
+      "confidence": "verified",
+      "source": "ghidra",
+      "verified_by": "amarkelov",
+      "session": "Z27AG_JDM_5MT_1860B104.bin-manual-20260610T212738Z",
+      "timestamp": "2026-06-10T21:27:38Z"
     },
     {
       "name": "step_check_used_stack_memory",
@@ -42347,7 +42356,7 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": "",
-      "return_type": "uint16_t uint16_t",
+      "return_type": "uint16_t",
       "params": [
         {
           "name": "p0",
@@ -43079,7 +43088,7 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": "",
-      "return_type": "void void"
+      "return_type": "void"
     },
     {
       "name": "sio2_rx_save_error_timestamp",
@@ -44434,7 +44443,7 @@
         {
           "name": "rat255",
           "storage": "R2",
-          "type": "uint16"
+          "type": "uint16_t"
         }
       ]
     },
@@ -45436,7 +45445,7 @@
         {
           "name": "ptr",
           "storage": "R1",
-          "type": "const struct *"
+          "type": "void *"
         }
       ]
     },
@@ -45461,7 +45470,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct *"
+          "type": "void *"
         }
       ]
     },
@@ -45477,7 +45486,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct *"
+          "type": "void *"
         }
       ]
     },
@@ -45493,7 +45502,7 @@
         {
           "name": "ptr",
           "storage": "R0",
-          "type": "const struct *"
+          "type": "void *"
         }
       ]
     },
