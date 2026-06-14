@@ -219,3 +219,44 @@ def apply_verdicts(store: AnnotationStore, items: list[ReconcileItem],
                     confidence="medium", source=f"xref:{it.source}"))
                 n += 1
     return n
+
+
+# ---------------------------------------------------------------------------
+# Cross-match candidate gathering
+# ---------------------------------------------------------------------------
+
+from rom_analyzer.types import MatchedFunction
+
+
+def gather_candidates(
+    new_id: str, ref_id: str,
+    matches: list[MatchedFunction],
+    new_fn_names: dict[int, str],
+    ref_fn_names: dict[int, str],
+    ram_data_candidates: list[LabelCandidate] | None = None,
+) -> list[LabelCandidate]:
+    """Build forward + back function LabelCandidates from one cross-match.
+
+    forward: the reference's name applied onto the new ref's address.
+    back:    the new ref's name applied onto the reference's address.
+    `ram_data_candidates` (already usage-equivalence-filtered, both directions)
+    are appended as-is.
+    """
+    out: list[LabelCandidate] = []
+    for m in matches:
+        ref_name = ref_fn_names.get(m.ref_address, m.ref_name)
+        new_name = new_fn_names.get(m.new_address)
+        if ref_name:
+            out.append(LabelCandidate(
+                target=new_id, direction="forward", address=m.new_address,
+                category="function", current=new_name, proposed=ref_name,
+                source=ref_id, evidence=f"bytecode match sim={m.similarity:.2f}"))
+        if new_name:
+            out.append(LabelCandidate(
+                target=ref_id, direction="back", address=m.ref_address,
+                category="function", current=ref_fn_names.get(m.ref_address),
+                proposed=new_name, source=new_id,
+                evidence=f"bytecode match sim={m.similarity:.2f}"))
+    if ram_data_candidates:
+        out.extend(ram_data_candidates)
+    return out

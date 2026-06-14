@@ -180,3 +180,26 @@ def test_apply_verdict_gap_add():
     apply_verdicts(store, items, target="t")
     assert any(f.entry_point == 0x200 and f.name == "new_fn"
                for f in store.functions)
+
+
+from rom_analyzer.enrich import gather_candidates
+from rom_analyzer.types import MatchedFunction
+
+
+def test_gather_forward_and_back_function_candidates():
+    # one matched function pair: new 0x200 <-> ref 0x10000
+    matches = [MatchedFunction(ref_name="sio_dma_reset", ref_address=0x10000,
+                               new_address=0x200, similarity=1.0)]
+    new_fns = {0x200: "call200"}          # new ref's own name at 0x200
+    ref_fns = {0x10000: "sio_dma_reset"}  # source ref's name
+    cands = gather_candidates(
+        new_id="cs7a", ref_id="33520003", matches=matches,
+        new_fn_names=new_fns, ref_fn_names=ref_fns)
+    fwd = [c for c in cands if c.direction == "forward"]
+    back = [c for c in cands if c.direction == "back"]
+    # forward: ref name onto new (target=cs7a)
+    assert fwd[0].target == "cs7a" and fwd[0].proposed == "sio_dma_reset"
+    assert fwd[0].current == "call200" and fwd[0].address == 0x200
+    # back: new name onto ref (target=33520003)
+    assert back[0].target == "33520003" and back[0].proposed == "call200"
+    assert back[0].current == "sio_dma_reset" and back[0].address == 0x10000
