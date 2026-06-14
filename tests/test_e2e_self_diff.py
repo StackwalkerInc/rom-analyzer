@@ -143,6 +143,40 @@ def test_multi_reference_emits_conflicts_and_provenance(tmp_path):
 
 
 @pytest.mark.e2e
+def test_enrich_emits_reconcile_nondestructive(tmp_path):
+    """`enrich` cross-matches a reference against all others and writes a
+    reconcile.toml. Non-destructive: enrich auto-applies new functions to the
+    reference JSONs, so we snapshot every reference/*.json and restore it."""
+    if not LOCAL_ROM.exists() or not REGISTRY.exists():
+        pytest.skip("requires local ROM + registry.toml")
+    from rom_analyzer.registry import load_registry, partition_available
+    from rom_analyzer.enrich import read_reconcile
+    usable, _ = partition_available(load_registry(REGISTRY))
+    fp8000 = [e for e in usable if e.variant == "fp8000"]
+    if len(fp8000) < 2:
+        pytest.skip("enrich e2e needs ≥2 usable fp8000 references")
+
+    ref_dir = REPO_ROOT / "reference"
+    snapshot = {p: p.read_bytes() for p in ref_dir.glob("*.json")}
+    out_dir = tmp_path / "enr"
+    try:
+        subprocess.run(
+            [ROM_ANALYZER, "enrich", "e5090011", "--out", str(out_dir)],
+            check=True,
+        )
+        reconcile = out_dir / "e5090011.reconcile.toml"
+        assert reconcile.exists(), "enrich must emit <id>.reconcile.toml"
+        items = read_reconcile(reconcile)
+        assert isinstance(items, list)
+        # every item must carry a verdict the apply step understands
+        for it in items:
+            assert it.verdict  # non-empty (proposed/keep/drop/custom)
+    finally:
+        for p, data in snapshot.items():
+            p.write_bytes(data)
+
+
+@pytest.mark.e2e
 def test_emit_obd_produces_dtc_map(tmp_path):
     if not LOCAL_ROM.exists():
         pytest.skip(

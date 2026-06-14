@@ -24,11 +24,11 @@ Per CLAUDE.md, stock ROMs are never committed to public repos. The `reference/` 
 # Local Python install (requires Ghidra 12.1 at GHIDRA_HOME + ghidra-m32r extension)
 pip install -e .
 export GHIDRA_HOME=/opt/homebrew/opt/ghidra/libexec
-rom-analyzer ./my-rom.bin --variant fp8000 --out ./out
+rom-analyzer analyze ./my-rom.bin --variant fp8000 --out ./out
 
 # Or via Docker (bundles everything)
 docker run --rm -v "$PWD":/host ghcr.io/rcusstackwalker/rom-analyzer:latest \
-    /host/my-rom.bin --variant fp8000 --out /host/out
+    analyze /host/my-rom.bin --variant fp8000 --out /host/out
 ```
 
 ## Multi-reference
@@ -139,7 +139,7 @@ To find what reference **B** can contribute to reference **A**, analyze A's own 
 B as the reference, then compare the result to A's existing annotations:
 
 ```bash
-rom-analyzer roms/<A>.bin --variant fp8000 --reference-id <B> --out out/ab
+rom-analyzer analyze roms/<A>.bin --variant fp8000 --reference-id <B> --out out/ab
 ```
 
 `out/ab/description.ld` now holds B's labels propagated onto A's addresses. Compare them to
@@ -166,7 +166,7 @@ the reference linker-clean.
 ### CAN slot semantics by SID
 
 ```bash
-rom-analyzer roms/<rom>.bin --variant fp8000 --reference-id <id> --emit-can-slots --out out/
+rom-analyzer analyze roms/<rom>.bin --variant fp8000 --reference-id <id> --emit-can-slots --out out/
 ```
 
 `can-slots.toml` decodes each mailbox's 11-bit SID — `(sid0 & 0x1f) << 6 | (sid1 & 0x3f)`,
@@ -175,6 +175,59 @@ semantic (ABS = `0x231`, EPS = `0x2f1`, ASC = `0x300`, AC = `0x443`, …). Becau
 stable while the slot index shifts between ROMs (ABS is slot 7 on 33520003 but slot 8 on
 30200003), this reliably names the handler in any ROM as
 `can0_slot{N}_{semantic}_{rx|tx}_update`.
+
+## Reference enrichment (automated)
+
+The [cross-referencing](#cross-referencing-references) flow above is automated by two
+commands that bidirectionally cross-pollinate references through a **propose → review →
+apply** cycle. Human judgement is only needed on genuine conflicts.
+
+```bash
+# 1. propose: cross-match <id> against every registered reference (both directions),
+#    auto-apply new functions, and emit a reconcile file of everything to review
+rom-analyzer enrich e5090011
+
+# 2. review: edit verdicts in reference/enrichment/e5090011.reconcile.toml
+
+# 3. apply: apply your verdicts to the reference JSONs and re-deduplicate
+rom-analyzer apply-enrichment reference/enrichment/e5090011.reconcile.toml
+```
+
+**What `enrich` does.** One Ghidra cross-match between `<id>`'s ROM and each same-variant
+reference yields both directions: *forward* (the reference's labels onto `<id>`) and *back*
+(`<id>`'s labels onto the reference). It then:
+
+- **auto-applies new functions** (bytecode-matched, cross-family safe; tagged
+  `source=xref:<src>`), forward into `<id>` and as back gap-fills into existing refs;
+- **drops** Ghidra auto-names (`FUN_*`, `icu_isr_*`) and functions landing in erased `0xFF`;
+- **routes to review** every genuine name conflict and every RAM/data candidate (RAM/data
+  only when usage-equivalent — accessed the same way in the matched function on both sides);
+- re-runs the cleanup chain (drop stray-`.S`/erased entries, de-dup names) on every touched
+  JSON, and writes `reference/enrichment/<id>.reconcile.toml`.
+
+**The reconcile file** — one `[[item]]` per review entry; you edit `verdict`:
+
+```toml
+[[item]]
+target    = "33520003"            # reference being modified
+direction = "back"                # forward (into <id>) | back (into existing)
+address   = "0x804d5e"
+category   = "ram_global"         # function | data | ram_global
+current   = "fp12962_u16"         # target's existing name ("" if a gap)
+proposed  = "tacho_output_state"  # candidate from the source reference
+source    = "e5090011"
+evidence  = "usage-equiv: written by tacho_set/reset in matched fn 0x14ed8"
+verdict   = "proposed"            # proposed | keep | drop | <custom-name>
+```
+
+`verdict` is pre-filled by the auto-resolution rules: registry `priority` is the naming
+authority (higher wins); `sio0`/`sio1` prefixes are held; a descriptive name beats a
+placeholder (`callNNNN`, `fpNNNN_*`); agreement from ≥2 refs is never listed. Change only
+what you disagree with, then run `apply-enrichment`.
+
+After `apply-enrichment` touches a reference that has an e2e golden (33520003), refresh the
+golden: re-run `rom-analyzer analyze … --emit-mode23` and update `tests/golden/`, then
+`scripts/run-e2e.sh`.
 
 ## Outputs
 
@@ -187,7 +240,7 @@ stable while the slot index shifts between ROMs (ABS is slot 7 on 33520003 but s
 
 ## Workflow for adding a new ROM to mmc-patches
 
-1. `rom-analyzer my-new-rom.bin --variant fp8000 --out out/`.
+1. `rom-analyzer analyze my-new-rom.bin --variant fp8000 --out out/`.
 2. Review `match-report.md`; if the match rate is below ~90%, investigate before relying on the outputs.
 3. Drop `out/description.ld` into `mmc-patches/m32r/<romid>_<slug>/description.ld`.
 4. Hand-edit `out/omni.ld.stub` into the target's `omni.ld`: fill in patch-specific call-site hooks (compare against `mmc-patches/m32r/33520003_z27ag_mt_2006/omni.ld`), confirm `free_space_start`/`free_space_end` from `flash-free.toml`.
