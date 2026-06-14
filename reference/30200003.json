@@ -10202,7 +10202,7 @@
       ]
     },
     {
-      "name": "main",
+      "name": "main_loop",
       "entry_point": "0x1b830",
       "confidence": "high",
       "source": "colt_s",

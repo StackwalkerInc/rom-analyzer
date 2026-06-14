@@ -46038,7 +46038,7 @@
       ]
     },
     {
-      "name": "main",
+      "name": "main_loop",
       "entry_point": "0x1b810",
       "confidence": "verified",
       "source": "ghidra",
