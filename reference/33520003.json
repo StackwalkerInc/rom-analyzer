@@ -18080,15 +18080,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash_coolant_temp_sensor_map_1311c",
-      "address": "0x1311c",
-      "category": "data",
-      "confidence": "high",
-      "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_coolant_temp_sensor_map_data",
       "address": "0x1311e",
       "category": "data",
@@ -23345,7 +23336,7 @@
       "timestamp": ""
     },
     {
-      "name": "mode_flags",
+      "name": "mode_flags_0",
       "address": "0x804efe",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -23355,7 +23346,7 @@
       "timestamp": ""
     },
     {
-      "name": "mode_flags_804f00",
+      "name": "mode_flags_1",
       "address": "0x804f00",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -23365,7 +23356,7 @@
       "timestamp": ""
     },
     {
-      "name": "mode_flags_804f02",
+      "name": "mode_flags_2",
       "address": "0x804f02",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -23375,7 +23366,7 @@
       "timestamp": ""
     },
     {
-      "name": "mode_flags_804f04",
+      "name": "mode_flags_3",
       "address": "0x804f04",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -23385,7 +23376,7 @@
       "timestamp": ""
     },
     {
-      "name": "mode_flags_804f06",
+      "name": "mode_flags_4",
       "address": "0x804f06",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -23395,7 +23386,7 @@
       "timestamp": ""
     },
     {
-      "name": "mode_flags_804f08",
+      "name": "mode_flags_5",
       "address": "0x804f08",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -25505,7 +25496,7 @@
       "timestamp": ""
     },
     {
-      "name": "spark_spool_advance_limit_80511e",
+      "name": "spark_spool_advance_limit",
       "address": "0x80511e",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -48880,7 +48871,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "spark_spool_advance_limit",
+      "name": "get_spark_spool_advance_limit",
       "entry_point": "0x27810",
       "confidence": "high",
       "source": "colt_flash",
@@ -50387,15 +50378,6 @@
     },
     {
       "name": "return1_call2edc8",
-      "entry_point": "0x2ed8c",
-      "confidence": "high",
-      "source": "colt_flash",
-      "session": "",
-      "timestamp": "",
-      "return_type": "uint16_t"
-    },
-    {
-      "name": "return1_call2edc8_2edc8",
       "entry_point": "0x2edc8",
       "confidence": "high",
       "source": "z27ag_s",
@@ -52846,7 +52828,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_init_47b80",
+      "name": "can0_init_decays",
       "entry_point": "0x47b80",
       "confidence": "high",
       "source": "colt_flash",
