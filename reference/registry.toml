@@ -13,6 +13,16 @@ features = ["obd", "mut", "crc", "mode23"]
 notes = "primary Z27AG reference (Z27AG_JDM_5MT_1860B104)"
 
 [[reference]]
+id = "39670016"
+json = "39670016.json"
+rom = "39670016.bin"
+family = "z27a"
+variant = "fp8000"
+priority = 90
+features = ["obd", "mut", "immobilizer", "rear_o2"]
+notes = "Colt Ralliart Z27A AUDM 5MT; 1.5L turbo, sibling of 33520003 with immobilizer support + rear O2 sensor. Well-decoded (colt_flash + colt_map + coltOth.S)."
+
+[[reference]]
 id = "47110032"
 json = "47110032.json"
 rom = "47110032.bin"
