@@ -7950,7 +7950,7 @@
   ],
   "functions": [
     {
-      "name": "reset_call10000",
+      "name": "sio_dma_reset",
       "entry_point": "0x10000",
       "confidence": "high",
       "source": "colt_flash",
@@ -7959,7 +7959,7 @@
       "return_type": "void"
     },
     {
-      "name": "call10040",
+      "name": "sio_dma_mode_select",
       "entry_point": "0x10040",
       "confidence": "high",
       "source": "colt_flash",
@@ -8113,7 +8113,7 @@
       ]
     },
     {
-      "name": "trampoline_reset_call1531c",
+      "name": "trampoline_reset_rom_crc_checker",
       "entry_point": "0x13e80",
       "confidence": "high",
       "source": "colt_flash",
@@ -8140,7 +8140,7 @@
       "return_type": "void"
     },
     {
-      "name": "peripherals_reinit_checked",
+      "name": "peripherals_reinit",
       "entry_point": "0x1415c",
       "confidence": "high",
       "source": "colt_flash",
@@ -8176,7 +8176,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "get_fp5379b7",
+      "name": "get_starter_input",
       "entry_point": "0x145bc",
       "confidence": "high",
       "source": "colt_flash",
@@ -8194,7 +8194,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "ret0_145ec",
+      "name": "return0_call14458",
       "entry_point": "0x145ec",
       "confidence": "high",
       "source": "colt_flash",
@@ -8203,7 +8203,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "adc_convert_145f0",
+      "name": "adc_convert_coolant_iat_baro_o2",
       "entry_point": "0x145f0",
       "confidence": "high",
       "source": "colt_flash",
@@ -8257,7 +8257,7 @@
       "return_type": "void"
     },
     {
-      "name": "adc_update_mode_stub",
+      "name": "adc_convert_mode_stub",
       "entry_point": "0x14958",
       "confidence": "high",
       "source": "colt_flash",
@@ -8284,7 +8284,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fuel_pressure_solenoid_out",
+      "name": "update_fast_outputs",
       "entry_point": "0x14c44",
       "confidence": "high",
       "source": "colt_flash",
@@ -8338,7 +8338,7 @@
       "return_type": "void"
     },
     {
-      "name": "implement_pwm_regulation_14d08",
+      "name": "implement_pwm_regulation_14b38",
       "entry_point": "0x14d08",
       "confidence": "high",
       "source": "colt_flash",
@@ -8516,7 +8516,7 @@
       "return_type": "void"
     },
     {
-      "name": "atomic_set_fp12962",
+      "name": "tacho_set",
       "entry_point": "0x150a8",
       "confidence": "high",
       "source": "colt_flash",
@@ -8525,7 +8525,7 @@
       "return_type": "void"
     },
     {
-      "name": "atomic_reset_fp12962",
+      "name": "tacho_reset",
       "entry_point": "0x150c0",
       "confidence": "high",
       "source": "colt_flash",
@@ -8534,7 +8534,7 @@
       "return_type": "void"
     },
     {
-      "name": "knock_sensor_update_state",
+      "name": "knock_sensor_update_ksa_kti",
       "entry_point": "0x150d8",
       "confidence": "high",
       "source": "colt_flash",
@@ -8625,7 +8625,7 @@
       "return_type": "void"
     },
     {
-      "name": "adc_init2",
+      "name": "adc_reinit",
       "entry_point": "0x154ec",
       "confidence": "high",
       "source": "colt_flash",
@@ -8692,7 +8692,7 @@
       ]
     },
     {
-      "name": "tid1_init",
+      "name": "fast_engine_model_timer_init",
       "entry_point": "0x15994",
       "confidence": "high",
       "source": "colt_flash",
@@ -8701,7 +8701,7 @@
       "return_type": "void"
     },
     {
-      "name": "tid1_reinit_checked",
+      "name": "fast_engine_model_timer_reinit_checked",
       "entry_point": "0x159c8",
       "confidence": "high",
       "source": "colt_flash",
@@ -8710,7 +8710,7 @@
       "return_type": "void"
     },
     {
-      "name": "tid1_reset_counter",
+      "name": "fast_engine_model_time_reset_counter",
       "entry_point": "0x159f4",
       "confidence": "high",
       "source": "colt_flash",
@@ -8719,7 +8719,7 @@
       "return_type": "void"
     },
     {
-      "name": "tid1_output_interrupt_handler",
+      "name": "tid1_interrupt_handler",
       "entry_point": "0x15a0c",
       "confidence": "high",
       "source": "colt_flash",
@@ -8746,7 +8746,7 @@
       "return_type": "void"
     },
     {
-      "name": "mjto5_output_interrupt_handler",
+      "name": "mjto5_interrupt_handler",
       "entry_point": "0x15b30",
       "confidence": "high",
       "source": "colt_flash",
@@ -8764,7 +8764,7 @@
       "return_type": "void"
     },
     {
-      "name": "top_coil_reinit_checked",
+      "name": "top_coil_reinit",
       "entry_point": "0x15c00",
       "confidence": "high",
       "source": "colt_flash",
@@ -8926,7 +8926,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_mask_some_timer_interrupts_spi_transfer",
+      "name": "injector_fault_detector_init",
       "entry_point": "0x16588",
       "confidence": "high",
       "source": "colt_flash",
@@ -8943,7 +8943,7 @@
       "timestamp": ""
     },
     {
-      "name": "call16618",
+      "name": "update_injectors_status_flags",
       "entry_point": "0x16618",
       "confidence": "high",
       "source": "colt_s",
@@ -8968,7 +8968,7 @@
       ]
     },
     {
-      "name": "get_reset_tinis3",
+      "name": "get_reset_tin3",
       "entry_point": "0x16798",
       "confidence": "high",
       "source": "colt_flash",
@@ -8977,7 +8977,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "get_reset_tinis16",
+      "name": "get_reset_tin16",
       "entry_point": "0x167cc",
       "confidence": "high",
       "source": "colt_flash",
@@ -8986,7 +8986,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "get_reset_tinis15",
+      "name": "get_reset_tin15",
       "entry_point": "0x16800",
       "confidence": "high",
       "source": "colt_flash",
@@ -8995,7 +8995,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "top4_init",
+      "name": "top4_tms0_init",
       "entry_point": "0x16834",
       "confidence": "high",
       "source": "colt_flash",
@@ -9029,7 +9029,7 @@
       "return_type": "void"
     },
     {
-      "name": "injector_timers_reinit_checked",
+      "name": "injector_timers_reinit",
       "entry_point": "0x16a8c",
       "confidence": "high",
       "source": "colt_flash",
@@ -9095,7 +9095,7 @@
       "return_type": "void"
     },
     {
-      "name": "knock_timers_reinit_checked",
+      "name": "knock_sensor_reinit",
       "entry_point": "0x16d94",
       "confidence": "high",
       "source": "colt_flash",
@@ -9597,7 +9597,7 @@
       "return_type": "void"
     },
     {
-      "name": "init_sio2_receive_dma",
+      "name": "sio2_rx_dma_init",
       "entry_point": "0x183c4",
       "confidence": "high",
       "source": "colt_flash",
@@ -9615,7 +9615,7 @@
       "return_type": "void"
     },
     {
-      "name": "unmask_and_clear_tinis17",
+      "name": "tin17_init",
       "entry_point": "0x184d8",
       "confidence": "high",
       "source": "colt_flash",
@@ -9624,7 +9624,7 @@
       "return_type": "void"
     },
     {
-      "name": "unmaks_tinim17",
+      "name": "tin17_reinit",
       "entry_point": "0x18504",
       "confidence": "high",
       "source": "colt_flash",
@@ -9633,7 +9633,7 @@
       "return_type": "void"
     },
     {
-      "name": "call18520",
+      "name": "camshaft_position_sensor_interrupt_handler",
       "entry_point": "0x18520",
       "confidence": "high",
       "source": "colt_flash",
@@ -9642,7 +9642,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_fp5526",
+      "name": "reset_shaft_sensor_flags",
       "entry_point": "0x185e4",
       "confidence": "high",
       "source": "colt_flash",
@@ -9651,7 +9651,7 @@
       "return_type": "void"
     },
     {
-      "name": "tio7_init_extra",
+      "name": "shaft_position_sensor_init",
       "entry_point": "0x185f0",
       "confidence": "high",
       "source": "colt_flash",
@@ -9668,7 +9668,7 @@
       "timestamp": ""
     },
     {
-      "name": "call18710",
+      "name": "crankshaft_position_sensor_interrupt_handler",
       "entry_point": "0x18710",
       "confidence": "high",
       "source": "colt_s",
@@ -9677,7 +9677,7 @@
       "return_type": "void"
     },
     {
-      "name": "call18ac0",
+      "name": "crankshaft_period2_calc_extra",
       "entry_point": "0x18ac0",
       "confidence": "high",
       "source": "colt_s",
@@ -9698,7 +9698,7 @@
       ]
     },
     {
-      "name": "call18b8c",
+      "name": "crankshaft_period1_calc_extra",
       "entry_point": "0x18b8c",
       "confidence": "high",
       "source": "colt_s",
@@ -9728,7 +9728,7 @@
       "return_type": "void"
     },
     {
-      "name": "mask_and_clear_tinis19",
+      "name": "gearbox_speed_sensor_init",
       "entry_point": "0x18df8",
       "confidence": "high",
       "source": "colt_flash",
@@ -9746,7 +9746,7 @@
       "return_type": "void"
     },
     {
-      "name": "get_and_clear_tin19_interrupt_counter",
+      "name": "get_and_clear_gearbox_pulse_counter",
       "entry_point": "0x18e40",
       "confidence": "high",
       "source": "colt_flash",
@@ -9755,7 +9755,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "tin19_irq_count_check",
+      "name": "gearbox_pulse_check",
       "entry_point": "0x18e60",
       "confidence": "high",
       "source": "colt_flash",
@@ -9773,7 +9773,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "update_tms1_interrupt_counter",
+      "name": "update_tms1_overflow_counter",
       "entry_point": "0x18eb0",
       "confidence": "high",
       "source": "colt_flash",
@@ -9782,7 +9782,7 @@
       "return_type": "void"
     },
     {
-      "name": "get_fast_time",
+      "name": "get_tms1ct",
       "entry_point": "0x18eec",
       "confidence": "high",
       "source": "colt_flash",
@@ -9791,7 +9791,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "atomic_nop",
+      "name": "atomic_nop18cdc",
       "entry_point": "0x18ef4",
       "confidence": "high",
       "source": "colt_flash",
@@ -9834,7 +9834,7 @@
       "return_type": "void"
     },
     {
-      "name": "mjti3_input_interrupt_handler",
+      "name": "mjti3_interrupt_handler",
       "entry_point": "0x1950c",
       "confidence": "high",
       "source": "colt_flash",
@@ -9843,7 +9843,7 @@
       "return_type": "void"
     },
     {
-      "name": "mjti2_input_interrupt_handler",
+      "name": "mjti2_interrupt_handler",
       "entry_point": "0x19570",
       "confidence": "high",
       "source": "colt_flash",
@@ -9870,7 +9870,7 @@
       "return_type": "void"
     },
     {
-      "name": "mjto4_output_interrupt_handler",
+      "name": "mjto4_interrupt_handler",
       "entry_point": "0x1959c",
       "confidence": "high",
       "source": "colt_flash",
@@ -9879,7 +9879,7 @@
       "return_type": "void"
     },
     {
-      "name": "mjto3_output_interrupt_handler",
+      "name": "mjto3_interrupt_handler",
       "entry_point": "0x195b4",
       "confidence": "high",
       "source": "colt_flash",
@@ -9888,7 +9888,7 @@
       "return_type": "void"
     },
     {
-      "name": "mjto2_output_interrupt_handler",
+      "name": "mjto2_interrupt_handler",
       "entry_point": "0x195e4",
       "confidence": "high",
       "source": "colt_flash",
@@ -9948,7 +9948,7 @@
       "return_type": "void"
     },
     {
-      "name": "tod0_output_interrupt_handler",
+      "name": "tod0_interrupt_handler",
       "entry_point": "0x1970c",
       "confidence": "high",
       "source": "colt_flash",
@@ -9975,7 +9975,7 @@
       "return_type": "void"
     },
     {
-      "name": "tio7_interrupt_helper",
+      "name": "shaft_position_sensor_interrupt_helper",
       "entry_point": "0x19738",
       "confidence": "high",
       "source": "colt_flash",
@@ -9984,7 +9984,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_enable_top10",
+      "name": "top10_init",
       "entry_point": "0x197bc",
       "confidence": "high",
       "source": "colt_flash",
@@ -9993,7 +9993,7 @@
       "return_type": "void"
     },
     {
-      "name": "top10_checked_reinit",
+      "name": "top10_reinit",
       "entry_point": "0x19810",
       "confidence": "high",
       "source": "colt_flash",
@@ -10071,7 +10071,7 @@
       ]
     },
     {
-      "name": "can0_reinit_checked",
+      "name": "can0_reinit",
       "entry_point": "0x19cbc",
       "confidence": "high",
       "source": "colt_flash",
@@ -10279,7 +10279,7 @@
       "return_type": "void"
     },
     {
-      "name": "sda_scl_up_out",
+      "name": "i2c_init",
       "entry_point": "0x1a6bc",
       "confidence": "high",
       "source": "colt_flash",
@@ -10288,7 +10288,7 @@
       "return_type": "void"
     },
     {
-      "name": "scl_out",
+      "name": "i2c_reinit",
       "entry_point": "0x1a6ec",
       "confidence": "high",
       "source": "colt_flash",
@@ -10342,7 +10342,7 @@
       "return_type": "void"
     },
     {
-      "name": "spi_stop2",
+      "name": "spi_reinit",
       "entry_point": "0x1af08",
       "confidence": "high",
       "source": "colt_flash",
@@ -10393,7 +10393,7 @@
       ]
     },
     {
-      "name": "init_throttle_timers_and_tio9",
+      "name": "throttle_hardware_init",
       "entry_point": "0x1b124",
       "confidence": "high",
       "source": "colt_flash",
@@ -10402,7 +10402,7 @@
       "return_type": "void"
     },
     {
-      "name": "tio_throttle_checked_reinit",
+      "name": "throttle_hardware_reinit",
       "entry_point": "0x1b20c",
       "confidence": "high",
       "source": "colt_flash",
@@ -10411,7 +10411,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_p3d5",
+      "name": "update_p35",
       "entry_point": "0x1b300",
       "confidence": "high",
       "source": "colt_flash",
@@ -10483,7 +10483,7 @@
       "return_type": "void"
     },
     {
-      "name": "tio9_interrupt_helper",
+      "name": "throttle_state_check",
       "entry_point": "0x1b524",
       "confidence": "high",
       "source": "colt_s",
@@ -10713,7 +10713,7 @@
       ]
     },
     {
-      "name": "reset_interrupt_handler_helper",
+      "name": "main",
       "entry_point": "0x1ba10",
       "confidence": "high",
       "source": "colt_s",
@@ -10721,7 +10721,7 @@
       "timestamp": ""
     },
     {
-      "name": "call1bafc",
+      "name": "cruise_control",
       "entry_point": "0x1bafc",
       "confidence": "high",
       "source": "colt_s",
@@ -10748,7 +10748,7 @@
       "return_type": "void"
     },
     {
-      "name": "call1bba0",
+      "name": "init_application",
       "entry_point": "0x1bba0",
       "confidence": "high",
       "source": "colt_s",
@@ -10765,7 +10765,7 @@
       "timestamp": ""
     },
     {
-      "name": "ram_integrity_check",
+      "name": "is_reset_corrections_trims_etc_needed",
       "entry_point": "0x1bd0c",
       "confidence": "high",
       "source": "colt_flash",
@@ -10774,7 +10774,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "guards_check_1bfb4",
+      "name": "is_reset_corrections_trims_etc_needed_subcondition",
       "entry_point": "0x1bfb4",
       "confidence": "high",
       "source": "colt_flash",
@@ -10783,7 +10783,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "some_ram_checksum_1bff8",
+      "name": "get_long_term_trims_crc",
       "entry_point": "0x1bff8",
       "confidence": "high",
       "source": "colt_flash",
@@ -10792,7 +10792,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "peripherals_init_extra",
+      "name": "peripherals_init_with_decay",
       "entry_point": "0x1c050",
       "confidence": "high",
       "source": "colt_flash",
@@ -10809,7 +10809,7 @@
       "timestamp": ""
     },
     {
-      "name": "reset_call1c0e0",
+      "name": "reset_accel_pedal_tps_corrections",
       "entry_point": "0x1c0e0",
       "confidence": "high",
       "source": "colt_flash",
@@ -10818,7 +10818,7 @@
       "return_type": "void"
     },
     {
-      "name": "call1c120",
+      "name": "reset_call1bf28",
       "entry_point": "0x1c120",
       "confidence": "high",
       "source": "colt_flash",
@@ -10926,7 +10926,7 @@
       "timestamp": ""
     },
     {
-      "name": "checked_map_coolant_temp",
+      "name": "calc_coolant_temp",
       "entry_point": "0x1d264",
       "confidence": "high",
       "source": "colt_flash",
@@ -10935,7 +10935,7 @@
       "return_type": "void"
     },
     {
-      "name": "checked_update_adc_full_coolant_temp_filtered",
+      "name": "calc_adc_full_coolant_temp_filtered",
       "entry_point": "0x1d2ec",
       "confidence": "high",
       "source": "colt_flash",
@@ -10944,7 +10944,7 @@
       "return_type": "void"
     },
     {
-      "name": "checked_map_coolant_temp_filtered",
+      "name": "map_coolant_temp",
       "entry_point": "0x1d3e0",
       "confidence": "high",
       "source": "colt_flash",
@@ -10953,7 +10953,7 @@
       "return_type": "void"
     },
     {
-      "name": "checked_map_iat",
+      "name": "calc_iat",
       "entry_point": "0x1d48c",
       "confidence": "high",
       "source": "colt_flash",
@@ -10962,7 +10962,7 @@
       "return_type": "void"
     },
     {
-      "name": "map_iat",
+      "name": "map_iat_1d2cc",
       "entry_point": "0x1d514",
       "confidence": "high",
       "source": "colt_flash",
@@ -10971,7 +10971,7 @@
       "return_type": "void"
     },
     {
-      "name": "checked_map_baro_pressure",
+      "name": "calc_baro_pressure",
       "entry_point": "0x1d55c",
       "confidence": "high",
       "source": "colt_flash",
@@ -10980,7 +10980,7 @@
       "return_type": "void"
     },
     {
-      "name": "baro_pressure_failed",
+      "name": "baro_pressure_sensor_failure",
       "entry_point": "0x1d5bc",
       "confidence": "high",
       "source": "colt_flash",
@@ -11012,7 +11012,7 @@
       ]
     },
     {
-      "name": "update_fp12530_b6",
+      "name": "update_sensor_faults_tps0x40",
       "entry_point": "0x1d688",
       "confidence": "high",
       "source": "colt_flash",
@@ -11029,7 +11029,7 @@
       "timestamp": ""
     },
     {
-      "name": "calc_fpp12310",
+      "name": "update_tps_main_correction",
       "entry_point": "0x1d754",
       "confidence": "high",
       "source": "colt_s",
@@ -11092,7 +11092,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12686",
+      "name": "update_engine_rpm_avg1_rate",
       "entry_point": "0x1dd20",
       "confidence": "high",
       "source": "colt_s",
@@ -11159,7 +11159,7 @@
       "timestamp": ""
     },
     {
-      "name": "reset_call1e654",
+      "name": "reset_maf_load_calc",
       "entry_point": "0x1e654",
       "confidence": "high",
       "source": "colt_flash",
@@ -11193,7 +11193,7 @@
       "return_type": "void"
     },
     {
-      "name": "call1e8d8",
+      "name": "process_ac_pressure_sensor",
       "entry_point": "0x1e8d8",
       "confidence": "high",
       "source": "colt_flash",
@@ -11202,7 +11202,7 @@
       "return_type": "void"
     },
     {
-      "name": "call1e9e0",
+      "name": "disabled_update_fuel_level",
       "entry_point": "0x1e9e0",
       "confidence": "high",
       "source": "colt_flash",
@@ -11273,7 +11273,7 @@
       "return_type": "void"
     },
     {
-      "name": "call1f450",
+      "name": "get_combustion_torque_output_high_octane",
       "entry_point": "0x1f450",
       "confidence": "high",
       "source": "colt_s",
@@ -11289,7 +11289,7 @@
       ]
     },
     {
-      "name": "pure_calc_smth1f47c",
+      "name": "get_octane_level_torque_loss",
       "entry_point": "0x1f47c",
       "confidence": "high",
       "source": "colt_flash",
@@ -11307,7 +11307,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_baro_x_iat_map_compensation",
+      "name": "get_meteo_torque_correction",
       "entry_point": "0x1f4d4",
       "confidence": "high",
       "source": "colt_flash",
@@ -11325,7 +11325,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_calc_smth1f4fc",
+      "name": "get_rpm_torque_loss",
       "entry_point": "0x1f4fc",
       "confidence": "high",
       "source": "colt_flash",
@@ -11402,7 +11402,7 @@
       ]
     },
     {
-      "name": "call1f8f0",
+      "name": "update_adc_full_coolant_temp_filtered_after_sensor_glitch",
       "entry_point": "0x1f8f0",
       "confidence": "high",
       "source": "colt_flash",
@@ -11577,7 +11577,7 @@
       "return_type": "void"
     },
     {
-      "name": "call20330",
+      "name": "torque_scale_up",
       "entry_point": "0x20330",
       "confidence": "high",
       "source": "colt_s",
@@ -11759,7 +11759,7 @@
       "timestamp": ""
     },
     {
-      "name": "reset_call20d34",
+      "name": "reset_call20ad4",
       "entry_point": "0x20d34",
       "confidence": "high",
       "source": "colt_s",
@@ -11942,7 +11942,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "pure_condition_call21650",
+      "name": "is_standing_engine_braking_rpm_shift",
       "entry_point": "0x21650",
       "confidence": "high",
       "source": "colt_s",
@@ -12013,7 +12013,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12510b4",
+      "name": "update_engine_not_running_switch",
       "entry_point": "0x21c20",
       "confidence": "high",
       "source": "colt_s",
@@ -12022,7 +12022,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call21c50",
+      "name": "is_engine_not_running",
       "entry_point": "0x21c50",
       "confidence": "high",
       "source": "colt_s",
@@ -12031,7 +12031,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "update_fp12510b0",
+      "name": "update_engine_cranking_flag",
       "entry_point": "0x21c74",
       "confidence": "high",
       "source": "colt_s",
@@ -12119,7 +12119,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "call22560",
+      "name": "is_low_load_engine_braking_active",
       "entry_point": "0x22560",
       "confidence": "high",
       "source": "colt_s",
@@ -12380,7 +12380,7 @@
       "return_type": "void"
     },
     {
-      "name": "impure_condition_call23e48",
+      "name": "is_launch_rpm_cut",
       "entry_point": "0x23e48",
       "confidence": "high",
       "source": "colt_s",
@@ -12866,7 +12866,7 @@
       ]
     },
     {
-      "name": "math_call2563c",
+      "name": "update_tps_based_ipw",
       "entry_point": "0x2563c",
       "confidence": "high",
       "source": "colt_flash",
@@ -12893,7 +12893,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "impure_return128_call258ac",
+      "name": "get_cranking_ipw_const128_compensation_call24f20",
       "entry_point": "0x258ac",
       "confidence": "high",
       "source": "colt_s",
@@ -12911,7 +12911,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "update_injector_latency_vs_power",
+      "name": "update_injector_latency",
       "entry_point": "0x25a10",
       "confidence": "high",
       "source": "colt_flash",
@@ -13053,7 +13053,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call26680",
+      "name": "reset_octane_level_and_knock_calc_flags",
       "entry_point": "0x26680",
       "confidence": "high",
       "source": "colt_flash",
@@ -13460,7 +13460,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "merlin_guess_spark_air_temp_compensation_extra",
+      "name": "iat_high_load_spark_compensation",
       "entry_point": "0x27e48",
       "confidence": "high",
       "source": "colt_flash",
@@ -13469,7 +13469,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "update_fp12054b15_return0",
+      "name": "return0_update_fp12054b15",
       "entry_point": "0x27f34",
       "confidence": "high",
       "source": "colt_flash",
@@ -14454,7 +14454,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12928b7",
+      "name": "probably_throttle_power_relay_control",
       "entry_point": "0x2d20c",
       "confidence": "high",
       "source": "colt_s",
@@ -14463,7 +14463,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call2d240",
+      "name": "probably_is_throttle_power_relay_enabled",
       "entry_point": "0x2d240",
       "confidence": "high",
       "source": "colt_s",
@@ -14490,7 +14490,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12932b1",
+      "name": "update_ac_working_lamp",
       "entry_point": "0x2d520",
       "confidence": "high",
       "source": "colt_flash",
@@ -14499,7 +14499,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call2d574",
+      "name": "is_ac_working_lamp_on",
       "entry_point": "0x2d574",
       "confidence": "high",
       "source": "colt_flash",
@@ -14603,7 +14603,7 @@
       "return_type": "void"
     },
     {
-      "name": "impure_condition_call2dc7c",
+      "name": "is_fuel_pressure_solenoid_enabled",
       "entry_point": "0x2dc7c",
       "confidence": "high",
       "source": "colt_flash",
@@ -14612,7 +14612,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "reset_fp12932b6",
+      "name": "reset_gpio1b6",
       "entry_point": "0x2dd80",
       "confidence": "high",
       "source": "colt_flash",
@@ -14698,7 +14698,7 @@
       "return_type": "void"
     },
     {
-      "name": "call2ec74",
+      "name": "reset_some_error_flags_on_ignition_cancel",
       "entry_point": "0x2ec74",
       "confidence": "high",
       "source": "colt_flash",
@@ -14707,7 +14707,7 @@
       "return_type": "void"
     },
     {
-      "name": "call2ed0c",
+      "name": "cond_reset_engine_runtime",
       "entry_point": "0x2ed0c",
       "confidence": "high",
       "source": "colt_flash",
@@ -14734,7 +14734,7 @@
       "return_type": "void"
     },
     {
-      "name": "call2f1b8",
+      "name": "critical_tests_run",
       "entry_point": "0x2f1b8",
       "confidence": "high",
       "source": "colt_flash",
@@ -14743,7 +14743,7 @@
       "return_type": "void"
     },
     {
-      "name": "call2fc2c0",
+      "name": "slow_test_run",
       "entry_point": "0x2f2c0",
       "confidence": "high",
       "source": "colt_flash",
@@ -14752,7 +14752,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_index_call2f460",
+      "name": "update_slow_test_index",
       "entry_point": "0x2f460",
       "confidence": "high",
       "source": "colt_flash",
@@ -14813,7 +14813,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "baro_pressure_error_status",
+      "name": "baro_pressure_sensor_fault_detection",
       "entry_point": "0x2f924",
       "confidence": "high",
       "source": "colt_flash",
@@ -14876,7 +14876,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "call2fb10",
+      "name": "probably_some_power_faults_detection",
       "entry_point": "0x2fb10",
       "confidence": "high",
       "source": "colt_s",
@@ -15111,7 +15111,7 @@
       ]
     },
     {
-      "name": "call31e30",
+      "name": "test_substitute31198",
       "entry_point": "0x31e30",
       "confidence": "high",
       "source": "colt_s",
@@ -15159,7 +15159,7 @@
       ]
     },
     {
-      "name": "const_condition_call31ef0",
+      "name": "test_maf_disabled",
       "entry_point": "0x31ef0",
       "confidence": "high",
       "source": "colt_s",
@@ -15168,7 +15168,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "const_condition_call31f14",
+      "name": "test_substitue_tps_load",
       "entry_point": "0x31f14",
       "confidence": "high",
       "source": "colt_s",
@@ -15184,7 +15184,7 @@
       ]
     },
     {
-      "name": "call31f78",
+      "name": "test_substitute_maf_charge_max_base",
       "entry_point": "0x31f78",
       "confidence": "high",
       "source": "colt_s",
@@ -15200,7 +15200,7 @@
       ]
     },
     {
-      "name": "const_condition_choose31fac",
+      "name": "test_substitute_injector_latency",
       "entry_point": "0x31fac",
       "confidence": "high",
       "source": "colt_flash",
@@ -15332,7 +15332,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "choose_on_const_condition32130",
+      "name": "test_substitute_egr_duty",
       "entry_point": "0x32130",
       "confidence": "high",
       "source": "colt_s",
@@ -15364,7 +15364,7 @@
       ]
     },
     {
-      "name": "choose_on_const_condition3217c",
+      "name": "test_substitute_wastegate_duty",
       "entry_point": "0x3217c",
       "confidence": "high",
       "source": "colt_s",
@@ -15421,7 +15421,7 @@
       ]
     },
     {
-      "name": "const_condition_call32324",
+      "name": "test_disable_active_steering_switch",
       "entry_point": "0x32324",
       "confidence": "high",
       "source": "colt_s",
@@ -15490,7 +15490,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call3370c",
+      "name": "is_large_crankshaft_time_change",
       "entry_point": "0x3370c",
       "confidence": "high",
       "source": "colt_s",
@@ -15499,7 +15499,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "call33754",
+      "name": "call32ab4",
       "entry_point": "0x33754",
       "confidence": "high",
       "source": "colt_s",
@@ -15545,7 +15545,7 @@
       ]
     },
     {
-      "name": "return_fp11964_33a7c",
+      "name": "get_coil_dwell",
       "entry_point": "0x33a7c",
       "confidence": "high",
       "source": "colt_s",
@@ -15588,7 +15588,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp11964",
+      "name": "update_coil_dwell",
       "entry_point": "0x33d10",
       "confidence": "high",
       "source": "colt_flash",
@@ -15612,7 +15612,7 @@
       ]
     },
     {
-      "name": "call34b74",
+      "name": "call33ed4",
       "entry_point": "0x34b74",
       "confidence": "high",
       "source": "colt_flash",
@@ -15621,7 +15621,7 @@
       "return_type": "void"
     },
     {
-      "name": "call34be0",
+      "name": "get_injector_duty_latency_compensated",
       "entry_point": "0x34be0",
       "confidence": "high",
       "source": "colt_flash",
@@ -15679,7 +15679,7 @@
       ]
     },
     {
-      "name": "call34edc",
+      "name": "injectors_fault_detection",
       "entry_point": "0x34edc",
       "confidence": "high",
       "source": "colt_flash",
@@ -15770,7 +15770,7 @@
       ]
     },
     {
-      "name": "call35da4",
+      "name": "regen_ignitionless_cam_rotation",
       "entry_point": "0x35da4",
       "confidence": "high",
       "source": "colt_s",
@@ -15788,7 +15788,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call35eb0",
+      "name": "reset_tps_topen_apps_ineuc",
       "entry_point": "0x35eb0",
       "confidence": "high",
       "source": "colt_flash",
@@ -15797,7 +15797,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call35f40",
+      "name": "reset_call352a0",
       "entry_point": "0x35f40",
       "confidence": "high",
       "source": "colt_flash",
@@ -15939,7 +15939,7 @@
       "return_type": "void"
     },
     {
-      "name": "call3ac50",
+      "name": "out",
       "entry_point": "0x3ac50",
       "confidence": "high",
       "source": "colt_s",
@@ -16031,7 +16031,7 @@
       ]
     },
     {
-      "name": "call3b660",
+      "name": "sio2_subcon_init_step",
       "entry_point": "0x3b660",
       "confidence": "high",
       "source": "colt_s",
@@ -16046,7 +16046,7 @@
       ]
     },
     {
-      "name": "pure_condition_call3b884",
+      "name": "sio2_get_faults",
       "entry_point": "0x3b884",
       "confidence": "high",
       "source": "colt_s",
@@ -16116,7 +16116,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "call407fc",
+      "name": "get_purge_control_duty",
       "entry_point": "0x407fc",
       "confidence": "high",
       "source": "colt_s",
@@ -16168,7 +16168,7 @@
       "return_type": "void"
     },
     {
-      "name": "call415f0",
+      "name": "fault_safe_purge_duty",
       "entry_point": "0x415f0",
       "confidence": "high",
       "source": "colt_s",
@@ -16193,7 +16193,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12926b6",
+      "name": "purge_solenoid_venting_control",
       "entry_point": "0x4176c",
       "confidence": "high",
       "source": "colt_flash",
@@ -16202,7 +16202,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call417b8",
+      "name": "is_purge_solenoid_venting_enabled",
       "entry_point": "0x417b8",
       "confidence": "high",
       "source": "colt_flash",
@@ -16238,7 +16238,7 @@
       "return_type": "void"
     },
     {
-      "name": "call41e58",
+      "name": "crankshaft_interrupt_call41eac",
       "entry_point": "0x41e58",
       "confidence": "high",
       "source": "colt_s",
@@ -16247,7 +16247,7 @@
       "return_type": "void"
     },
     {
-      "name": "call41f6c",
+      "name": "crankshaft_pin_fixup",
       "entry_point": "0x41f6c",
       "confidence": "high",
       "source": "colt_s",
@@ -16340,7 +16340,7 @@
       "return_type": "void"
     },
     {
-      "name": "call439b0",
+      "name": "call43a04",
       "entry_point": "0x439b0",
       "confidence": "high",
       "source": "colt_s",
@@ -16410,7 +16410,7 @@
       "return_type": "void"
     },
     {
-      "name": "top_coil_calc_and_sync",
+      "name": "coil_control",
       "entry_point": "0x449fc",
       "confidence": "high",
       "source": "colt_flash",
@@ -16419,7 +16419,7 @@
       "return_type": "void"
     },
     {
-      "name": "top_coil_calc_and_execute_sync_low",
+      "name": "coil_sync_activation",
       "entry_point": "0x44de0",
       "confidence": "high",
       "source": "colt_flash",
@@ -16440,7 +16440,7 @@
       ]
     },
     {
-      "name": "top_coil_calc_and_execute_sync_high",
+      "name": "coil_sync_deactivation",
       "entry_point": "0x45084",
       "confidence": "high",
       "source": "colt_flash",
@@ -16493,7 +16493,7 @@
       ]
     },
     {
-      "name": "call45478",
+      "name": "spark_advance_scale_up",
       "entry_point": "0x45478",
       "confidence": "high",
       "source": "colt_s",
@@ -16553,7 +16553,7 @@
       "return_type": "void"
     },
     {
-      "name": "math_call_knock_related_45a94",
+      "name": "update_knock_smoothed",
       "entry_point": "0x45a94",
       "confidence": "high",
       "source": "colt_s",
@@ -16562,7 +16562,7 @@
       "return_type": "void"
     },
     {
-      "name": "call45c08",
+      "name": "call45d30",
       "entry_point": "0x45c08",
       "confidence": "high",
       "source": "colt_s",
@@ -16571,7 +16571,7 @@
       "return_type": "void"
     },
     {
-      "name": "trampoline_call35da4",
+      "name": "trampoline_regen_ignitionless_cam_rotation",
       "entry_point": "0x45c60",
       "confidence": "high",
       "source": "colt_s",
@@ -16580,7 +16580,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_fp12022",
+      "name": "nop_ignition_compensation45dd0",
       "entry_point": "0x45c70",
       "confidence": "high",
       "source": "colt_s",
@@ -16589,7 +16589,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "reset_fp11696",
+      "name": "return0_call45de4",
       "entry_point": "0x45c84",
       "confidence": "high",
       "source": "colt_s",
@@ -16598,7 +16598,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "reset_fp11694",
+      "name": "return0_call45df0",
       "entry_point": "0x45c90",
       "confidence": "high",
       "source": "colt_s",
@@ -16927,7 +16927,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot0_tx_update",
+      "name": "can0_slot0_apps_tps_extra_tx_update",
       "entry_point": "0x49608",
       "confidence": "high",
       "source": "colt_flash",
@@ -16936,7 +16936,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot1_tx_update",
+      "name": "can0_slot1_rpm_extra_tx_update",
       "entry_point": "0x496ec",
       "confidence": "high",
       "source": "colt_flash",
@@ -16945,7 +16945,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot2_tx_update",
+      "name": "can0_slot2_dash_revolutions_odometer_coolant_tx_update",
       "entry_point": "0x49758",
       "confidence": "high",
       "source": "colt_flash",
@@ -16954,7 +16954,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot3_tx_update",
+      "name": "can0_slot3_trip_ambient_tx_update",
       "entry_point": "0x497f8",
       "confidence": "high",
       "source": "colt_flash",
@@ -16990,7 +16990,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot7_rx_update",
+      "name": "can0_slot7_abs_rx_update",
       "entry_point": "0x49a50",
       "confidence": "high",
       "source": "colt_flash",
@@ -16999,7 +16999,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot8_rx_update",
+      "name": "can0_slot8_eps_rx_update",
       "entry_point": "0x49b0c",
       "confidence": "high",
       "source": "colt_flash",
@@ -17008,7 +17008,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot10_rx_update",
+      "name": "can0_slot10_ac_rx_update",
       "entry_point": "0x49b9c",
       "confidence": "high",
       "source": "colt_flash",
@@ -17053,7 +17053,7 @@
       "return_type": "void"
     },
     {
-      "name": "call49ef4",
+      "name": "check_g8",
       "entry_point": "0x49ef4",
       "confidence": "high",
       "source": "colt_s",
@@ -17083,7 +17083,7 @@
       "return_type": "void"
     },
     {
-      "name": "cobd_rx_process",
+      "name": "canrx12_15_process",
       "entry_point": "0x4a014",
       "confidence": "high",
       "source": "colt_s",
@@ -17099,7 +17099,7 @@
       ]
     },
     {
-      "name": "can0_slot9_rx_update",
+      "name": "can0_slot9_asc_rx_update",
       "entry_point": "0x4a330",
       "confidence": "high",
       "source": "colt_flash",
@@ -17108,7 +17108,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot13_tx_update",
+      "name": "can0_slot13_rpm_accel_pedal_related_tx_update",
       "entry_point": "0x4a4e4",
       "confidence": "high",
       "source": "colt_flash",
@@ -17117,7 +17117,7 @@
       "return_type": "void"
     },
     {
-      "name": "can0_slot14_tx_update",
+      "name": "can0_slot14_asc_tx_update",
       "entry_point": "0x4a594",
       "confidence": "high",
       "source": "colt_flash",
@@ -17126,7 +17126,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12932b2",
+      "name": "update_gpio1b2",
       "entry_point": "0x4a610",
       "confidence": "high",
       "source": "colt_flash",
@@ -17135,7 +17135,7 @@
       "return_type": "void"
     },
     {
-      "name": "impure_condition_call4a64c",
+      "name": "impure_condition_call498fc",
       "entry_point": "0x4a64c",
       "confidence": "high",
       "source": "colt_flash",
@@ -17160,7 +17160,7 @@
       "timestamp": ""
     },
     {
-      "name": "enable_interrupts_level",
+      "name": "enable_interrupt_level",
       "entry_point": "0x4ef28",
       "confidence": "high",
       "source": "colt_flash",
@@ -17489,7 +17489,7 @@
       ]
     },
     {
-      "name": "s_mul9f7",
+      "name": "s_scale_base128",
       "entry_point": "0x4f1ec",
       "confidence": "high",
       "source": "colt_flash",
@@ -17510,7 +17510,7 @@
       ]
     },
     {
-      "name": "s_mul23f9_9f7",
+      "name": "s32_scale_base128",
       "entry_point": "0x4f204",
       "confidence": "high",
       "source": "colt_flash",
@@ -17531,7 +17531,7 @@
       ]
     },
     {
-      "name": "ps_mul9f7",
+      "name": "ps_scale_base128",
       "entry_point": "0x4f23c",
       "confidence": "high",
       "source": "colt_flash",
@@ -17552,7 +17552,7 @@
       ]
     },
     {
-      "name": "ps_mul14f18_9f7",
+      "name": "ps32_scale_base128",
       "entry_point": "0x4f254",
       "confidence": "high",
       "source": "colt_flash",
@@ -17573,7 +17573,7 @@
       ]
     },
     {
-      "name": "s_mul8f8",
+      "name": "s_scale_base256",
       "entry_point": "0x4f290",
       "confidence": "high",
       "source": "colt_flash",
@@ -17594,7 +17594,7 @@
       ]
     },
     {
-      "name": "s_mul16f16_8f8",
+      "name": "s32_scale_base256",
       "entry_point": "0x4f2a8",
       "confidence": "high",
       "source": "colt_flash",
@@ -17615,7 +17615,7 @@
       ]
     },
     {
-      "name": "ps_mul8f8",
+      "name": "ps_scale_base256",
       "entry_point": "0x4f2e0",
       "confidence": "high",
       "source": "colt_flash",
@@ -17636,7 +17636,7 @@
       ]
     },
     {
-      "name": "ps_mul16f16_8f8",
+      "name": "ps_scale32_base256",
       "entry_point": "0x4f2fc",
       "confidence": "high",
       "source": "colt_flash",
@@ -17657,7 +17657,7 @@
       ]
     },
     {
-      "name": "conv8f8_uint",
+      "name": "conv16to8",
       "entry_point": "0x4f33c",
       "confidence": "high",
       "source": "colt_flash",
@@ -17673,7 +17673,7 @@
       ]
     },
     {
-      "name": "conv16f16_uint",
+      "name": "conv32to16",
       "entry_point": "0x4f344",
       "confidence": "high",
       "source": "colt_flash",
@@ -17689,7 +17689,7 @@
       ]
     },
     {
-      "name": "conv_u8_8f8",
+      "name": "conv8to16",
       "entry_point": "0x4f348",
       "confidence": "high",
       "source": "colt_flash",
@@ -17705,7 +17705,7 @@
       ]
     },
     {
-      "name": "conv_uint_16f16",
+      "name": "conv16to32",
       "entry_point": "0x4f350",
       "confidence": "high",
       "source": "colt_flash",
@@ -17890,7 +17890,7 @@
       ]
     },
     {
-      "name": "prec_sat32_divu32_16",
+      "name": "ps32_divu32_16",
       "entry_point": "0x4f474",
       "confidence": "high",
       "source": "colt_flash",
@@ -18143,7 +18143,7 @@
       ]
     },
     {
-      "name": "prec_aprxu16_255_2",
+      "name": "p_aprxu16_255_2",
       "entry_point": "0x4f820",
       "confidence": "high",
       "source": "colt_flash",
@@ -18462,7 +18462,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_and_analyze_adc_byte_throttle_power_smoothed",
+      "name": "update_and_analyze_adc_full_throttle_power_smoothed",
       "entry_point": "0x518c4",
       "confidence": "high",
       "source": "colt_flash",
@@ -18480,7 +18480,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_adc_byte_throttle_power_smoothed",
+      "name": "update_adc_full_throttle_power_smoothed",
       "entry_point": "0x518e0",
       "confidence": "high",
       "source": "colt_flash",
@@ -18489,7 +18489,7 @@
       "return_type": "void"
     },
     {
-      "name": "analyze_adc_byte_throttle_power_smoothed",
+      "name": "analyze_adc_full_throttle_power_smoothed",
       "entry_point": "0x51900",
       "confidence": "high",
       "source": "colt_flash",
@@ -18507,7 +18507,7 @@
       "return_type": "void"
     },
     {
-      "name": "call519e8",
+      "name": "copy_accel_pedal_sub_call50b18",
       "entry_point": "0x519e8",
       "confidence": "high",
       "source": "colt_s",
@@ -18876,7 +18876,7 @@
       "return_type": "void"
     },
     {
-      "name": "calc_fp6100_53ed8",
+      "name": "update_etc_ttp_bound_by_main_adaptations",
       "entry_point": "0x53ed8",
       "confidence": "high",
       "source": "colt_flash",
@@ -18956,7 +18956,7 @@
       "return_type": "void"
     },
     {
-      "name": "calc_tps_averages",
+      "name": "throttle_adapt_calc_tps_averages",
       "entry_point": "0x547a8",
       "confidence": "high",
       "source": "colt_flash",
@@ -18974,7 +18974,7 @@
       "return_type": "void"
     },
     {
-      "name": "call54a1c",
+      "name": "update_throttle_current_corrections",
       "entry_point": "0x54a1c",
       "confidence": "high",
       "source": "colt_flash",
@@ -18983,7 +18983,7 @@
       "return_type": "void"
     },
     {
-      "name": "call54c9c",
+      "name": "store_ttc_source_from_main",
       "entry_point": "0x54c9c",
       "confidence": "high",
       "source": "colt_flash",
@@ -18992,7 +18992,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp6210b3",
+      "name": "call53f0c",
       "entry_point": "0x54d1c",
       "confidence": "high",
       "source": "colt_flash",
@@ -19001,7 +19001,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_desired_throttle_smth_sum_component3",
+      "name": "update_ttc_fixed_part",
       "entry_point": "0x54d58",
       "confidence": "high",
       "source": "colt_flash",
@@ -19019,7 +19019,7 @@
       "return_type": "void"
     },
     {
-      "name": "call54dbc",
+      "name": "update_etc_close_fault",
       "entry_point": "0x54dbc",
       "confidence": "high",
       "source": "colt_s",
@@ -19046,7 +19046,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp6213b7",
+      "name": "update_fp6221b6",
       "entry_point": "0x54fc0",
       "confidence": "high",
       "source": "colt_flash",
@@ -19055,7 +19055,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_desired_throttle_smth_sum",
+      "name": "update_target_throttle_current_from_sum",
       "entry_point": "0x54fec",
       "confidence": "high",
       "source": "colt_flash",
@@ -19091,7 +19091,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_desired_throttle_duty_etc",
+      "name": "update_desired_throttle_duty",
       "entry_point": "0x55164",
       "confidence": "high",
       "source": "colt_flash",
@@ -19100,7 +19100,7 @@
       "return_type": "void"
     },
     {
-      "name": "trampoline_update_fp6142",
+      "name": "trampoline_update_throttle_power_filtered",
       "entry_point": "0x55328",
       "confidence": "high",
       "source": "colt_flash",
@@ -19109,7 +19109,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp6142",
+      "name": "update_throttle_power_filtered",
       "entry_point": "0x55334",
       "confidence": "high",
       "source": "colt_flash",
@@ -19163,7 +19163,7 @@
       "return_type": "void"
     },
     {
-      "name": "s32_mul16_div256",
+      "name": "ttc_scale",
       "entry_point": "0x558c0",
       "confidence": "high",
       "source": "colt_s",
@@ -19361,7 +19361,7 @@
       ]
     },
     {
-      "name": "update_fp12932b7",
+      "name": "fuel_pump_control",
       "entry_point": "0x56fd0",
       "confidence": "high",
       "source": "colt_flash",
@@ -19370,7 +19370,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call57004",
+      "name": "is_fuel_pump_active",
       "entry_point": "0x57004",
       "confidence": "high",
       "source": "colt_flash",
@@ -19379,7 +19379,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "reset_call57030",
+      "name": "reset_call56220",
       "entry_point": "0x57030",
       "confidence": "high",
       "source": "colt_s",
@@ -19433,7 +19433,7 @@
       "return_type": "void"
     },
     {
-      "name": "call57af8",
+      "name": "regenerate_oxygen_feedback_trim_valid_decay",
       "entry_point": "0x57af8",
       "confidence": "high",
       "source": "colt_s",
@@ -19449,7 +19449,7 @@
       ]
     },
     {
-      "name": "call57b54",
+      "name": "call56d1c",
       "entry_point": "0x57b54",
       "confidence": "high",
       "source": "colt_s",
@@ -19493,7 +19493,7 @@
       ]
     },
     {
-      "name": "call57dc4",
+      "name": "probably_set_dtc",
       "entry_point": "0x57dc4",
       "confidence": "high",
       "source": "colt_flash",
@@ -19519,7 +19519,7 @@
       ]
     },
     {
-      "name": "call57e48",
+      "name": "obd_dtc_change_monitor_update",
       "entry_point": "0x57e48",
       "confidence": "high",
       "source": "colt_flash",
@@ -20469,7 +20469,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fp12932b0",
+      "name": "ac_control",
       "entry_point": "0x620d0",
       "confidence": "high",
       "source": "colt_s",
@@ -20573,7 +20573,7 @@
       "return_type": "void"
     },
     {
-      "name": "nop62a10",
+      "name": "nop60f50",
       "entry_point": "0x62a10",
       "confidence": "high",
       "source": "colt_flash",
@@ -20919,7 +20919,7 @@
       ]
     },
     {
-      "name": "reset_call63570",
+      "name": "reset_call61ab0",
       "entry_point": "0x63570",
       "confidence": "high",
       "source": "colt_flash",
@@ -20928,7 +20928,7 @@
       "return_type": "void"
     },
     {
-      "name": "call63598",
+      "name": "reset_call61ad8",
       "entry_point": "0x63598",
       "confidence": "high",
       "source": "colt_flash",
@@ -20937,7 +20937,7 @@
       "return_type": "void"
     },
     {
-      "name": "nop635c0",
+      "name": "nop61b00",
       "entry_point": "0x635c0",
       "confidence": "high",
       "source": "colt_flash",
@@ -20946,7 +20946,7 @@
       "return_type": "void"
     },
     {
-      "name": "eeprom_move_from_ram_to_data_area_block0",
+      "name": "eeprom_update_block0_from_memory",
       "entry_point": "0x6366c",
       "confidence": "high",
       "source": "colt_flash",
@@ -20991,7 +20991,7 @@
       "return_type": "void"
     },
     {
-      "name": "eeprom_data_area_move_to_mem_block0",
+      "name": "unused_eeprom_copy_first16bytes_from_area_to_map",
       "entry_point": "0x639a8",
       "confidence": "high",
       "source": "colt_flash",
@@ -21000,7 +21000,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call63a50",
+      "name": "disabled_reset_trims_condition_call61f90",
       "entry_point": "0x63a50",
       "confidence": "high",
       "source": "colt_flash",
@@ -21017,7 +21017,7 @@
       "timestamp": ""
     },
     {
-      "name": "call63a8c",
+      "name": "update_field_sense_fault",
       "entry_point": "0x63a8c",
       "confidence": "high",
       "source": "colt_s",
@@ -21034,7 +21034,7 @@
       "timestamp": ""
     },
     {
-      "name": "call63d54",
+      "name": "update_alternator_duty",
       "entry_point": "0x63d54",
       "confidence": "high",
       "source": "colt_flash",
@@ -21043,7 +21043,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call63da8",
+      "name": "is_alternator_closed_loop",
       "entry_point": "0x63da8",
       "confidence": "high",
       "source": "colt_s",
@@ -21052,7 +21052,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "pure_condition_call63e04",
+      "name": "is_probably_disable_alternator",
       "entry_point": "0x63e04",
       "confidence": "high",
       "source": "colt_s",
@@ -21078,7 +21078,7 @@
       "return_type": "void"
     },
     {
-      "name": "pure_condition_call64220",
+      "name": "is_alternator_duty_limiting_enabled",
       "entry_point": "0x64220",
       "confidence": "high",
       "source": "colt_s",
@@ -21105,7 +21105,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "call644f0",
+      "name": "update_guarded_checks_execution_flag",
       "entry_point": "0x644f0",
       "confidence": "high",
       "source": "colt_flash",
@@ -21114,7 +21114,7 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call6451c",
+      "name": "reset_tomo_apps_neuc",
       "entry_point": "0x6451c",
       "confidence": "high",
       "source": "colt_flash",
@@ -21132,7 +21132,7 @@
       "return_type": "void"
     },
     {
-      "name": "call64760",
+      "name": "conditional_guarded_checks_execution",
       "entry_point": "0x64760",
       "confidence": "high",
       "source": "colt_flash",
@@ -21193,7 +21193,7 @@
       ]
     },
     {
-      "name": "call64f34",
+      "name": "tomo_can_asc_rx_regen_decays",
       "entry_point": "0x64f34",
       "confidence": "high",
       "source": "colt_flash",
@@ -21202,7 +21202,7 @@
       "return_type": "void"
     },
     {
-      "name": "call64f68",
+      "name": "tomo_update_can_asc_decays",
       "entry_point": "0x64f68",
       "confidence": "high",
       "source": "colt_flash",
@@ -21247,7 +21247,7 @@
       "return_type": "void"
     },
     {
-      "name": "call6536c",
+      "name": "tomo_update_current_torque_output_continuation",
       "entry_point": "0x6536c",
       "confidence": "high",
       "source": "colt_s",
@@ -21310,7 +21310,7 @@
       "return_type": "void"
     },
     {
-      "name": "call65c64",
+      "name": "tomo_torque_scale_up",
       "entry_point": "0x65c64",
       "confidence": "high",
       "source": "colt_s",
@@ -21462,7 +21462,7 @@
       "return_type": "void"
     },
     {
-      "name": "nop6747c",
+      "name": "nop659bc",
       "entry_point": "0x6747c",
       "confidence": "high",
       "source": "colt_s",
@@ -21770,7 +21770,7 @@
       "return_type": "void"
     },
     {
-      "name": "init_fp5304_u8a",
+      "name": "init_memory_area_from_flash_call68df0",
       "entry_point": "0x6a8b0",
       "confidence": "high",
       "source": "colt_flash",
