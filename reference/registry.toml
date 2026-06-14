@@ -11,3 +11,13 @@ variant = "fp8000"
 priority = 100
 features = ["obd", "mut", "crc", "mode23"]
 notes = "primary Z27AG reference (Z27AG_JDM_5MT_1860B104)"
+
+[[reference]]
+id = "47110032"
+json = "47110032.json"
+rom = "47110032.bin"
+family = "z37a"
+variant = "fp8000"
+priority = 50
+features = ["can_bootloader", "dma", "cvt_dash"]
+notes = "Colt CZT Z37A 5MT; CAN bootloader + DMA/CAN handlers decoded (from mmc-research colt_flash/colt_map)"
