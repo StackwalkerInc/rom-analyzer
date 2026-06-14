@@ -56,6 +56,7 @@ from rom_analyzer.annotations_io import (
 from rom_analyzer.types import DataTypeDefinition
 from rom_analyzer.enrich import (
     LabelCandidate, gather_candidates, classify, build_reconcile_items, write_reconcile,
+    read_reconcile, apply_verdicts,
 )
 from rom_analyzer.scripts.build_reference_from_txt import (
     drop_imprecise_s_duplicates, drop_erased_flash_entries, dedup_symbol_names,
@@ -1049,6 +1050,53 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
 
     finally:
         project.close()
+
+
+@cli.command("apply-enrichment")
+@click.argument("reconcile_file", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+def apply_enrichment(reconcile_file):
+    """Apply human verdicts from a reconcile.toml to the reference JSONs,
+    re-deduplicate each touched reference, and report what changed.
+
+    Refreshing the e2e golden for any touched reference that has one (e.g.
+    33520003) is a separate operator step via the analyze command.
+    """
+    registry_path = _REFERENCE_DIR / "registry.toml"
+    if not registry_path.exists():
+        raise click.ClickException(f"Registry not found at {registry_path}")
+    by_id = {e.id: e for e in load_registry(registry_path)}
+
+    items = read_reconcile(Path(reconcile_file))
+    if not items:
+        click.echo("No items in reconcile file; nothing to do.")
+        return
+
+    targets = sorted({it.target for it in items})
+    touched_golden = []
+    for tid in targets:
+        if tid not in by_id:
+            click.echo(f"   [skip] target {tid!r} not in registry")
+            continue
+        entry = by_id[tid]
+        st = load_annotations(entry.json_path)
+        n = apply_verdicts(st, items, target=tid)
+        drop_imprecise_s_duplicates(st)
+        if entry.rom_path.exists():
+            drop_erased_flash_entries(st, entry.rom_path.read_bytes())
+        dedup_symbol_names(st)
+        save_annotations(entry.json_path, st)
+        click.echo(f"   {tid}: applied {n} verdict(s)")
+        if tid == "33520003":
+            touched_golden.append(tid)
+
+    if touched_golden:
+        click.echo(
+            "\nNOTE: refresh the e2e golden for "
+            + ", ".join(touched_golden)
+            + " by re-running the analyze command and updating tests/golden/, "
+            "then run scripts/run-e2e.sh."
+        )
+    click.echo("Done.")
 
 
 if __name__ == "__main__":
