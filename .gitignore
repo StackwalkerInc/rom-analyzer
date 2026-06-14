@@ -16,7 +16,13 @@ htmlcov/
 
 # Local scratch
 out/
+out_pre_task/
 .cache/
+
+# Editor swap files
+*.swp
+*.swo
+*~
 
 # Stock ROMs (never distributed; user supplies locally — see README)
 roms/*.bin
