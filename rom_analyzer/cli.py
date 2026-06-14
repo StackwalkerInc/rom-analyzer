@@ -50,8 +50,16 @@ from rom_analyzer.registry import (
     ReferenceEntry, load_registry, select_references, partition_available,
 )
 from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
-from rom_analyzer.annotations_io import load_annotations, load_reference_symbols
+from rom_analyzer.annotations_io import (
+    AnnotationFunction, load_annotations, load_reference_symbols, save_annotations,
+)
 from rom_analyzer.types import DataTypeDefinition
+from rom_analyzer.enrich import (
+    LabelCandidate, gather_candidates, classify, build_reconcile_items, write_reconcile,
+)
+from rom_analyzer.scripts.build_reference_from_txt import (
+    drop_imprecise_s_duplicates, drop_erased_flash_entries, dedup_symbol_names,
+)
 
 
 VARIANT_TO_LANGUAGE = {
@@ -288,7 +296,7 @@ def analyze_against_reference(project, entry, language_id, rom_path, rom_bytes,
     )
 
 
-@click.command()
+@click.command("analyze")
 @click.argument("rom_path", type=click.Path(exists=True, dir_okay=False, path_type=Path))
 @click.option("--variant", type=click.Choice(["fp8000", "fpc000"]), required=True)
 @click.option("--reference", type=click.Path(exists=True, dir_okay=False, path_type=Path),
@@ -334,7 +342,7 @@ def analyze_against_reference(project, entry, language_id, rom_path, rom_bytes,
               help="Greedy incremental: match against the top-priority "
                    "reference first, later references only fill gaps. "
                    "(Accepted but not yet implemented — reserved for a future iteration.)")
-def main(rom_path, variant, reference, reference_rom, ghidra_home,
+def analyze(rom_path, variant, reference, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
          reference_name, clean_project, enrich_project, inline_source_annotations,
          emit_mode23, emit_obd, emit_can_slots,
@@ -821,5 +829,227 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
         project.close()
 
 
+# ---------------------------------------------------------------------------
+# Click group and enrich subcommand
+# ---------------------------------------------------------------------------
+
+@click.group()
+def cli():
+    """rom-analyzer: M32R ROM analysis and reference enrichment."""
+
+
+cli.add_command(analyze)
+
+
+# ---------------------------------------------------------------------------
+# Helpers for enrich
+# ---------------------------------------------------------------------------
+
+def _rom_bytes_cached(entry: ReferenceEntry, _cache: dict = {}) -> bytes:
+    """Read and cache a reference entry's ROM bytes."""
+    if entry.id not in _cache:
+        _cache[entry.id] = entry.rom_path.read_bytes()
+    return _cache[entry.id]
+
+
+def _erased_addrs(entry: ReferenceEntry, window: int = 8) -> set[int]:
+    """Return the set of function-entry addresses that land in erased flash."""
+    rom = _rom_bytes_cached(entry)
+    store = load_annotations(entry.json_path)
+    erased: set[int] = set()
+    for f in store.functions:
+        addr = f.entry_point
+        if addr + window <= len(rom) and all(b == 0xFF for b in rom[addr:addr + window]):
+            erased.add(addr)
+    return erased
+
+
+def _append_functions(store, cands: list[LabelCandidate]) -> int:
+    """Append new AnnotationFunctions for auto candidates not already present.
+
+    Returns the number appended.
+    """
+    existing = {f.entry_point for f in store.functions}
+    n = 0
+    for c in cands:
+        if c.address not in existing:
+            store.functions.append(AnnotationFunction(
+                name=c.proposed,
+                entry_point=c.address,
+                confidence="medium",
+                source=f"xref:{c.source}",
+            ))
+            existing.add(c.address)
+            n += 1
+    return n
+
+
+@cli.command("enrich")
+@click.argument("new_id")
+@click.option("--ghidra-home", type=click.Path(exists=True, file_okay=False, path_type=Path),
+              default=os.environ.get("GHIDRA_HOME", "/opt/homebrew/opt/ghidra/libexec"))
+@click.option("--project-dir", type=click.Path(path_type=Path),
+              default=Path.home() / "rom-analyzer-projects")
+@click.option("--project-name", default="rom-analyzer")
+@click.option("--out", "out_dir", type=click.Path(path_type=Path),
+              default=_REFERENCE_DIR / "enrichment", show_default=True)
+@click.option("--inline-source-annotations", is_flag=True, default=False)
+def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_source_annotations):
+    """Cross-match <new_id> against all references; auto-apply new functions and
+    emit a reconcile.toml of conflicts + RAM/data for review."""
+    registry_path = _REFERENCE_DIR / "registry.toml"
+    if not registry_path.exists():
+        raise click.ClickException(f"Registry not found at {registry_path}")
+
+    entries = load_registry(registry_path)
+    by_id = {e.id: e for e in entries}
+    if new_id not in by_id:
+        raise click.ClickException(f"Reference id {new_id!r} not found in registry")
+
+    new_entry = by_id[new_id]
+    if not new_entry.rom_path.exists():
+        raise click.ClickException(
+            f"ROM for {new_id} not found at {new_entry.rom_path}"
+        )
+
+    others = [e for e in entries if e.id != new_id and e.rom_path.exists()]
+    if not others:
+        raise click.ClickException("No other references with available ROMs to cross-match against")
+
+    priority = {e.id: e.priority for e in entries}
+    language_id = VARIANT_TO_LANGUAGE.get(new_entry.variant)
+    if language_id is None:
+        raise click.ClickException(f"Unknown variant {new_entry.variant!r} for {new_id}")
+
+    setup_environment(ghidra_home)
+    import pyghidra
+    pyghidra.start()
+
+    project_path = Path(project_dir) / project_name
+    project_path.mkdir(parents=True, exist_ok=True)
+    project = pyghidra.open_project(project_path, project_name, create=True)
+
+    try:
+        new_prog_name = ghidriff_program_name(new_entry.rom_path)
+        rom_bytes = new_entry.rom_path.read_bytes()
+
+        # Load the new entry's store once; build fn-name lookup
+        new_store = load_annotations(new_entry.json_path)
+        new_fn_names: dict[int, str] = {f.entry_point: f.name for f in new_store.functions}
+
+        # Import new ROM into Ghidra once (shared across all cross-matches)
+        _new_ref_symbols_preview = load_reference_symbols(new_entry.json_path)
+        _new_crc_step_addr = next(
+            (s.address for s in _new_ref_symbols_preview if s.name == "rom_crc_check_step"),
+            None,
+        )
+        click.echo(f"[import] Importing new ROM {new_id}: {new_entry.rom_path}")
+        new_run = import_and_dump(
+            project,
+            new_entry.rom_path, language_id,
+            crc_step_address=_new_crc_step_addr,
+            collect_data_refs_flag=True,
+        )
+
+        all_candidates: list[LabelCandidate] = []
+
+        for ref in others:
+            if ref.variant != new_entry.variant:
+                click.echo(
+                    f"   [skip] {ref.id}: variant {ref.variant!r} != {new_entry.variant!r} "
+                    f"(cross-variant matching not yet supported)"
+                )
+                continue
+
+            click.echo(f"[cross-match] {new_id} vs {ref.id}")
+            result = analyze_against_reference(
+                project, ref, language_id,
+                new_entry.rom_path, rom_bytes,
+                new_run, new_prog_name,
+                target_family=new_entry.family,
+                inline_source_annotations=inline_source_annotations,
+            )
+
+            ref_store = load_annotations(ref.json_path)
+            ref_fn_names: dict[int, str] = {f.entry_point: f.name for f in ref_store.functions}
+
+            cands = gather_candidates(
+                new_id, ref.id,
+                result.matches,
+                new_fn_names, ref_fn_names,
+                ram_data_candidates=None,
+            )
+            all_candidates.extend(cands)
+            click.echo(f"   {len(cands)} candidates from {ref.id}")
+
+        # Compute erased-address sets per target ROM (keyed by target id)
+        target_ids = {c.target for c in all_candidates}
+        erased_by_target: dict[str, set[int]] = {}
+        for tid in target_ids:
+            if tid == new_id:
+                erased_by_target[tid] = _erased_addrs(new_entry)
+            elif tid in by_id:
+                erased_by_target[tid] = _erased_addrs(by_id[tid])
+            else:
+                erased_by_target[tid] = set()
+
+        # Classify
+        auto_all: list[LabelCandidate] = []
+        review_all: list[LabelCandidate] = []
+        by_target: dict[str, list[LabelCandidate]] = {}
+        for c in all_candidates:
+            by_target.setdefault(c.target, []).append(c)
+
+        for tid, group in by_target.items():
+            classified = classify(group, erased=erased_by_target.get(tid, set()))
+            auto_all.extend(classified.auto)
+            review_all.extend(classified.review)
+
+        # Auto-apply: new function gaps only
+        # Group auto candidates by target
+        auto_by_target: dict[str, list[LabelCandidate]] = {}
+        for c in auto_all:
+            auto_by_target.setdefault(c.target, []).append(c)
+
+        total_auto_applied = 0
+        store_cache: dict[str, object] = {}
+
+        for tid, cands in auto_by_target.items():
+            if tid not in by_id:
+                click.echo(f"   [skip auto] target {tid!r} not in registry")
+                continue
+            target_entry = by_id[tid]
+            st = load_annotations(target_entry.json_path)
+            n_appended = _append_functions(st, cands)
+            if n_appended:
+                target_rom_bytes = (
+                    rom_bytes if tid == new_id
+                    else _rom_bytes_cached(target_entry)
+                )
+                drop_imprecise_s_duplicates(st)
+                drop_erased_flash_entries(st, target_rom_bytes)
+                dedup_symbol_names(st)
+                save_annotations(target_entry.json_path, st)
+                click.echo(f"   [auto] {tid}: applied {n_appended} new function(s)")
+            total_auto_applied += n_appended
+
+        # Build reconcile items from review candidates
+        items = build_reconcile_items(review_all, priority)
+
+        out_dir = Path(out_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        reconcile_path = out_dir / f"{new_id}.reconcile.toml"
+        write_reconcile(reconcile_path, items)
+
+        click.echo(
+            f"\nDone. Auto-applied: {total_auto_applied} function(s). "
+            f"Review items: {len(items)}. "
+            f"Reconcile: {reconcile_path}"
+        )
+
+    finally:
+        project.close()
+
+
 if __name__ == "__main__":
-    main()
+    cli()

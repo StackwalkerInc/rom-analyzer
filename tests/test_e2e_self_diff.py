@@ -40,7 +40,7 @@ def test_self_diff_matches_goldens(tmp_path):
     out_dir = tmp_path / "out"
     subprocess.run(
         [
-            ROM_ANALYZER, str(LOCAL_ROM),
+            ROM_ANALYZER, "analyze", str(LOCAL_ROM),
             "--variant", "fp8000",
             "--reference", str(REFERENCE_XML),
             "--out", str(out_dir),
@@ -104,7 +104,7 @@ def test_single_entry_registry_matches_goldens(tmp_path):
         pytest.skip("requires local ROM + registry.toml")
     out_dir = tmp_path / "out"
     subprocess.run(
-        [ROM_ANALYZER, str(LOCAL_ROM), "--variant", "fp8000",
+        [ROM_ANALYZER, "analyze", str(LOCAL_ROM), "--variant", "fp8000",
          "--registry", str(REGISTRY), "--reference-id", "33520003",
          "--out", str(out_dir), "--emit-mode23"],
         check=True,
@@ -131,7 +131,7 @@ def test_multi_reference_emits_conflicts_and_provenance(tmp_path):
         pytest.skip("multi-reference e2e needs ≥2 usable fp8000 references")
     out_dir = tmp_path / "out"
     subprocess.run(
-        [ROM_ANALYZER, str(LOCAL_ROM), "--variant", "fp8000",
+        [ROM_ANALYZER, "analyze", str(LOCAL_ROM), "--variant", "fp8000",
          "--registry", str(REGISTRY), "--out", str(out_dir)],
         check=True,
     )
@@ -152,7 +152,7 @@ def test_emit_obd_produces_dtc_map(tmp_path):
     out_dir = tmp_path / "out"
     subprocess.run(
         [
-            ROM_ANALYZER, str(LOCAL_ROM),
+            ROM_ANALYZER, "analyze", str(LOCAL_ROM),
             "--variant", "fp8000",
             "--out", str(out_dir),
             "--emit-obd",

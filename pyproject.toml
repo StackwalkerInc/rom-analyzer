@@ -21,7 +21,7 @@ dev = [
 ]
 
 [project.scripts]
-rom-analyzer = "rom_analyzer.cli:main"
+rom-analyzer = "rom_analyzer.cli:cli"
 
 [tool.pytest.ini_options]
 markers = [
