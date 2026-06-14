@@ -47030,6 +47030,85 @@
       "return_type": "void"
     },
     {
+      "name": "zs16_add_u16",
+      "entry_point": "0x1f7e0",
+      "confidence": "medium",
+      "source": "xref:30200003",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sh16_divu16",
+      "entry_point": "0x1f9fc",
+      "confidence": "medium",
+      "source": "xref:30200003",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "zs16_mul_u16",
+      "entry_point": "0x1fa78",
+      "confidence": "medium",
+      "source": "xref:30200003",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uin32_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_zs32_to_zs16",
+      "entry_point": "0x1faa4",
+      "confidence": "medium",
+      "source": "xref:30200003",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
       "name": "update_maf_x_iat_mapped",
       "entry_point": "0x1facc",
       "confidence": "high",
