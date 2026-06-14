@@ -52,3 +52,38 @@ class ReconcileItem:
     source: str
     evidence: str
     verdict: str       # "proposed" | "keep" | "drop" | <custom-name>
+
+
+@dataclass
+class Classified:
+    auto: list[LabelCandidate]    # new functions, safe to apply now
+    review: list[LabelCandidate]  # conflicts + RAM/data, need verdicts
+
+
+def classify(candidates: list[LabelCandidate], erased: set[int]) -> Classified:
+    """Split candidates into auto-apply / review / drop.
+
+    AUTO  : a new function (gap, current is None), real name, entry not erased.
+    DROP  : auto-names anywhere; functions whose entry is in erased flash.
+    REVIEW: name conflicts (current set and differs from proposed); all RAM/data
+            candidates (raw-offset data is filtered upstream; what arrives here
+            already passed usage-equivalence).
+    Agreement (current == proposed) is neither auto nor review.
+    """
+    auto: list[LabelCandidate] = []
+    review: list[LabelCandidate] = []
+    for c in candidates:
+        if is_auto_name(c.proposed):
+            continue
+        if c.current == c.proposed:
+            continue  # agreement / corroboration
+        if c.category == "function":
+            if c.address in erased:
+                continue  # typo landing in 0xFF
+            if c.current is None:
+                auto.append(c)         # new function gap — cross-family safe
+            else:
+                review.append(c)       # genuine fn name conflict
+        else:
+            review.append(c)           # RAM/data always reviewed
+    return Classified(auto=auto, review=review)
