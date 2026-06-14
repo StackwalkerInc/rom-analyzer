@@ -642,7 +642,7 @@
       "timestamp": ""
     },
     {
-      "name": "system_break_interrupt_handler",
+      "name": "system_break_interrupt_handler_3954",
       "address": "0x3954",
       "category": "data",
       "confidence": "high",
@@ -17547,6 +17547,14 @@
       "return_type": "uint16_t"
     },
     {
+      "name": "mjto5_interrupt_handler",
+      "entry_point": "0xa4c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "reset_interrupt_handler_helper",
       "entry_point": "0xa54",
       "confidence": "high",
@@ -18281,7 +18289,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjto5_interrupt_handler",
+      "name": "mjto5_interrupt_handler_3218",
       "entry_point": "0x3218",
       "confidence": "high",
       "source": "colt_flash",
@@ -18766,6 +18774,14 @@
           "type": "lvl"
         }
       ]
+    },
+    {
+      "name": "system_break_interrupt_handler",
+      "entry_point": "0x3954",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "init_some_timers39b0",
@@ -20736,10 +20752,114 @@
       ]
     },
     {
+      "name": "mjti3_interrupt_handler",
+      "entry_point": "0x8008",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjti2_interrupt_handler",
+      "entry_point": "0x800c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto4_interrupt_handler",
+      "entry_point": "0x8024",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto3_interrupt_handler",
+      "entry_point": "0x8028",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto2_interrupt_handler",
+      "entry_point": "0x802c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio1_rx_interrupt_handler",
+      "entry_point": "0x803c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio0_rx_interrupt_handler",
+      "entry_point": "0x8044",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tid0_interrupt_handler",
+      "entry_point": "0x8050",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tod0_interrupt_handler",
+      "entry_point": "0x8054",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "dma59_interrupt_handler",
+      "entry_point": "0x8058",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio23_interrupt_handler",
+      "entry_point": "0x805c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tid1_interrupt_handler",
+      "entry_point": "0x8064",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "reset_call_9e04",
       "entry_point": "0x9e04",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio_dma_code10_mode_select",
+      "entry_point": "0x9e3c",
+      "confidence": "medium",
+      "source": "xref:39670016",
       "session": "",
       "timestamp": ""
     },
@@ -21817,7 +21937,7 @@
       "timestamp": ""
     },
     {
-      "name": "sio0_rx_interrupt_handler",
+      "name": "sio0_rx_interrupt_handler_de84",
       "entry_point": "0xde84",
       "confidence": "high",
       "source": "colt_flash",
@@ -22320,7 +22440,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjti3_interrupt_handler",
+      "name": "mjti3_interrupt_handler_f97c",
       "entry_point": "0xf97c",
       "confidence": "high",
       "source": "colt_flash",
@@ -22328,7 +22448,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjti2_interrupt_handler",
+      "name": "mjti2_interrupt_handler_f99c",
       "entry_point": "0xf99c",
       "confidence": "high",
       "source": "colt_flash",
@@ -22336,7 +22456,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjto4_interrupt_handler",
+      "name": "mjto4_interrupt_handler_f9d0",
       "entry_point": "0xf9d0",
       "confidence": "high",
       "source": "colt_flash",
@@ -22344,7 +22464,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjto3_interrupt_handler",
+      "name": "mjto3_interrupt_handler_f9e8",
       "entry_point": "0xf9e8",
       "confidence": "high",
       "source": "colt_flash",
@@ -22352,7 +22472,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjto2_interrupt_handler",
+      "name": "mjto2_interrupt_handler_fa18",
       "entry_point": "0xfa18",
       "confidence": "high",
       "source": "colt_flash",
@@ -22368,7 +22488,7 @@
       "timestamp": ""
     },
     {
-      "name": "dma59_interrupt_handler",
+      "name": "dma59_interrupt_handler_faf8",
       "entry_point": "0xfaf8",
       "confidence": "high",
       "source": "colt_flash",
@@ -22376,7 +22496,7 @@
       "timestamp": ""
     },
     {
-      "name": "sio23_interrupt_handler",
+      "name": "sio23_interrupt_handler_fb20",
       "entry_point": "0xfb20",
       "confidence": "high",
       "source": "colt_flash",
@@ -23510,6 +23630,14 @@
       "timestamp": ""
     },
     {
+      "name": "update_etc_and_overboost_fuel_cut_flag",
+      "entry_point": "0x152ec",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "update_run_state_flags_extra",
       "entry_point": "0x15558",
       "confidence": "high",
@@ -23787,6 +23915,30 @@
       "entry_point": "0x16780",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fuel_cut_effect_on_oxygen_trims",
+      "entry_point": "0x16830",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_o2_sensors_monitor_flags_b0b1",
+      "entry_point": "0x16928",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_crawling_state",
+      "entry_point": "0x169ec",
+      "confidence": "medium",
+      "source": "xref:39670016",
       "session": "",
       "timestamp": ""
     },
@@ -24163,6 +24315,14 @@
       "timestamp": ""
     },
     {
+      "name": "is_fuel_trim_update_disabled",
+      "entry_point": "0x17f34",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "aggregate_call_18040",
       "entry_point": "0x18040",
       "confidence": "high",
@@ -24223,6 +24383,38 @@
           "type": "const cylinder_bank *"
         }
       ]
+    },
+    {
+      "name": "update_oxygen_trim_step_scaling_flags",
+      "entry_point": "0x183b8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_o2_offset_trim",
+      "entry_point": "0x184a4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_long_term_fuel_trim",
+      "entry_point": "0x1856c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_current_ltft_off_stft",
+      "entry_point": "0x1863c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "conditional_call_18744",
@@ -24941,6 +25133,14 @@
       "timestamp": ""
     },
     {
+      "name": "update_target_idle_rpm_min",
+      "entry_point": "0x1bae8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "reset_fp12144",
       "entry_point": "0x1bc38",
       "confidence": "high",
@@ -24961,6 +25161,14 @@
       "entry_point": "0x1bd08",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "multiregen_idle_mode_decay",
+      "entry_point": "0x1be44",
+      "confidence": "medium",
+      "source": "xref:39670016",
       "session": "",
       "timestamp": ""
     },
@@ -25199,6 +25407,14 @@
       "timestamp": ""
     },
     {
+      "name": "is_cranking_mode",
+      "entry_point": "0x1cb28",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "math_call_1cb50",
       "entry_point": "0x1cb50",
       "confidence": "high",
@@ -25211,6 +25427,38 @@
       "entry_point": "0x1cb78",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "pure_call29c08",
+      "entry_point": "0x1cbc0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "stall_mode_idle_control",
+      "entry_point": "0x1cc40",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_idle_standing_mode",
+      "entry_point": "0x1cc60",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "runtime_icomp_calc",
+      "entry_point": "0x1cd80",
+      "confidence": "medium",
+      "source": "xref:39670016",
       "session": "",
       "timestamp": ""
     },
@@ -25233,6 +25481,118 @@
       "return_type": "uint16_t"
     },
     {
+      "name": "get_updated_hot_cranking_idle_compensation",
+      "entry_point": "0x1d48c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "return0_call2a7f8",
+      "entry_point": "0x1d544",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "scaled_alternator_idle_compensation",
+      "entry_point": "0x1d5a8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_fan_related0",
+      "entry_point": "0x1d5c0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_idle_corr_update_enabled",
+      "entry_point": "0x1d63c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_st_idle_corr",
+      "entry_point": "0x1d758",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_lt_idle_corr",
+      "entry_point": "0x1d8fc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_lt_idle_corr_update_enabled",
+      "entry_point": "0x1d950",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_lt_idle_corr",
+      "entry_point": "0x1d9cc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "nonidle_mode_idle_control",
+      "entry_point": "0x1da98",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_st_idle_corr_lores",
+      "entry_point": "0x1db10",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_st_idle_corr_hires",
+      "entry_point": "0x1db4c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call2af74",
+      "entry_point": "0x1db88",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_unknown_idle_valve_position_correction",
+      "entry_point": "0x1dbe0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "map_isv_to_etc_extra_smth",
       "entry_point": "0x1dcb0",
       "confidence": "high",
@@ -25240,6 +25600,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "update_gear_shift_limits",
+      "entry_point": "0x1dea0",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "update_apps_limiting_stabilizer_flags",
@@ -25281,6 +25649,14 @@
       ]
     },
     {
+      "name": "get_loss_compensated_torque_scaled_down",
+      "entry_point": "0x1e7bc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "get_3d_mapped_1e7f4",
       "entry_point": "0x1e7f4",
       "confidence": "high",
@@ -25300,6 +25676,38 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "check_lt_idle_corr_ac_extra",
+      "entry_point": "0x1e998",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_icomp_cloudy_limit_on_apps_neutral",
+      "entry_point": "0x1ec38",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "brakes_release_idle_correction",
+      "entry_point": "0x1ec68",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_mtc_base_and_cam_parking",
+      "entry_point": "0x1ed04",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call1ed40",
@@ -25340,6 +25748,30 @@
       ]
     },
     {
+      "name": "probably_is_throttle_power_relay_enabled",
+      "entry_point": "0x1efa8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_etc_breakdown_lamp_on",
+      "entry_point": "0x1f014",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_severe_limp_condition",
+      "entry_point": "0x1f0b8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call1f320",
       "entry_point": "0x1f320",
       "confidence": "high",
@@ -25358,6 +25790,14 @@
       "return_type": "void"
     },
     {
+      "name": "is_ac_enabled",
+      "entry_point": "0x1f398",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "boost_control",
       "entry_point": "0x1f7d0",
       "confidence": "high",
@@ -25365,6 +25805,30 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "update_boost_control_flags",
+      "entry_point": "0x1f7f8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "calc_wastegate_duty",
+      "entry_point": "0x1fa54",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_wastegate_duty_error",
+      "entry_point": "0x1faf0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "update_fp12106",
@@ -25425,6 +25889,22 @@
       "timestamp": ""
     },
     {
+      "name": "update_externally_visible_engine_state",
+      "entry_point": "0x1fd90",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_call2e240",
+      "entry_point": "0x200b4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call200d0",
       "entry_point": "0x200d0",
       "confidence": "high",
@@ -25465,6 +25945,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "update_semipersistent_diagnostic_request_flags",
+      "entry_point": "0x204c4",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call20678",
@@ -25724,10 +26212,34 @@
       "return_type": "uint16_t"
     },
     {
+      "name": "probably_some_power_faults_detection",
+      "entry_point": "0x20f7c",
+      "confidence": "medium",
+      "source": "xref:30200003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "update_fp16210_b6_fp16222_b6",
       "entry_point": "0x2129c",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "resolve_disabled_tests_or_clear_on_request",
+      "entry_point": "0x212ec",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_call2f4c8",
+      "entry_point": "0x21520",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -25757,6 +26269,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "uint16_t"
+    },
+    {
+      "name": "update_sio0_protocol",
+      "entry_point": "0x21948",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call21aac",
@@ -25864,6 +26384,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "implement_sio0_diagnostic_flags2_resets",
+      "entry_point": "0x22ad4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call22c38",
@@ -26347,6 +26875,14 @@
       "return_type": "uint8_t"
     },
     {
+      "name": "test_substitute_mivec_target_current",
+      "entry_point": "0x23784",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "test_disable_active_steering_switch",
       "entry_point": "0x23820",
       "confidence": "high",
@@ -26420,6 +26956,14 @@
       "timestamp": ""
     },
     {
+      "name": "shaft_period1_calc_extra_continuation",
+      "entry_point": "0x23b90",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call24c38",
       "entry_point": "0x24c38",
       "confidence": "high",
@@ -26442,6 +26986,14 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "update_sparkc_interrupt_corrected",
+      "entry_point": "0x24cc0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call24ea8",
@@ -26511,6 +27063,14 @@
       ]
     },
     {
+      "name": "call33ed4",
+      "entry_point": "0x260b8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "pure_calc_26124",
       "entry_point": "0x26124",
       "confidence": "high",
@@ -26525,6 +27085,14 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "injectors_update_duty_extra",
+      "entry_point": "0x26170",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call262d0",
@@ -26545,6 +27113,14 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "injectors_fault_detection",
+      "entry_point": "0x26420",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call265fc",
@@ -26570,6 +27146,30 @@
       ]
     },
     {
+      "name": "get_ipw_fuel_film_compensated",
+      "entry_point": "0x267ac",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_mivec_measured_angles",
+      "entry_point": "0x26a0c",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_mivec_target_current",
+      "entry_point": "0x26ce4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "reset_fp13938_checked",
       "entry_point": "0x27448",
       "confidence": "high",
@@ -26582,6 +27182,14 @@
       "entry_point": "0x27460",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_call41b70",
+      "entry_point": "0x27658",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -27068,6 +27676,14 @@
       "timestamp": ""
     },
     {
+      "name": "reset_tps_topen_apps_ineuc",
+      "entry_point": "0x2cf14",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call2cf90",
       "entry_point": "0x2cf90",
       "confidence": "high",
@@ -27136,6 +27752,14 @@
       "entry_point": "0x30c58",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "init_misfire_control",
+      "entry_point": "0x30ca4",
+      "confidence": "medium",
+      "source": "xref:39670016",
       "session": "",
       "timestamp": ""
     },
@@ -27224,6 +27848,22 @@
       ]
     },
     {
+      "name": "jdm_mode_disabled_subcall4633c",
+      "entry_point": "0x3151c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "jdm_mode_disabled_subcall4634c",
+      "entry_point": "0x3152c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "math_call_31844",
       "entry_point": "0x31844",
       "confidence": "high",
@@ -27238,6 +27878,30 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "update_misfire_flags",
+      "entry_point": "0x318b8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "misfire_injector_enabled_mask",
+      "entry_point": "0x3195c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "jdm_mode_disabled_subcall467d0",
+      "entry_point": "0x319b0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "trampoline_33508",
@@ -27263,6 +27927,14 @@
       ]
     },
     {
+      "name": "call47808",
+      "entry_point": "0x33508",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "reset_call_33664",
       "entry_point": "0x33664",
       "confidence": "high",
@@ -27278,6 +27950,30 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "ignition_decayed_reset_test_state",
+      "entry_point": "0x33df8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_injector_disable_reason_flags",
+      "entry_point": "0x33e98",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call56a70",
+      "entry_point": "0x33f20",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call34170",
@@ -27304,6 +28000,14 @@
       "entry_point": "0x341cc",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call56d3c",
+      "entry_point": "0x341ec",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -27378,6 +28082,14 @@
       ]
     },
     {
+      "name": "ignition_cycle_dtc_resetting",
+      "entry_point": "0x34660",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call34ad8",
       "entry_point": "0x34ad8",
       "confidence": "high",
@@ -27403,10 +28115,114 @@
       "return_type": "void"
     },
     {
+      "name": "update_active_faults_subcall57620",
+      "entry_point": "0x34d48",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "dtc_smth_call57648",
+      "entry_point": "0x34d70",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call57a4c",
+      "entry_point": "0x350d4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call57b20",
+      "entry_point": "0x351a8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call345c4",
       "entry_point": "0x354c4",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "catalyst_check",
+      "entry_point": "0x3559c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "catalyst_check_bank",
+      "entry_point": "0x357e4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "catalyst_check_iteration",
+      "entry_point": "0x35b78",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "jdm_mode_disabled_update_coolant_temp_low_dtc",
+      "entry_point": "0x36038",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "jdm_disabled_subcall58a04",
+      "entry_point": "0x360dc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fuel_trims_malfunction_dtc",
+      "entry_point": "0x36188",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fuel_trims_malfunction_dtc_bank",
+      "entry_point": "0x361e8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "jdm_mode_disabled_call59060",
+      "entry_point": "0x36708",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "jdm_mode_disabled_subcall590cc",
+      "entry_point": "0x36774",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -27418,6 +28234,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "conditional_set_or_reset_o2_front_high",
+      "entry_point": "0x36f1c",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "call37168",
@@ -27712,6 +28536,46 @@
       ]
     },
     {
+      "name": "trouble_code_translate",
+      "entry_point": "0x3ab20",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call5e320",
+      "entry_point": "0x3ac1c",
+      "confidence": "medium",
+      "source": "xref:30200003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "save_monitor_data_cyclic",
+      "entry_point": "0x3b1bc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "save_monitor_data_noncyclic",
+      "entry_point": "0x3b290",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "parameter_save_mode_from_reason",
+      "entry_point": "0x3b5ec",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "sio0_reply_obd",
       "entry_point": "0x3b644",
       "confidence": "high",
@@ -27817,6 +28681,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "uint16_t"
+    },
+    {
+      "name": "update_obd_dtc_top_errors",
+      "entry_point": "0x3b9b4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "reset_call_3bc68",
@@ -27937,6 +28809,46 @@
       ]
     },
     {
+      "name": "jdm_mode_disabled_update_idle_control_malfunction_dtc",
+      "entry_point": "0x3c730",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "idlemon_rpm_above_target_check",
+      "entry_point": "0x3c994",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "idlemon_rpm_below_target_check",
+      "entry_point": "0x3cae0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_idlemon_enabled",
+      "entry_point": "0x3cc80",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "translate_slow_valves_errors_flags",
+      "entry_point": "0x3cdd4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call3ce28",
       "entry_point": "0x3ce28",
       "confidence": "high",
@@ -27957,6 +28869,14 @@
       "entry_point": "0x3d324",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_subcon_related_reset_call39c60",
+      "entry_point": "0x3d3a4",
+      "confidence": "medium",
+      "source": "xref:39670016",
       "session": "",
       "timestamp": ""
     },
@@ -27998,6 +28918,30 @@
       "entry_point": "0x3e07c",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_prepare_and_request_transmit",
+      "entry_point": "0x3e0a4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_request_frame",
+      "entry_point": "0x3e26c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_update_frame",
+      "entry_point": "0x3e368",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -28393,6 +29337,206 @@
       "timestamp": ""
     },
     {
+      "name": "disabled_call50ec0",
+      "entry_point": "0x42368",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "conditionally_test_tps_main",
+      "entry_point": "0x42730",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_main_min_check",
+      "entry_point": "0x427b8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_main_max_check",
+      "entry_point": "0x42878",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_main_match_sub_test",
+      "entry_point": "0x42970",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_tps_problems_flag",
+      "entry_point": "0x42ac8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_sub_check",
+      "entry_point": "0x42b14",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_sub_max_check",
+      "entry_point": "0x42b28",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_sub_min_check",
+      "entry_point": "0x42c2c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cond_set_tps_sub_fault",
+      "entry_point": "0x42d30",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call519b8",
+      "entry_point": "0x42d58",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_main_check_call51aa0",
+      "entry_point": "0x42e40",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "etc_p1122_check",
+      "entry_point": "0x42ec8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "conditionally_set_fp6228_f8_b6",
+      "entry_point": "0x4310c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_fault_set_call51dc0",
+      "entry_point": "0x43134",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_power_check_and_tps_dual_match_test",
+      "entry_point": "0x43220",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_power_check",
+      "entry_point": "0x4323c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_dual_match_test",
+      "entry_point": "0x43308",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_actuator_p0638_0_conditionally_set",
+      "entry_point": "0x434f8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_additional_inputs_checks",
+      "entry_point": "0x4358c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_additional_inputs_shorted_check",
+      "entry_point": "0x43648",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_additional_inputs_plausibility_check",
+      "entry_point": "0x43944",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call52990",
+      "entry_point": "0x43c34",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_power_check",
+      "entry_point": "0x43c5c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tps_double_shorted_check",
+      "entry_point": "0x43cc0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "reset_call_43e2c",
       "entry_point": "0x43e2c",
       "confidence": "high",
@@ -28401,10 +29545,74 @@
       "timestamp": ""
     },
     {
+      "name": "copy_ecu_throttle_command_to_etc",
+      "entry_point": "0x43e6c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fill_throttle_var_data_etc_faults_all",
+      "entry_point": "0x43ea0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fill_throttle_var_data2_etc_faults2",
+      "entry_point": "0x43f20",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fill_throttle_var_data1_etc_faults",
+      "entry_point": "0x43fb8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "nop44070",
       "entry_point": "0x44070",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_etc_ttp_bound_extra",
+      "entry_point": "0x44074",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_etc_ttp_bound_by_main_adaptations",
+      "entry_point": "0x442ac",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_etc_ttp_bound_by_sub_adaptations",
+      "entry_point": "0x44334",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_adaptation_tests",
+      "entry_point": "0x443a4",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -28425,10 +29633,234 @@
       "timestamp": ""
     },
     {
+      "name": "throttle_adapt_return_spring",
+      "entry_point": "0x448a0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_tps_main_adapt_current_spring",
+      "entry_point": "0x448f4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_tps_sub_adapt_current_spring",
+      "entry_point": "0x449d4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_adapt_calc_tps_averages",
+      "entry_point": "0x44aa8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_desired_throttle_duty_etc",
+      "entry_point": "0x44b40",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_throttle_current_corrections",
+      "entry_point": "0x44cec",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "store_ttc_source_from_main",
+      "entry_point": "0x44f6c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call53f0c",
+      "entry_point": "0x44fec",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_ttc_fixed_part",
+      "entry_point": "0x45028",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "conditionally_by_main_update_throttle_current_component2_unscaled_extra",
+      "entry_point": "0x45078",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_etc_close_fault",
+      "entry_point": "0x4508c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_etc_open_fault",
+      "entry_point": "0x45154",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "conditionally_by_main_update_throttle_current_component2_unscaled",
+      "entry_point": "0x4521c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fp6221b6",
+      "entry_point": "0x45290",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_target_throttle_current_from_sum",
+      "entry_point": "0x452bc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "calc_throttle_current_on_tps_sub",
+      "entry_point": "0x45300",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "store_ttc_source_from_sub",
+      "entry_point": "0x45350",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "conditionally_by_sub_update_throttle_current_component2_unscaled",
+      "entry_point": "0x453d0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_desired_throttle_duty",
+      "entry_point": "0x45444",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "trampoline_update_throttle_power_filtered",
+      "entry_point": "0x45608",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_throttle_power_filtered",
+      "entry_point": "0x45614",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_adapt_closed_and_open",
+      "entry_point": "0x4564c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_throttle_motor_direction",
+      "entry_point": "0x4580c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_ttc_proportional_part",
+      "entry_point": "0x458d4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_ttc_integral_part",
+      "entry_point": "0x459dc",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_ttc_integral_part_hires",
+      "entry_point": "0x45a3c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ttc_scale",
+      "entry_point": "0x45b48",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "bound_enforce_call_45b58",
       "entry_point": "0x45b58",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fast_model_throttle_calc",
+      "entry_point": "0x45d54",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -28441,10 +29873,26 @@
       "timestamp": ""
     },
     {
+      "name": "debug_throttle_control",
+      "entry_point": "0x45ee8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "zero_val_call45fe0",
       "entry_point": "0x45fe0",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "debug_throttle_control_subcall55a30",
+      "entry_point": "0x46000",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -28457,10 +29905,58 @@
       "timestamp": ""
     },
     {
+      "name": "regen_unused_baro_sensor_ok_decay",
+      "entry_point": "0x4670c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mode_disabled_manifold_diferential_pressure_sensor_check",
+      "entry_point": "0x46738",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mode_disabled_evap_pressure_sensor_check",
+      "entry_point": "0x46954",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mode_disabled_call5d068",
+      "entry_point": "0x46ac0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_crawling_state_23cac",
+      "entry_point": "0x46e68",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call47068",
       "entry_point": "0x47068",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "engine_overboost_check",
+      "entry_point": "0x47120",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -28485,6 +29981,14 @@
       "entry_point": "0x474ec",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "htonic_idle_control",
+      "entry_point": "0x475c8",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -28959,6 +30463,14 @@
       ]
     },
     {
+      "name": "unused_subcall66c74",
+      "entry_point": "0x49b1c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call49c28",
       "entry_point": "0x49c28",
       "confidence": "high",
@@ -28971,6 +30483,14 @@
       "entry_point": "0x49ce4",
       "confidence": "high",
       "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call61b04",
+      "entry_point": "0x49ce8",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -29308,6 +30828,86 @@
       "timestamp": ""
     },
     {
+      "name": "impure_condition_call402dc",
+      "entry_point": "0x4bba4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "pure_condition_call406f0",
+      "entry_point": "0x4bf54",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "purge_related_call40774",
+      "entry_point": "0x4bfd8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_purge_control_duty",
+      "entry_point": "0x4c050",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_purge_base_state",
+      "entry_point": "0x4c068",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_purge_modified_stft",
+      "entry_point": "0x4c9e8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "calc_purge_duty",
+      "entry_point": "0x4cb00",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_purge_open_rate",
+      "entry_point": "0x4cc88",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fault_safe_purge_duty",
+      "entry_point": "0x4ce90",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_purge_control",
+      "entry_point": "0x4cec0",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "mode_disabled_update_fuel_level_lamp",
       "entry_point": "0x4cfcc",
       "confidence": "high",
@@ -29343,10 +30943,42 @@
       "timestamp": ""
     },
     {
+      "name": "mivec_subcontrol",
+      "entry_point": "0x4d198",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mivec_related_call2da5c",
+      "entry_point": "0x4d1c4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "math_call_4d72c",
       "entry_point": "0x4d72c",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_mivec_angle_model_limit",
+      "entry_point": "0x4d7d4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mivec_related_call2e168",
+      "entry_point": "0x4d878",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },
@@ -29366,6 +30998,54 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "update_fan_control_flags",
+      "entry_point": "0x4d9e8",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_fan_control_cool_on_highroll",
+      "entry_point": "0x4dc74",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_fan_control_colt_wot_transient_disable",
+      "entry_point": "0x4dd98",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mut_fan_test_flags",
+      "entry_point": "0x4de88",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fan_control_output_flags",
+      "entry_point": "0x4dec4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fan_output_gpio",
+      "entry_point": "0x4df2c",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "update_ac_working_lamp",
@@ -29430,6 +31110,30 @@
       "entry_point": "0x4e1f0",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_fuel_pressure_solenoid_flag",
+      "entry_point": "0x4e218",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "is_fuel_pressure_solenoid_enabled",
+      "entry_point": "0x4e2a4",
+      "confidence": "medium",
+      "source": "xref:33520003",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_mut_pointer",
+      "entry_point": "0x4e3a0",
+      "confidence": "medium",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": ""
     },

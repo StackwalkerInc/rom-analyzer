@@ -18185,26 +18185,6 @@
       "timestamp": ""
     },
     {
-      "name": "target_torque_output_scaled",
-      "address": "0x205bc",
-      "category": "data",
-      "data_type": "uint16_t call205bc() limited increment to translate target_torque_output_scaled_limit ->",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "out",
-      "address": "0x3a200",
-      "category": "data",
-      "data_type": "uint16_t sio2_error_recover() return 0 in case of no error or error not timed",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash3b0f0_u8",
       "address": "0x3b0f0",
       "category": "data",
@@ -47047,6 +47027,14 @@
       "return_type": "uint16_t"
     },
     {
+      "name": "target_torque_output_scaled",
+      "entry_point": "0x205bc",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "odd_u16",
       "entry_point": "0x20624",
       "confidence": "high",
@@ -51806,6 +51794,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "out",
+      "entry_point": "0x3a200",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "sio2_tx_complete",
@@ -56906,6 +56902,14 @@
       ]
     },
     {
+      "name": "i2c_write_byte_to_address",
+      "entry_point": "0x61268",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "i2c_eeprom_write",
       "entry_point": "0x612b8",
       "confidence": "high",
@@ -57755,6 +57759,22 @@
           "type": "uint16_t"
         }
       ]
+    },
+    {
+      "name": "linear_interpolation32_from8_16",
+      "entry_point": "0x65aa8",
+      "confidence": "medium",
+      "source": "xref:39670016",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "linear_interpolation32_from8_8",
+      "entry_point": "0x65b20",
+      "confidence": "medium",
+      "source": "xref:47110032",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "map16_3d_pure",
