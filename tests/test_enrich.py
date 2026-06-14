@@ -119,3 +119,64 @@ def test_descriptive_beats_placeholder_regardless_of_priority():
     name, verdict = auto_resolve(c, prio)
     assert name == "camshaft_position_sensor_interrupt_handler"
     assert verdict == "proposed"
+
+
+import tomllib
+from pathlib import Path
+from rom_analyzer.enrich import (
+    build_reconcile_items, write_reconcile, read_reconcile, apply_verdicts,
+)
+from rom_analyzer.annotations_io import (
+    AnnotationStore, AnnotationFunction, AnnotationSymbol,
+)
+
+
+def test_build_items_fills_proposed_and_verdict():
+    prio = {"33520003": 100, "39670016": 90}
+    rev = [LabelCandidate(target="39670016", direction="back", address=0x100,
+                          category="function", current="call100",
+                          proposed="real_fn", source="33520003")]
+    items = build_reconcile_items(rev, prio)
+    assert items[0].verdict == "proposed" and items[0].proposed == "real_fn"
+
+
+def test_reconcile_roundtrip(tmp_path):
+    items = [ReconcileItem(target="33520003", direction="back", address=0x804d5e,
+                           category="ram_global", current="fp12962_u16",
+                           proposed="tacho_output_state", source="e5090011",
+                           evidence="usage-equiv", verdict="proposed")]
+    p = tmp_path / "r.toml"
+    write_reconcile(p, items)
+    data = tomllib.loads(p.read_text())
+    assert data["item"][0]["address"] == "0x804d5e"
+    back = read_reconcile(p)
+    assert back[0].address == 0x804d5e and back[0].verdict == "proposed"
+
+
+def test_apply_verdicts_rename_keep_drop_custom():
+    store = AnnotationStore(schema_version=1, rom_id="t", rom_sha256="",
+        symbols=[AnnotationSymbol(name="fp12962_u16", address=0x804d5e,
+                                  category="ram_global")],
+        functions=[AnnotationFunction(name="call100", entry_point=0x100)])
+    items = [
+        ReconcileItem("t", "back", 0x804d5e, "ram_global", "fp12962_u16",
+                      "tacho_output_state", "e5090011", "", "proposed"),
+        ReconcileItem("t", "back", 0x100, "function", "call100",
+                      "real_fn", "33520003", "", "keep"),
+    ]
+    n = apply_verdicts(store, items, target="t")
+    by_addr = {s.address: s.name for s in store.symbols}
+    fn = {f.entry_point: f.name for f in store.functions}
+    assert by_addr[0x804d5e] == "tacho_output_state"   # proposed applied
+    assert fn[0x100] == "call100"                        # keep -> unchanged
+    assert n == 1
+
+
+def test_apply_verdict_gap_add():
+    store = AnnotationStore(schema_version=1, rom_id="t", rom_sha256="",
+                            symbols=[], functions=[])
+    items = [ReconcileItem("t", "forward", 0x200, "function", None,
+                           "new_fn", "33520003", "", "proposed")]
+    apply_verdicts(store, items, target="t")
+    assert any(f.entry_point == 0x200 and f.name == "new_fn"
+               for f in store.functions)

@@ -113,3 +113,109 @@ def auto_resolve(c: LabelCandidate, priority: dict[str, int]) -> tuple[str, str]
     if priority.get(c.source, 0) > priority.get(c.target, 0):
         return c.proposed, "proposed"
     return cur, "keep"
+
+
+# ---------------------------------------------------------------------------
+# File I/O and verdict application
+# ---------------------------------------------------------------------------
+
+import tomllib
+from dataclasses import replace
+from pathlib import Path
+
+import tomli_w
+
+from rom_analyzer.annotations_io import AnnotationFunction, AnnotationStore, AnnotationSymbol
+
+
+def build_reconcile_items(review: list[LabelCandidate],
+                          priority: dict[str, int]) -> list[ReconcileItem]:
+    """Turn REVIEW candidates into ReconcileItems with auto-resolved verdicts."""
+    items: list[ReconcileItem] = []
+    for c in review:
+        proposed, verdict = auto_resolve(c, priority)
+        items.append(ReconcileItem(
+            target=c.target, direction=c.direction, address=c.address,
+            category=c.category, current=c.current, proposed=proposed,
+            source=c.source, evidence=c.evidence, verdict=verdict,
+        ))
+    # group by target then address for readable review
+    items.sort(key=lambda i: (i.target, i.address))
+    return items
+
+
+def write_reconcile(path: Path, items: list[ReconcileItem]) -> None:
+    rows = [{
+        "target": i.target, "direction": i.direction,
+        "address": f"0x{i.address:x}", "category": i.category,
+        "current": i.current or "", "proposed": i.proposed,
+        "source": i.source, "evidence": i.evidence, "verdict": i.verdict,
+    } for i in items]
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).write_text(tomli_w.dumps({"item": rows}))
+
+
+def read_reconcile(path: Path) -> list[ReconcileItem]:
+    data = tomllib.loads(Path(path).read_text())
+    out: list[ReconcileItem] = []
+    for r in data.get("item", []):
+        out.append(ReconcileItem(
+            target=r["target"], direction=r["direction"],
+            address=int(r["address"], 16), category=r["category"],
+            current=r["current"] or None, proposed=r["proposed"],
+            source=r["source"], evidence=r.get("evidence", ""),
+            verdict=r["verdict"],
+        ))
+    return out
+
+
+def _resolved_name(item: ReconcileItem) -> str | None:
+    """Final name for an item, or None to leave/skip."""
+    if item.verdict == "proposed":
+        return item.proposed
+    if item.verdict == "keep":
+        return None
+    if item.verdict == "drop":
+        return None
+    return item.verdict  # custom name
+
+
+def apply_verdicts(store: AnnotationStore, items: list[ReconcileItem],
+                   target: str) -> int:
+    """Apply this target's reconcile verdicts to its AnnotationStore in place.
+
+    Renames existing entries, or adds a new one for a gap (current is None) when
+    the verdict yields a name. Returns the number of mutations.
+    """
+    fn_by_addr = {f.entry_point: i for i, f in enumerate(store.functions)}
+    sym_by_addr = {s.address: i for i, s in enumerate(store.symbols)}
+    n = 0
+    for it in items:
+        if it.target != target:
+            continue
+        name = _resolved_name(it)
+        if name is None:
+            continue
+        if it.category == "function":
+            if it.address in fn_by_addr:
+                idx = fn_by_addr[it.address]
+                if store.functions[idx].name != name:
+                    store.functions[idx] = replace(store.functions[idx], name=name)
+                    n += 1
+            elif it.current is None:
+                store.functions.append(AnnotationFunction(
+                    name=name, entry_point=it.address, confidence="medium",
+                    source=f"xref:{it.source}"))
+                n += 1
+        else:
+            if it.address in sym_by_addr:
+                idx = sym_by_addr[it.address]
+                if store.symbols[idx].name != name:
+                    store.symbols[idx] = replace(store.symbols[idx], name=name)
+                    n += 1
+            elif it.current is None:
+                store.symbols.append(AnnotationSymbol(
+                    name=name, address=it.address, category=it.category,
+                    confidence="medium", source=f"xref:{it.source}"))
+                n += 1
+    return n
