@@ -75,3 +75,47 @@ def test_classify_agreement_not_listed():
     cands = [_cand(0x10000, "function", "sio_dma_reset", "sio_dma_reset")]
     out = classify(cands, erased=set())
     assert out.auto == [] and out.review == []
+
+
+from rom_analyzer.enrich import auto_resolve
+
+
+def _rev(current, proposed, target="39670016", source="33520003"):
+    return LabelCandidate(target=target, direction="back", address=0x100,
+                          category="function", current=current, proposed=proposed,
+                          source=source)
+
+
+def test_authority_wins_by_priority():
+    # source 33520003 has higher priority than target 39670016 -> propose source name
+    prio = {"33520003": 100, "39670016": 90}
+    name, verdict = auto_resolve(_rev("update_fuel_pressure_solenoid_out",
+                                      "update_fast_outputs"), prio)
+    assert name == "update_fast_outputs" and verdict == "proposed"
+
+
+def test_lower_priority_source_keeps_target():
+    # source lower priority and both names real -> keep target
+    prio = {"33520003": 100, "e5090011": 30}
+    name, verdict = auto_resolve(
+        _rev("get_starter_input", "some_other_real_name",
+             target="33520003", source="e5090011"), prio)
+    assert verdict == "keep"
+
+
+def test_keep_sio_prefix():
+    prio = {"47110032": 50, "39670016": 90}
+    c = _rev("sio1_tx_process_check", "si1_request_transmit_checked",
+             target="39670016", source="47110032")
+    name, verdict = auto_resolve(c, prio)
+    assert verdict == "keep"  # hold sio0/sio1 prefix on target
+
+
+def test_descriptive_beats_placeholder_regardless_of_priority():
+    # target has placeholder, source (even lower priority) has real name
+    prio = {"33520003": 100, "e5090011": 30}
+    c = _rev("call18520", "camshaft_position_sensor_interrupt_handler",
+             target="33520003", source="e5090011")
+    name, verdict = auto_resolve(c, prio)
+    assert name == "camshaft_position_sensor_interrupt_handler"
+    assert verdict == "proposed"

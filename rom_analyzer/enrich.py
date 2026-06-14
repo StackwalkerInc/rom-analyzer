@@ -87,3 +87,29 @@ def classify(candidates: list[LabelCandidate], erased: set[int]) -> Classified:
         else:
             review.append(c)           # RAM/data always reviewed
     return Classified(auto=auto, review=review)
+
+
+def auto_resolve(c: LabelCandidate, priority: dict[str, int]) -> tuple[str, str]:
+    """Suggest (proposed_name, default_verdict) for a REVIEW candidate.
+
+    Rules, in order:
+      1. Keep target's sio0/sio1 prefix (deliberately standardised) -> keep.
+      2. Descriptive beats placeholder, regardless of priority.
+      3. Authority by registry priority: higher-priority side's name wins; if the
+         target already outranks the source and has a real name, keep target.
+    """
+    cur = c.current or ""
+    # 1. hold sio prefix on the target
+    if cur.startswith(("sio0", "sio1")):
+        return cur, "keep"
+    # 2. descriptive beats placeholder
+    cur_ph = is_placeholder(cur) or not cur
+    prop_ph = is_placeholder(c.proposed)
+    if cur_ph and not prop_ph:
+        return c.proposed, "proposed"
+    if prop_ph and not cur_ph:
+        return cur, "keep"
+    # 3. authority by priority
+    if priority.get(c.source, 0) > priority.get(c.target, 0):
+        return c.proposed, "proposed"
+    return cur, "keep"
