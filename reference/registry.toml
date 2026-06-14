@@ -50,7 +50,7 @@ family = "cu2w"
 variant = "fp8000"
 priority = 35
 features = ["4g63t", "karman_vortex_maf", "turbo"]
-notes = "Outlander CU2W turbo; 4G63T with Karman-Vortex MAF. No driver cruise control (the high_speed_cruise_* symbols are a steady-state high-speed calibration mode for spark/fuel, not a cruise servo). Simpler chassis integration (closer to Lancer CS7 than the Colt family). Built from mmc-research colt_flash + out_map + out_original.S (id c7280010 at 0x222)."
+notes = "Outlander CU2W turbo; 4G63T with Karman-Vortex MAF (period/frequency-based: flash_maf_fault_revolution_period_limit, update_vehicle_speed_frequency). No driver cruise control. Simpler chassis integration (closer to Lancer CS7 than the Colt family). Built from mmc-research out_map + out_original.S + description.ld (id c7280010 at 0x222); the dir's colt_flash.txt is a stray Colt file and is NOT used."
 
 [[reference]]
 id = "e5090011"
