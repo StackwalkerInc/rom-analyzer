@@ -43,6 +43,16 @@ features = ["cvt", "cvt_maps", "torque_model"]
 notes = "Colt Z27W CVT; most-decoded CVT (torque model + CVT/PSST/LPSD flash maps, RAM globals from mmc-research singa_map + description.ld). No function table."
 
 [[reference]]
+id = "c7280010"
+json = "c7280010.json"
+rom = "c7280010.bin"
+family = "cu2w"
+variant = "fp8000"
+priority = 35
+features = ["4g63t", "karman_vortex_maf", "turbo", "cruise_control"]
+notes = "Outlander CU2W turbo; 4G63T with Karman-Vortex MAF. Simpler chassis integration (closer to Lancer CS7 than the Colt family). Built from mmc-research colt_flash + out_map + out_original.S (id c7280010 at 0x222)."
+
+[[reference]]
 id = "e5090011"
 json = "e5090011.json"
 rom = "e5090011.bin"
