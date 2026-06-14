@@ -33,7 +33,7 @@
       "timestamp": ""
     },
     {
-      "name": "Exception",
+      "name": "Exception_30",
       "address": "0x30",
       "category": "data",
       "data_type": "Address",
@@ -91,7 +91,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_c8",
       "address": "0xc8",
       "category": "data",
       "data_type": "DMA0-4",
@@ -101,7 +101,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_cc",
       "address": "0xcc",
       "category": "data",
       "data_type": "SIO1 Receive",
@@ -111,7 +111,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_d0",
       "address": "0xd0",
       "category": "data",
       "data_type": "SIO1 Transmit",
@@ -121,7 +121,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_d4",
       "address": "0xd4",
       "category": "data",
       "data_type": "SIO0 Receive",
@@ -131,7 +131,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_d8",
       "address": "0xd8",
       "category": "data",
       "data_type": "SIO0 Transmit",
@@ -141,7 +141,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_dc",
       "address": "0xdc",
       "category": "data",
       "data_type": "A/D0 Conversion",
@@ -151,7 +151,7 @@
       "timestamp": ""
     },
     {
-      "name": "used",
+      "name": "used_e0",
       "address": "0xe0",
       "category": "data",
       "data_type": "Not",
@@ -161,7 +161,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_e8",
       "address": "0xe8",
       "category": "data",
       "data_type": "DMA5-9",
@@ -171,7 +171,7 @@
       "timestamp": ""
     },
     {
-      "name": "interrupt",
+      "name": "interrupt_ec",
       "address": "0xec",
       "category": "data",
       "data_type": "SIO2,3 Transmit/receive",
@@ -181,7 +181,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_f0",
       "address": "0xf0",
       "category": "data",
       "data_type": "RTD",
@@ -191,7 +191,7 @@
       "timestamp": ""
     },
     {
-      "name": "used",
+      "name": "used_f4",
       "address": "0xf4",
       "category": "data",
       "data_type": "Not",
@@ -201,7 +201,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_10c",
       "address": "0x10c",
       "category": "data",
       "data_type": "CAN0 Transmit/receive & Error",
@@ -211,7 +211,7 @@
       "timestamp": ""
     },
     {
-      "name": "Interrupt",
+      "name": "Interrupt_110",
       "address": "0x110",
       "category": "data",
       "data_type": "CAN1 Transmit/receive & Error",
@@ -365,7 +365,7 @@
       "timestamp": ""
     },
     {
-      "name": "area",
+      "name": "area_3788",
       "address": "0x3788",
       "category": "data",
       "data_type": "---------- data",
@@ -525,7 +525,7 @@
       "timestamp": ""
     },
     {
-      "name": "can_rx_done_mask",
+      "name": "can_rx_done_mask_3811",
       "address": "0x3811",
       "category": "data",
       "data_type": "uint8_t[5]",
@@ -584,7 +584,7 @@
       "timestamp": ""
     },
     {
-      "name": "uint8_t",
+      "name": "uint8_t_383d",
       "address": "0x383d",
       "category": "data",
       "confidence": "high",
@@ -593,7 +593,7 @@
       "timestamp": ""
     },
     {
-      "name": "uint8_t",
+      "name": "uint8_t_383e",
       "address": "0x383e",
       "category": "data",
       "confidence": "high",
@@ -622,7 +622,7 @@
       "timestamp": ""
     },
     {
-      "name": "Handler",
+      "name": "Handler_3900",
       "address": "0x3900",
       "category": "data",
       "data_type": "TRAP",
@@ -632,7 +632,7 @@
       "timestamp": ""
     },
     {
-      "name": "Handler",
+      "name": "Handler_3904",
       "address": "0x3904",
       "category": "data",
       "data_type": "Address Exception",
@@ -671,7 +671,7 @@
       "timestamp": ""
     },
     {
-      "name": "GetP2Data7",
+      "name": "GetP2Data7_3d78",
       "address": "0x3d78",
       "category": "data",
       "confidence": "high",
@@ -680,7 +680,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetHighP2Data6Atomic",
+      "name": "SetHighP2Data6Atomic_3d84",
       "address": "0x3d84",
       "category": "data",
       "confidence": "high",
@@ -689,7 +689,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetLowP2Data7Atomic",
+      "name": "SetLowP2Data7Atomic_3dd8",
       "address": "0x3dd8",
       "category": "data",
       "confidence": "high",
@@ -698,7 +698,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetOutputP2Data7",
+      "name": "SetOutputP2Data7_3e08",
       "address": "0x3e08",
       "category": "data",
       "confidence": "high",
@@ -717,7 +717,7 @@
       "timestamp": ""
     },
     {
-      "name": "nop6650",
+      "name": "nop6650_6650",
       "address": "0x6650",
       "category": "data",
       "confidence": "high",
@@ -756,7 +756,7 @@
       "timestamp": ""
     },
     {
-      "name": "area",
+      "name": "area_7fa8",
       "address": "0x7fa8",
       "category": "data",
       "data_type": "Unused",
@@ -1368,7 +1368,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash96aa_map8",
+      "name": "flash96aa_map8_96ac",
       "address": "0x96ac",
       "category": "data",
       "confidence": "high",
@@ -1387,7 +1387,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash9756_axis",
+      "name": "flash9756_axis_9758",
       "address": "0x9758",
       "category": "data",
       "confidence": "high",
@@ -1406,7 +1406,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash98aa_map8",
+      "name": "flash98aa_map8_98ac",
       "address": "0x98ac",
       "category": "data",
       "confidence": "high",
@@ -1453,7 +1453,7 @@
       "timestamp": ""
     },
     {
-      "name": "a970",
+      "name": "a970_c788",
       "address": "0xc788",
       "category": "data",
       "data_type": "reset_mask_some_timer_interrupts_spi_transfer() called only in",
@@ -1463,7 +1463,7 @@
       "timestamp": ""
     },
     {
-      "name": "a970",
+      "name": "a970_ca00",
       "address": "0xca00",
       "category": "data",
       "data_type": "reset_enable_top4() called only in",
@@ -1483,7 +1483,7 @@
       "timestamp": ""
     },
     {
-      "name": "a970",
+      "name": "a970_d5f8",
       "address": "0xd5f8",
       "category": "data",
       "data_type": "tio02_5_init() called only from",
@@ -1513,7 +1513,7 @@
       "timestamp": ""
     },
     {
-      "name": "a970",
+      "name": "a970_ec98",
       "address": "0xec98",
       "category": "data",
       "data_type": "spi_cs_up() called only in",
@@ -1523,7 +1523,7 @@
       "timestamp": ""
     },
     {
-      "name": "a970",
+      "name": "a970_f540",
       "address": "0xf540",
       "category": "data",
       "data_type": "checked_reset_p3d5() called only in",
@@ -1533,7 +1533,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjti3_interrupt_handler",
+      "name": "mjti3_interrupt_handler_f97c",
       "address": "0xf97c",
       "category": "data",
       "confidence": "high",
@@ -1542,7 +1542,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjti2_interrupt_handler",
+      "name": "mjti2_interrupt_handler_f99c",
       "address": "0xf99c",
       "category": "data",
       "confidence": "high",
@@ -1561,7 +1561,7 @@
       "timestamp": ""
     },
     {
-      "name": "etc",
+      "name": "etc_fb68",
       "address": "0xfb68",
       "category": "data",
       "data_type": "mjt2_interrupt_handler_helper and",
@@ -1691,7 +1691,7 @@
       "timestamp": ""
     },
     {
-      "name": "a970",
+      "name": "a970_4aba8",
       "address": "0x4aba8",
       "category": "data",
       "data_type": "load_and_check_whole_eeprom() used only in",
@@ -1701,7 +1701,7 @@
       "timestamp": ""
     },
     {
-      "name": "once",
+      "name": "once_4ad00",
       "address": "0x4ad00",
       "category": "data",
       "data_type": "int i2c1_eeprom_read_whole() used",
@@ -1801,7 +1801,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4eaa6_axis",
+      "name": "flash4eaa6_axis_4eaa8",
       "address": "0x4eaa8",
       "category": "data",
       "confidence": "high",
@@ -1830,7 +1830,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4eade_axis",
+      "name": "flash4eade_axis_4eae0",
       "address": "0x4eae0",
       "category": "data",
       "confidence": "high",
@@ -1909,7 +1909,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4eb7a_axis",
+      "name": "flash4eb7a_axis_4eb7c",
       "address": "0x4eb7c",
       "category": "data",
       "confidence": "high",
@@ -1977,7 +1977,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ec1e_axis",
+      "name": "flash4ec1e_axis_4ec20",
       "address": "0x4ec20",
       "category": "data",
       "confidence": "high",
@@ -1996,7 +1996,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ec46_axis",
+      "name": "flash4ec46_axis_4ec48",
       "address": "0x4ec48",
       "category": "data",
       "confidence": "high",
@@ -2025,7 +2025,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ec7e_axis",
+      "name": "flash4ec7e_axis_4ec80",
       "address": "0x4ec80",
       "category": "data",
       "confidence": "high",
@@ -2044,7 +2044,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ec96_axis",
+      "name": "flash4ec96_axis_4ec98",
       "address": "0x4ec98",
       "category": "data",
       "confidence": "high",
@@ -2063,7 +2063,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ecaa_axis",
+      "name": "flash4ecaa_axis_4ecac",
       "address": "0x4ecac",
       "category": "data",
       "confidence": "high",
@@ -2082,7 +2082,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ecba_axis",
+      "name": "flash4ecba_axis_4ecbc",
       "address": "0x4ecbc",
       "category": "data",
       "confidence": "high",
@@ -2170,7 +2170,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_basic_iat_corrections_axis",
+      "name": "flash_basic_iat_corrections_axis_4ed60",
       "address": "0x4ed60",
       "category": "data",
       "confidence": "high",
@@ -2189,7 +2189,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ed72_map",
+      "name": "flash4ed72_map_4ed74",
       "address": "0x4ed74",
       "category": "data",
       "confidence": "high",
@@ -2256,7 +2256,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4edde_axis",
+      "name": "flash4edde_axis_4ede0",
       "address": "0x4ede0",
       "category": "data",
       "confidence": "high",
@@ -2275,7 +2275,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4edf2_axis",
+      "name": "flash4edf2_axis_4edf4",
       "address": "0x4edf4",
       "category": "data",
       "confidence": "high",
@@ -2353,7 +2353,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4ee8e_map",
+      "name": "flash4ee8e_map_4ee90",
       "address": "0x4ee90",
       "category": "data",
       "confidence": "high",
@@ -2575,7 +2575,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f0d2_map",
+      "name": "flash4f0d2_map_4f0d4",
       "address": "0x4f0d4",
       "category": "data",
       "confidence": "high",
@@ -2644,7 +2644,7 @@
       "timestamp": ""
     },
     {
-      "name": "upper",
+      "name": "upper_4f184",
       "address": "0x4f184",
       "category": "data",
       "data_type": "flash4f182_map starts",
@@ -2744,7 +2744,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f2be_map",
+      "name": "flash4f2be_map_4f2c0",
       "address": "0x4f2c0",
       "category": "data",
       "confidence": "high",
@@ -2773,7 +2773,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f3ea_map",
+      "name": "flash4f3ea_map_4f3ec",
       "address": "0x4f3ec",
       "category": "data",
       "confidence": "high",
@@ -2812,7 +2812,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f44a_map",
+      "name": "flash4f44a_map_4f44c",
       "address": "0x4f44c",
       "category": "data",
       "confidence": "high",
@@ -2831,7 +2831,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f466_map",
+      "name": "flash4f466_map_4f468",
       "address": "0x4f468",
       "category": "data",
       "confidence": "high",
@@ -2900,7 +2900,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f526_map",
+      "name": "flash4f526_map_4f528",
       "address": "0x4f528",
       "category": "data",
       "confidence": "high",
@@ -2929,7 +2929,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f54a_map",
+      "name": "flash4f54a_map_4f54c",
       "address": "0x4f54c",
       "category": "data",
       "confidence": "high",
@@ -2948,7 +2948,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f562_map",
+      "name": "flash4f562_map_4f564",
       "address": "0x4f564",
       "category": "data",
       "confidence": "high",
@@ -3015,7 +3015,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f5b6_axis",
+      "name": "flash4f5b6_axis_4f5b8",
       "address": "0x4f5b8",
       "category": "data",
       "confidence": "high",
@@ -3044,7 +3044,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f5de_axis",
+      "name": "flash4f5de_axis_4f5e0",
       "address": "0x4f5e0",
       "category": "data",
       "confidence": "high",
@@ -3073,7 +3073,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f68a_map",
+      "name": "flash4f68a_map_4f68c",
       "address": "0x4f68c",
       "category": "data",
       "confidence": "high",
@@ -3102,7 +3102,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f6b6_axis",
+      "name": "flash4f6b6_axis_4f6b8",
       "address": "0x4f6b8",
       "category": "data",
       "confidence": "high",
@@ -3121,7 +3121,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f6d6_map",
+      "name": "flash4f6d6_map_4f6d8",
       "address": "0x4f6d8",
       "category": "data",
       "confidence": "high",
@@ -3140,7 +3140,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f702_map",
+      "name": "flash4f702_map_4f704",
       "address": "0x4f704",
       "category": "data",
       "confidence": "high",
@@ -3189,7 +3189,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f756_axis",
+      "name": "flash4f756_axis_4f758",
       "address": "0x4f758",
       "category": "data",
       "confidence": "high",
@@ -3276,7 +3276,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f7e6_axis",
+      "name": "flash4f7e6_axis_4f7e8",
       "address": "0x4f7e8",
       "category": "data",
       "confidence": "high",
@@ -3305,7 +3305,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f812_axis",
+      "name": "flash4f812_axis_4f814",
       "address": "0x4f814",
       "category": "data",
       "confidence": "high",
@@ -3393,7 +3393,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f8be_map",
+      "name": "flash4f8be_map_4f8c0",
       "address": "0x4f8c0",
       "category": "data",
       "confidence": "high",
@@ -3581,7 +3581,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash4f9dc_multimap8",
+      "name": "flash4f9dc_multimap8_4fafc",
       "address": "0x4fafc",
       "category": "data",
       "data_type": "value16_map8_description *",
@@ -3971,7 +3971,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_init_mode_flags3",
+      "name": "flash_init_mode_flags3_5009c",
       "address": "0x5009c",
       "category": "data",
       "data_type": "uint16_t[8]",
@@ -4011,7 +4011,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash500ca_u8a",
+      "name": "flash500ca_u8a_500cc",
       "address": "0x500cc",
       "category": "data",
       "confidence": "high",
@@ -4090,7 +4090,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_default_sw_part_id",
+      "name": "flash_default_sw_part_id_500e0",
       "address": "0x500e0",
       "category": "data",
       "data_type": "uint8_t[10]",
@@ -4230,7 +4230,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash50117_u8",
+      "name": "flash50117_u8_50115",
       "address": "0x50115",
       "category": "data",
       "data_type": "uint8_t",
@@ -4240,7 +4240,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash50117_u8",
+      "name": "flash50117_u8_50116",
       "address": "0x50116",
       "category": "data",
       "data_type": "uint8_t",
@@ -4250,7 +4250,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash50117_u8",
+      "name": "flash50117_u8_50117",
       "address": "0x50117",
       "category": "data",
       "data_type": "uint8_t",
@@ -4460,7 +4460,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash501ba_map8",
+      "name": "flash501ba_map8_501bc",
       "address": "0x501bc",
       "category": "data",
       "confidence": "high",
@@ -4499,7 +4499,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash501e2_map8",
+      "name": "flash501e2_map8_501e4",
       "address": "0x501e4",
       "category": "data",
       "confidence": "high",
@@ -4635,7 +4635,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5027e_map8",
+      "name": "flash5027e_map8_50280",
       "address": "0x50280",
       "category": "data",
       "confidence": "high",
@@ -4782,7 +4782,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash508c6_map8",
+      "name": "flash508c6_map8_508c8",
       "address": "0x508c8",
       "category": "data",
       "confidence": "high",
@@ -4811,7 +4811,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash50a0e_map8",
+      "name": "flash50a0e_map8_50a10",
       "address": "0x50a10",
       "category": "data",
       "confidence": "high",
@@ -5650,7 +5650,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5252a_u16",
+      "name": "flash5252a_u16_52526",
       "address": "0x52526",
       "category": "data",
       "data_type": "uint16_t",
@@ -5660,7 +5660,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5252a_u16",
+      "name": "flash5252a_u16_52528",
       "address": "0x52528",
       "category": "data",
       "data_type": "uint16_t",
@@ -5670,7 +5670,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5252a_u16",
+      "name": "flash5252a_u16_5252a",
       "address": "0x5252a",
       "category": "data",
       "data_type": "uint16_t",
@@ -6260,7 +6260,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52912_map8",
+      "name": "flash52912_map8_52914",
       "address": "0x52914",
       "category": "data",
       "confidence": "high",
@@ -6289,7 +6289,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52936_map8",
+      "name": "flash52936_map8_52938",
       "address": "0x52938",
       "category": "data",
       "confidence": "high",
@@ -6378,7 +6378,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5295e_u8a",
+      "name": "flash5295e_u8a_52960",
       "address": "0x52960",
       "category": "data",
       "confidence": "high",
@@ -6397,7 +6397,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5296a_u8a",
+      "name": "flash5296a_u8a_5296c",
       "address": "0x5296c",
       "category": "data",
       "confidence": "high",
@@ -6435,7 +6435,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52982_map8",
+      "name": "flash52982_map8_52984",
       "address": "0x52984",
       "category": "data",
       "confidence": "high",
@@ -6464,7 +6464,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5299e_map8",
+      "name": "flash5299e_map8_529a0",
       "address": "0x529a0",
       "category": "data",
       "confidence": "high",
@@ -6563,7 +6563,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52a4e_map8",
+      "name": "flash52a4e_map8_52a50",
       "address": "0x52a50",
       "category": "data",
       "confidence": "high",
@@ -6582,7 +6582,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52a5e_map8",
+      "name": "flash52a5e_map8_52a60",
       "address": "0x52a60",
       "category": "data",
       "confidence": "high",
@@ -6601,7 +6601,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52a6a_map8",
+      "name": "flash52a6a_map8_52a6c",
       "address": "0x52a6c",
       "category": "data",
       "confidence": "high",
@@ -6620,7 +6620,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52a7a_map16",
+      "name": "flash52a7a_map16_52a7c",
       "address": "0x52a7c",
       "category": "data",
       "confidence": "high",
@@ -6659,7 +6659,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52aa2_map8",
+      "name": "flash52aa2_map8_52aa4",
       "address": "0x52aa4",
       "category": "data",
       "confidence": "high",
@@ -6697,7 +6697,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52aba_map8",
+      "name": "flash52aba_map8_52abc",
       "address": "0x52abc",
       "category": "data",
       "confidence": "high",
@@ -6716,7 +6716,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52aca_map8",
+      "name": "flash52aca_map8_52acc",
       "address": "0x52acc",
       "category": "data",
       "confidence": "high",
@@ -6755,7 +6755,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52afa_map8",
+      "name": "flash52afa_map8_52afc",
       "address": "0x52afc",
       "category": "data",
       "confidence": "high",
@@ -6784,7 +6784,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52b1e_map8",
+      "name": "flash52b1e_map8_52b20",
       "address": "0x52b20",
       "category": "data",
       "confidence": "high",
@@ -6872,7 +6872,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52b82_map8",
+      "name": "flash52b82_map8_52b84",
       "address": "0x52b84",
       "category": "data",
       "confidence": "high",
@@ -6891,7 +6891,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52b8e_map8",
+      "name": "flash52b8e_map8_52b90",
       "address": "0x52b90",
       "category": "data",
       "confidence": "high",
@@ -6920,7 +6920,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52bac_map8",
+      "name": "flash52bac_map8_52bc4",
       "address": "0x52bc4",
       "category": "data",
       "data_type": "value16_map8_description",
@@ -6987,7 +6987,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52c0e_map8",
+      "name": "flash52c0e_map8_52c10",
       "address": "0x52c10",
       "category": "data",
       "confidence": "high",
@@ -7006,7 +7006,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52c1a_map8",
+      "name": "flash52c1a_map8_52c1c",
       "address": "0x52c1c",
       "category": "data",
       "confidence": "high",
@@ -7035,7 +7035,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52c52_map8",
+      "name": "flash52c52_map8_52c54",
       "address": "0x52c54",
       "category": "data",
       "confidence": "high",
@@ -7064,7 +7064,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52cc6_map8",
+      "name": "flash52cc6_map8_52cc8",
       "address": "0x52cc8",
       "category": "data",
       "confidence": "high",
@@ -7093,7 +7093,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash52ce6_map8",
+      "name": "flash52ce6_map8_52ce8",
       "address": "0x52ce8",
       "category": "data",
       "confidence": "high",
@@ -7309,7 +7309,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5314a_map8",
+      "name": "flash5314a_map8_5314c",
       "address": "0x5314c",
       "category": "data",
       "confidence": "high",
@@ -7337,7 +7337,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53164_map8",
+      "name": "flash53164_map8_53164",
       "address": "0x53164",
       "category": "data",
       "data_type": "value16_map8_description",
@@ -7357,7 +7357,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53172_map8",
+      "name": "flash53172_map8_53174",
       "address": "0x53174",
       "category": "data",
       "confidence": "high",
@@ -7385,7 +7385,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash531ce_map8",
+      "name": "flash531ce_map8_531d0",
       "address": "0x531d0",
       "category": "data",
       "confidence": "high",
@@ -7442,7 +7442,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53446_map16",
+      "name": "flash53446_map16_53448",
       "address": "0x53448",
       "category": "data",
       "confidence": "high",
@@ -7461,7 +7461,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53482_map16",
+      "name": "flash53482_map16_53484",
       "address": "0x53484",
       "category": "data",
       "confidence": "high",
@@ -7480,7 +7480,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash534be_map8",
+      "name": "flash534be_map8_534c0",
       "address": "0x534c0",
       "category": "data",
       "confidence": "high",
@@ -7499,7 +7499,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash534de_map8",
+      "name": "flash534de_map8_534e0",
       "address": "0x534e0",
       "category": "data",
       "confidence": "high",
@@ -7518,7 +7518,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53516_map8",
+      "name": "flash53516_map8_53518",
       "address": "0x53518",
       "category": "data",
       "confidence": "high",
@@ -7537,7 +7537,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53539_u8a",
+      "name": "flash53539_u8a_5353c",
       "address": "0x5353c",
       "category": "data",
       "confidence": "high",
@@ -7566,7 +7566,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5357a_u8a",
+      "name": "flash5357a_u8a_5357c",
       "address": "0x5357c",
       "category": "data",
       "confidence": "high",
@@ -7595,7 +7595,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53586_u8a",
+      "name": "flash53586_u8a_53588",
       "address": "0x53588",
       "category": "data",
       "confidence": "high",
@@ -7644,7 +7644,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash535d6_map8",
+      "name": "flash535d6_map8_535d8",
       "address": "0x535d8",
       "category": "data",
       "confidence": "high",
@@ -7663,7 +7663,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash536ee_map8",
+      "name": "flash536ee_map8_536f0",
       "address": "0x536f0",
       "category": "data",
       "confidence": "high",
@@ -7682,7 +7682,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53806_map8",
+      "name": "flash53806_map8_53808",
       "address": "0x53808",
       "category": "data",
       "confidence": "high",
@@ -7701,7 +7701,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash538ce_map8",
+      "name": "flash538ce_map8_538d0",
       "address": "0x538d0",
       "category": "data",
       "confidence": "high",
@@ -7720,7 +7720,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash539e6_map8",
+      "name": "flash539e6_map8_539e8",
       "address": "0x539e8",
       "category": "data",
       "confidence": "high",
@@ -7739,7 +7739,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53afe_map8",
+      "name": "flash53afe_map8_53b00",
       "address": "0x53b00",
       "category": "data",
       "confidence": "high",
@@ -7758,7 +7758,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53bc6_map8",
+      "name": "flash53bc6_map8_53bc8",
       "address": "0x53bc8",
       "category": "data",
       "confidence": "high",
@@ -7777,7 +7777,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53cde_map8",
+      "name": "flash53cde_map8_53ce0",
       "address": "0x53ce0",
       "category": "data",
       "confidence": "high",
@@ -7796,7 +7796,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53df6_map8",
+      "name": "flash53df6_map8_53df8",
       "address": "0x53df8",
       "category": "data",
       "confidence": "high",
@@ -7815,7 +7815,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53ebe_map8",
+      "name": "flash53ebe_map8_53ec0",
       "address": "0x53ec0",
       "category": "data",
       "confidence": "high",
@@ -7834,7 +7834,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash53fa6_map8",
+      "name": "flash53fa6_map8_53fa8",
       "address": "0x53fa8",
       "category": "data",
       "confidence": "high",
@@ -7853,7 +7853,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5408e_map8",
+      "name": "flash5408e_map8_54090",
       "address": "0x54090",
       "category": "data",
       "confidence": "high",
@@ -7872,7 +7872,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash540be_map8",
+      "name": "flash540be_map8_540c0",
       "address": "0x540c0",
       "category": "data",
       "confidence": "high",
@@ -7901,7 +7901,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54202_map8",
+      "name": "flash54202_map8_54204",
       "address": "0x54204",
       "category": "data",
       "confidence": "high",
@@ -7930,7 +7930,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5426a_map8",
+      "name": "flash5426a_map8_5426c",
       "address": "0x5426c",
       "category": "data",
       "confidence": "high",
@@ -7959,7 +7959,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54376_map8",
+      "name": "flash54376_map8_54378",
       "address": "0x54378",
       "category": "data",
       "confidence": "high",
@@ -8016,7 +8016,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash543de_map8",
+      "name": "flash543de_map8_543e0",
       "address": "0x543e0",
       "category": "data",
       "confidence": "high",
@@ -8044,7 +8044,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54402_map8",
+      "name": "flash54402_map8_54404",
       "address": "0x54404",
       "category": "data",
       "confidence": "high",
@@ -8093,7 +8093,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54437_u8a",
+      "name": "flash54437_u8a_54438",
       "address": "0x54438",
       "category": "data",
       "confidence": "high",
@@ -8142,7 +8142,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash545ca_map8",
+      "name": "flash545ca_map8_545cc",
       "address": "0x545cc",
       "category": "data",
       "confidence": "high",
@@ -8199,7 +8199,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5465e_map8",
+      "name": "flash5465e_map8_54660",
       "address": "0x54660",
       "category": "data",
       "confidence": "high",
@@ -8227,7 +8227,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54782_map8",
+      "name": "flash54782_map8_54784",
       "address": "0x54784",
       "category": "data",
       "confidence": "high",
@@ -8246,7 +8246,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5478e_map8",
+      "name": "flash5478e_map8_54790",
       "address": "0x54790",
       "category": "data",
       "confidence": "high",
@@ -8265,7 +8265,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5479a_map8",
+      "name": "flash5479a_map8_5479c",
       "address": "0x5479c",
       "category": "data",
       "confidence": "high",
@@ -8284,7 +8284,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547a6_map8",
+      "name": "flash547a6_map8_547a8",
       "address": "0x547a8",
       "category": "data",
       "confidence": "high",
@@ -8303,7 +8303,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547b2_map8",
+      "name": "flash547b2_map8_547b4",
       "address": "0x547b4",
       "category": "data",
       "confidence": "high",
@@ -8322,7 +8322,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547be_map8",
+      "name": "flash547be_map8_547c0",
       "address": "0x547c0",
       "category": "data",
       "confidence": "high",
@@ -8341,7 +8341,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547ca_map8",
+      "name": "flash547ca_map8_547cc",
       "address": "0x547cc",
       "category": "data",
       "confidence": "high",
@@ -8360,7 +8360,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547da_map8",
+      "name": "flash547da_map8_547dc",
       "address": "0x547dc",
       "category": "data",
       "confidence": "high",
@@ -8379,7 +8379,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547e6_map8",
+      "name": "flash547e6_map8_547e8",
       "address": "0x547e8",
       "category": "data",
       "confidence": "high",
@@ -8398,7 +8398,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547f2_map8",
+      "name": "flash547f2_map8_547f4",
       "address": "0x547f4",
       "category": "data",
       "confidence": "high",
@@ -8417,7 +8417,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash547fe_map8",
+      "name": "flash547fe_map8_54800",
       "address": "0x54800",
       "category": "data",
       "confidence": "high",
@@ -8436,7 +8436,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5480e_map8",
+      "name": "flash5480e_map8_54810",
       "address": "0x54810",
       "category": "data",
       "confidence": "high",
@@ -8484,7 +8484,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54952_map16",
+      "name": "flash54952_map16_54954",
       "address": "0x54954",
       "category": "data",
       "confidence": "high",
@@ -8513,7 +8513,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54986_map8",
+      "name": "flash54986_map8_54988",
       "address": "0x54988",
       "category": "data",
       "confidence": "high",
@@ -8562,7 +8562,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54b46_map8",
+      "name": "flash54b46_map8_54b48",
       "address": "0x54b48",
       "category": "data",
       "confidence": "high",
@@ -8591,7 +8591,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54b6a_map8",
+      "name": "flash54b6a_map8_54b6c",
       "address": "0x54b6c",
       "category": "data",
       "confidence": "high",
@@ -8610,7 +8610,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54bd6_map8",
+      "name": "flash54bd6_map8_54bd8",
       "address": "0x54bd8",
       "category": "data",
       "confidence": "high",
@@ -8629,7 +8629,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54be6_map8",
+      "name": "flash54be6_map8_54be8",
       "address": "0x54be8",
       "category": "data",
       "confidence": "high",
@@ -8667,7 +8667,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54c2e_map8",
+      "name": "flash54c2e_map8_54c30",
       "address": "0x54c30",
       "category": "data",
       "confidence": "high",
@@ -8686,7 +8686,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54c4e_map8",
+      "name": "flash54c4e_map8_54c50",
       "address": "0x54c50",
       "category": "data",
       "confidence": "high",
@@ -8705,7 +8705,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54c56_map8",
+      "name": "flash54c56_map8_54c58",
       "address": "0x54c58",
       "category": "data",
       "confidence": "high",
@@ -8724,7 +8724,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54e02_map8",
+      "name": "flash54e02_map8_54e04",
       "address": "0x54e04",
       "category": "data",
       "confidence": "high",
@@ -8753,7 +8753,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54e26_map8",
+      "name": "flash54e26_map8_54e28",
       "address": "0x54e28",
       "category": "data",
       "confidence": "high",
@@ -8772,7 +8772,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54e38_map8",
+      "name": "flash54e38_map8_54ea0",
       "address": "0x54ea0",
       "category": "data",
       "data_type": "value16_map8_description",
@@ -8852,7 +8852,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5500e_map16",
+      "name": "flash5500e_map16_55010",
       "address": "0x55010",
       "category": "data",
       "confidence": "high",
@@ -8930,7 +8930,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55caa_map8",
+      "name": "flash55caa_map8_55cac",
       "address": "0x55cac",
       "category": "data",
       "confidence": "high",
@@ -8949,7 +8949,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55cf2_map8",
+      "name": "flash55cf2_map8_55cf4",
       "address": "0x55cf4",
       "category": "data",
       "confidence": "high",
@@ -8968,7 +8968,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d3a_map8",
+      "name": "flash55d3a_map8_55d3c",
       "address": "0x55d3c",
       "category": "data",
       "confidence": "high",
@@ -9025,7 +9025,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d5e_map8",
+      "name": "flash55d5e_map8_55d60",
       "address": "0x55d60",
       "category": "data",
       "confidence": "high",
@@ -9044,7 +9044,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d6e_map8",
+      "name": "flash55d6e_map8_55d70",
       "address": "0x55d70",
       "category": "data",
       "confidence": "high",
@@ -9063,7 +9063,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d7a_map8",
+      "name": "flash55d7a_map8_55d7c",
       "address": "0x55d7c",
       "category": "data",
       "confidence": "high",
@@ -9082,7 +9082,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d86_map8",
+      "name": "flash55d86_map8_55d88",
       "address": "0x55d88",
       "category": "data",
       "confidence": "high",
@@ -9101,7 +9101,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d92_map8",
+      "name": "flash55d92_map8_55d94",
       "address": "0x55d94",
       "category": "data",
       "confidence": "high",
@@ -9120,7 +9120,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55d9e_map8",
+      "name": "flash55d9e_map8_55da0",
       "address": "0x55da0",
       "category": "data",
       "confidence": "high",
@@ -9139,7 +9139,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55daa_map16",
+      "name": "flash55daa_map16_55dac",
       "address": "0x55dac",
       "category": "data",
       "confidence": "high",
@@ -9177,7 +9177,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55df2_map8",
+      "name": "flash55df2_map8_55e54",
       "address": "0x55e54",
       "category": "data",
       "data_type": "value16_map8_description",
@@ -9196,7 +9196,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash54974_map8",
+      "name": "flash54974_map8_55ec2",
       "address": "0x55ec2",
       "category": "data",
       "data_type": "value16_map8_description",
@@ -9225,7 +9225,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55ece_map16",
+      "name": "flash55ece_map16_55ed0",
       "address": "0x55ed0",
       "category": "data",
       "confidence": "high",
@@ -9334,7 +9334,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash55fa8_u16",
+      "name": "flash55fa8_u16_55fa8",
       "address": "0x55fa8",
       "category": "data",
       "data_type": "uint16_t",
@@ -9654,7 +9654,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash5625e_map16",
+      "name": "flash5625e_map16_56260",
       "address": "0x56260",
       "category": "data",
       "confidence": "high",
@@ -9673,7 +9673,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash563ee_map16",
+      "name": "flash563ee_map16_563f0",
       "address": "0x563f0",
       "category": "data",
       "confidence": "high",
@@ -9692,7 +9692,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash565b2_map16",
+      "name": "flash565b2_map16_565b4",
       "address": "0x565b4",
       "category": "data",
       "confidence": "high",
@@ -9711,7 +9711,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56776_map8",
+      "name": "flash56776_map8_56778",
       "address": "0x56778",
       "category": "data",
       "confidence": "high",
@@ -9800,7 +9800,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56a12_map8",
+      "name": "flash56a12_map8_56a14",
       "address": "0x56a14",
       "category": "data",
       "confidence": "high",
@@ -9829,7 +9829,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56b0a_axis",
+      "name": "flash56b0a_axis_56b0c",
       "address": "0x56b0c",
       "category": "data",
       "confidence": "high",
@@ -9887,7 +9887,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56bb6_map8",
+      "name": "flash56bb6_map8_56bb8",
       "address": "0x56bb8",
       "category": "data",
       "confidence": "high",
@@ -9945,7 +9945,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56c2e_map8",
+      "name": "flash56c2e_map8_56c30",
       "address": "0x56c30",
       "category": "data",
       "confidence": "high",
@@ -9964,7 +9964,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56c72_axis",
+      "name": "flash56c72_axis_56c74",
       "address": "0x56c74",
       "category": "data",
       "confidence": "high",
@@ -9993,7 +9993,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash56d9a_map16",
+      "name": "flash56d9a_map16_56d9c",
       "address": "0x56d9c",
       "category": "data",
       "confidence": "high",
@@ -10012,7 +10012,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash570ee_map16",
+      "name": "flash570ee_map16_570f0",
       "address": "0x570f0",
       "category": "data",
       "confidence": "high",
@@ -10031,7 +10031,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash572b2_map8",
+      "name": "flash572b2_map8_572b4",
       "address": "0x572b4",
       "category": "data",
       "confidence": "high",
@@ -10110,7 +10110,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash576f2_map8",
+      "name": "flash576f2_map8_576f4",
       "address": "0x576f4",
       "category": "data",
       "confidence": "high",
@@ -11647,7 +11647,7 @@
       "timestamp": ""
     },
     {
-      "name": "gpinputs3_prev",
+      "name": "gpinputs3_prev_804c54",
       "address": "0x804c54",
       "category": "ram_global",
       "data_type": "uint16_t",
@@ -14835,7 +14835,7 @@
       "timestamp": ""
     },
     {
-      "name": "fp10210_u16",
+      "name": "fp10210_u16_805820",
       "address": "0x805820",
       "category": "ram_global",
       "confidence": "high",
@@ -20781,7 +20781,7 @@
       "timestamp": ""
     },
     {
-      "name": "mjto5_call_hook_nop0",
+      "name": "mjto5_call_hook_nop0_663c",
       "entry_point": "0x663c",
       "confidence": "high",
       "source": "colt_flash",
@@ -26699,7 +26699,7 @@
       "return_type": "void"
     },
     {
-      "name": "get_3d_mapped_1e7f4",
+      "name": "get_3d_mapped_1e7f4_1ef74",
       "entry_point": "0x1ef74",
       "confidence": "high",
       "source": "colt_flash",
@@ -29028,7 +29028,7 @@
       "timestamp": ""
     },
     {
-      "name": "call3a1b8",
+      "name": "call3a1b8_3a1b8",
       "entry_point": "0x3a1b8",
       "confidence": "high",
       "source": "colt_s",

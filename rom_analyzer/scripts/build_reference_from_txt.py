@@ -367,6 +367,35 @@ def _dedup_functions(functions: list[AnnotationFunction]) -> list[AnnotationFunc
     return list(by_addr.values())
 
 
+def dedup_symbol_names(store: AnnotationStore) -> int:
+    """Make every symbol/function name unique across the whole store.
+
+    Linker fragments share one symbol namespace, so two objects with the same
+    name (at different addresses — e.g. a function mirrored across code regions,
+    or a label repeated in colt_flash/.S) would emit a duplicate `name = addr;`
+    and break the link. The lowest-address object keeps the canonical name;
+    later collisions are suffixed with their address (name_<hexaddr>). Returns
+    the number of objects renamed.
+    """
+    objs = [(f.entry_point, f) for f in store.functions]
+    objs += [(s.address, s) for s in store.symbols]
+    objs.sort(key=lambda t: t[0])
+
+    used: set[str] = set()
+    renamed = 0
+    for addr, obj in objs:
+        if obj.name not in used:
+            used.add(obj.name)
+            continue
+        new_name = f"{obj.name}_{addr:x}"
+        while new_name in used:
+            new_name += "_x"
+        obj.name = new_name
+        used.add(new_name)
+        renamed += 1
+    return renamed
+
+
 def build_store(flash_path: Path | None, map_path: Path | None,
                 description_ld_path: Path | None, asm_path: Path | None,
                 rom_id: str, rom_sha256: str) -> AnnotationStore:
@@ -385,13 +414,15 @@ def build_store(flash_path: Path | None, map_path: Path | None,
         symbols += s_syms
         functions += s_fns
 
-    return AnnotationStore(
+    store = AnnotationStore(
         schema_version=1,
         rom_id=rom_id,
         rom_sha256=rom_sha256,
         symbols=_dedup_symbols(symbols),
         functions=_dedup_functions(functions),
     )
+    dedup_symbol_names(store)
+    return store
 
 
 def main() -> None:

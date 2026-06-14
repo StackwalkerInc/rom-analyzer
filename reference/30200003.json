@@ -121,7 +121,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_torque_loss_vs_rpm_2dmap8",
+      "name": "flash_torque_loss_vs_rpm_2dmap8_3cac",
       "address": "0x3cac",
       "category": "data",
       "confidence": "high",
@@ -166,7 +166,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_alternator_torque_loss_3dmap8",
+      "name": "flash_alternator_torque_loss_3dmap8_3dfc",
       "address": "0x3dfc",
       "category": "data",
       "confidence": "high",
@@ -391,7 +391,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_target_throttle_position_rpm_x_torque_3dmap16",
+      "name": "flash_target_throttle_position_rpm_x_torque_3dmap16_867c",
       "address": "0x867c",
       "category": "data",
       "confidence": "high",
@@ -445,7 +445,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_acceleration_gear_shift_apps_limit_low_gear_nonneutral_2dmap8",
+      "name": "flash_acceleration_gear_shift_apps_limit_low_gear_nonneutral_2dmap8_8cb8",
       "address": "0x8cb8",
       "category": "data",
       "confidence": "high",
@@ -571,7 +571,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_overboost_on_load8_vs_rpm_2dmap8",
+      "name": "flash_overboost_on_load8_vs_rpm_2dmap8_ab1c",
       "address": "0xab1c",
       "category": "data",
       "confidence": "high",
@@ -589,7 +589,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_overboost_off_load8_vs_rpm_2dmap8",
+      "name": "flash_overboost_off_load8_vs_rpm_2dmap8_ab2c",
       "address": "0xab2c",
       "category": "data",
       "confidence": "high",
@@ -607,7 +607,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_overboost_off_wastegate_duty_vs_rpm_2dmap8",
+      "name": "flash_overboost_off_wastegate_duty_vs_rpm_2dmap8_ab3c",
       "address": "0xab3c",
       "category": "data",
       "confidence": "high",
@@ -643,7 +643,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_boost_target_load_low_gear_3dmap8",
+      "name": "flash_boost_target_load_low_gear_3dmap8_ade0",
       "address": "0xade0",
       "category": "data",
       "confidence": "high",
@@ -670,7 +670,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_wastegate_duty_compensation_vs_iat_2dmap8",
+      "name": "flash_wastegate_duty_compensation_vs_iat_2dmap8_aeec",
       "address": "0xaeec",
       "category": "data",
       "confidence": "high",
@@ -724,7 +724,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_apps_limiting_stabilizer_rpm_axis",
+      "name": "flash_apps_limiting_stabilizer_rpm_axis_b28c",
       "address": "0xb28c",
       "category": "data",
       "confidence": "high",
@@ -742,7 +742,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_fuel_map_rpm_axis",
+      "name": "flash_fuel_map_rpm_axis_b3e8",
       "address": "0xb3e8",
       "category": "data",
       "confidence": "high",
@@ -796,7 +796,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_ttp_rpm_axis",
+      "name": "flash_ttp_rpm_axis_b598",
       "address": "0xb598",
       "category": "data",
       "confidence": "high",
@@ -814,7 +814,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_internal_torque_axis",
+      "name": "flash_internal_torque_axis_b5bc",
       "address": "0xb5bc",
       "category": "data",
       "confidence": "high",
@@ -868,7 +868,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_torque_calculations_rpm_axis",
+      "name": "flash_torque_calculations_rpm_axis_b91c",
       "address": "0xb91c",
       "category": "data",
       "confidence": "high",
@@ -922,7 +922,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_torque_calculations_ac_pressure_axis",
+      "name": "flash_torque_calculations_ac_pressure_axis_b9ac",
       "address": "0xb9ac",
       "category": "data",
       "confidence": "high",
@@ -949,7 +949,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_combustion_torque_output_load_axis",
+      "name": "flash_combustion_torque_output_load_axis_ba04",
       "address": "0xba04",
       "category": "data",
       "confidence": "high",
@@ -976,7 +976,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_mivec_target_rpm_axis",
+      "name": "flash_mivec_target_rpm_axis_bb68",
       "address": "0xbb68",
       "category": "data",
       "confidence": "high",
@@ -1093,7 +1093,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_boost_control3d_tps_axis",
+      "name": "flash_boost_control3d_tps_axis_c608",
       "address": "0xc608",
       "category": "data",
       "confidence": "high",
@@ -1567,7 +1567,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_basic4_secondary_speed_safe_axis",
+      "name": "flash_basic4_secondary_speed_safe_axis_812b4",
       "address": "0x812b4",
       "category": "data",
       "confidence": "high",
@@ -1702,7 +1702,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_base_lpsd_rpm_axis",
+      "name": "flash_base_lpsd_rpm_axis_81570",
       "address": "0x81570",
       "category": "data",
       "confidence": "high",
@@ -2080,7 +2080,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_inhibitor_position_pss_min_main_2dmap8",
+      "name": "flash_inhibitor_position_pss_min_main_2dmap8_82554",
       "address": "0x82554",
       "category": "data",
       "confidence": "high",
@@ -2116,7 +2116,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_cvt_manual_mode_primary_speed_2nd_2dmap8",
+      "name": "flash_cvt_manual_mode_primary_speed_2nd_2dmap8_825b8",
       "address": "0x825b8",
       "category": "data",
       "confidence": "high",
@@ -2143,7 +2143,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_cvt_manual_mode_primary_speed_4th_2dmap8",
+      "name": "flash_cvt_manual_mode_primary_speed_4th_2dmap8_825ec",
       "address": "0x825ec",
       "category": "data",
       "confidence": "high",
@@ -2251,7 +2251,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_inhibitor_position_pss_min_ds_2dmap8",
+      "name": "flash_inhibitor_position_pss_min_ds_2dmap8_828cc",
       "address": "0x828cc",
       "category": "data",
       "confidence": "high",
@@ -2287,7 +2287,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_base_lpsd_vs_rpm_x_target_lp_3dmap8",
+      "name": "flash_base_lpsd_vs_rpm_x_target_lp_3dmap8_82b40",
       "address": "0x82b40",
       "category": "data",
       "confidence": "high",
@@ -2557,7 +2557,7 @@
       "timestamp": ""
     },
     {
-      "name": "flash_psst_kickdown_nondrive_vs_ss_2dmap8",
+      "name": "flash_psst_kickdown_nondrive_vs_ss_2dmap8_83598",
       "address": "0x83598",
       "category": "data",
       "confidence": "high",
@@ -12010,7 +12010,7 @@
       "return_type": "void"
     },
     {
-      "name": "update_fuel_map_target_afr",
+      "name": "update_fuel_map_target_afr_239d4",
       "entry_point": "0x239d4",
       "confidence": "medium",
       "source": "xref:33520003",
