@@ -48,7 +48,14 @@ _ADDR_RE = re.compile(r"^0x[0-9a-fA-F]+$")
 _FP_RE = re.compile(r"^fp[+-]\d+$")
 _IDENT_RE = re.compile(r"^[A-Za-z_]\w*$")
 _LD_ASSIGN_RE = re.compile(r"^\s*([A-Za-z_]\w*)\s*=\s*(0x[0-9a-fA-F]+)\s*;")
+_S_COMMENT_RE = re.compile(r"^\s*/\*(.+?)\*/\s*$")
+_S_ADDR_RE = re.compile(r"^\s*([0-9a-fA-F]+):\s")
 _ARG_REGS = ("R0", "R1", "R2", "R3")
+
+# Higher rank wins when the same address is described by multiple sources.
+# colt_flash/colt_map are curated tables; the .S decl comments are next; a
+# bare description.ld assignment (no type) is the weakest.
+_SOURCE_RANK = {"colt_flash": 3, "colt_map": 3, "colt_s": 2, "description_ld": 1}
 
 
 def _strip_comment(text: str) -> str:
@@ -279,34 +286,111 @@ def parse_description_ld(path: Path) -> list[AnnotationSymbol]:
     return symbols
 
 
+def parse_annotated_s(path: Path) -> tuple[list[AnnotationSymbol], list[AnnotationFunction]]:
+    """Parse an annotated objdump .S where each object is named by an own-line
+    /* C-declaration */ comment immediately preceding its address line.
+
+    Example:
+        /*void rom_crc_check_step()*/
+            5e224:  ...                 <- entry point
+    For many ROMs (notably CVT decodes with no colt_flash table) the .S is the
+    only source of function names. Declarations use the same grammar as
+    colt_flash, so the same parsers apply. RAM globals never appear here (the
+    disassembly is flash); addresses are raw flash offsets.
+    """
+    symbols: list[AnnotationSymbol] = []
+    functions: list[AnnotationFunction] = []
+    pending: str | None = None
+    for line in path.read_text(errors="replace").splitlines():
+        cm = _S_COMMENT_RE.match(line)
+        if cm:
+            pending = cm.group(1).strip()
+            continue
+        am = _S_ADDR_RE.match(line)
+        if am and pending is not None:
+            addr = int(am.group(1), 16)
+            # Drop trailing " - note" annotations and a '^' "see-above" marker.
+            decl = pending.split(" - ")[0].strip().rstrip("^").strip()
+            if decl:
+                if _is_function(decl):
+                    parsed = _parse_function_decl(decl)
+                    if parsed is not None:
+                        name, return_type, params = parsed
+                        functions.append(AnnotationFunction(
+                            name=name, entry_point=addr, confidence="high",
+                            source="colt_s", return_type=return_type, params=params,
+                        ))
+                else:
+                    parsed_d = _parse_data_decl(decl)
+                    if parsed_d is not None:
+                        name, data_type = parsed_d
+                        category = "data" if addr < 0x800000 else "ram_global"
+                        symbols.append(AnnotationSymbol(
+                            name=name, address=addr, category=category,
+                            data_type=data_type, confidence="high", source="colt_s",
+                        ))
+        # Any non-comment line ends the one-line association window.
+        pending = None
+    return symbols, functions
+
+
+def _dedup_symbols(symbols: list[AnnotationSymbol]) -> list[AnnotationSymbol]:
+    """Keep one symbol per (address, category): higher source rank wins; a typed
+    entry beats an untyped one of equal rank."""
+    def better(new: AnnotationSymbol, old: AnnotationSymbol) -> bool:
+        rn, ro = _SOURCE_RANK.get(new.source, 0), _SOURCE_RANK.get(old.source, 0)
+        if rn != ro:
+            return rn > ro
+        return old.data_type is None and new.data_type is not None
+
+    by_key: dict[tuple[int, str], AnnotationSymbol] = {}
+    for s in symbols:
+        key = (s.address, s.category)
+        if key not in by_key or better(s, by_key[key]):
+            by_key[key] = s
+    return list(by_key.values())
+
+
+def _dedup_functions(functions: list[AnnotationFunction]) -> list[AnnotationFunction]:
+    """Keep one function per entry_point: higher source rank wins; a function
+    carrying params beats one without at equal rank."""
+    def better(new: AnnotationFunction, old: AnnotationFunction) -> bool:
+        rn, ro = _SOURCE_RANK.get(new.source, 0), _SOURCE_RANK.get(old.source, 0)
+        if rn != ro:
+            return rn > ro
+        return not old.params and bool(new.params)
+
+    by_addr: dict[int, AnnotationFunction] = {}
+    for f in functions:
+        if f.entry_point not in by_addr or better(f, by_addr[f.entry_point]):
+            by_addr[f.entry_point] = f
+    return list(by_addr.values())
+
+
 def build_store(flash_path: Path | None, map_path: Path | None,
-                description_ld_path: Path | None, rom_id: str,
-                rom_sha256: str) -> AnnotationStore:
+                description_ld_path: Path | None, asm_path: Path | None,
+                rom_id: str, rom_sha256: str) -> AnnotationStore:
     symbols: list[AnnotationSymbol] = []
     functions: list[AnnotationFunction] = []
     if flash_path:
-        data_syms, functions = parse_colt_flash(flash_path)
+        data_syms, fns = parse_colt_flash(flash_path)
         symbols += data_syms
+        functions += fns
     if map_path:
         symbols += parse_colt_map(map_path)
     if description_ld_path:
         symbols += parse_description_ld(description_ld_path)
-
-    # De-duplicate symbols by (address, category): a colt_flash entry (typed)
-    # wins over a description_ld entry (untyped) at the same flash address.
-    by_key: dict[tuple[int, str], AnnotationSymbol] = {}
-    for s in symbols:
-        key = (s.address, s.category)
-        existing = by_key.get(key)
-        if existing is None or (existing.data_type is None and s.data_type is not None):
-            by_key[key] = s
+    if asm_path:
+        s_syms, s_fns = parse_annotated_s(asm_path)
+        symbols += s_syms
+        functions += s_fns
 
     return AnnotationStore(
         schema_version=1,
         rom_id=rom_id,
         rom_sha256=rom_sha256,
-        symbols=list(by_key.values()),
-        functions=functions,
+        symbols=_dedup_symbols(symbols),
+        functions=_dedup_functions(functions),
     )
 
 
@@ -318,20 +402,23 @@ def main() -> None:
                     help="colt_map.txt / singa_map.txt path (RAM globals)")
     ap.add_argument("--description-ld", type=Path, default=None,
                     help="description.ld of 'name = 0xADDR;' flash labels (CVT decodes)")
+    ap.add_argument("--asm", type=Path, default=None,
+                    help="annotated objdump .S (function/data names as /*decl*/ "
+                         "comments preceding their address line)")
     ap.add_argument("--rom", type=Path, default=None,
                     help="ROM bin to hash for rom_sha256 (recommended)")
     ap.add_argument("--rom-id", required=True, help="ROM id, e.g. 47110032")
     ap.add_argument("--out", required=True, type=Path, help="output JSON path")
     args = ap.parse_args()
 
-    if not (args.flash or args.map or args.description_ld):
-        ap.error("provide at least one of --flash / --map / --description-ld")
+    if not (args.flash or args.map or args.description_ld or args.asm):
+        ap.error("provide at least one of --flash / --map / --description-ld / --asm")
 
     rom_sha256 = ""
     if args.rom:
         rom_sha256 = hashlib.sha256(args.rom.read_bytes()).hexdigest()
 
-    store = build_store(args.flash, args.map, args.description_ld,
+    store = build_store(args.flash, args.map, args.description_ld, args.asm,
                         args.rom_id, rom_sha256)
     save_annotations(args.out, store)
 

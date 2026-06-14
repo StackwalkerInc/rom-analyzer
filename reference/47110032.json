@@ -13,6 +13,55 @@
       "timestamp": ""
     },
     {
+      "name": "interrupt",
+      "address": "0x10",
+      "category": "data",
+      "data_type": "System break",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Exception",
+      "address": "0x20",
+      "category": "data",
+      "data_type": "Reserved Instruction",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Exception",
+      "address": "0x30",
+      "category": "data",
+      "data_type": "Address",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "TRAPX",
+      "address": "0x40",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0x80",
+      "category": "data",
+      "data_type": "External",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_password",
       "address": "0x84",
       "category": "data",
@@ -28,6 +77,156 @@
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "used",
+      "address": "0xa4",
+      "category": "data",
+      "data_type": "Not",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xc8",
+      "category": "data",
+      "data_type": "DMA0-4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xcc",
+      "category": "data",
+      "data_type": "SIO1 Receive",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xd0",
+      "category": "data",
+      "data_type": "SIO1 Transmit",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xd4",
+      "category": "data",
+      "data_type": "SIO0 Receive",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xd8",
+      "category": "data",
+      "data_type": "SIO0 Transmit",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xdc",
+      "category": "data",
+      "data_type": "A/D0 Conversion",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "used",
+      "address": "0xe0",
+      "category": "data",
+      "data_type": "Not",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xe8",
+      "category": "data",
+      "data_type": "DMA5-9",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "interrupt",
+      "address": "0xec",
+      "category": "data",
+      "data_type": "SIO2,3 Transmit/receive",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0xf0",
+      "category": "data",
+      "data_type": "RTD",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "used",
+      "address": "0xf4",
+      "category": "data",
+      "data_type": "Not",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0x10c",
+      "category": "data",
+      "data_type": "CAN0 Transmit/receive & Error",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Interrupt",
+      "address": "0x110",
+      "category": "data",
+      "data_type": "CAN1 Transmit/receive & Error",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "area",
+      "address": "0x114",
+      "category": "data",
+      "data_type": "Unused",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -156,12 +355,32 @@
       "timestamp": ""
     },
     {
+      "name": "members",
+      "address": "0x2028",
+      "category": "data",
+      "data_type": "can_tx1_id0_transmission_complete_hook() one of 37b0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "area",
       "address": "0x3788",
       "category": "data",
       "data_type": "---------- data",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_eng_trans_string",
+      "address": "0x3794",
+      "category": "data",
+      "data_type": "char[11]",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -246,6 +465,16 @@
       "timestamp": ""
     },
     {
+      "name": "flash_can_rx_dlc",
+      "address": "0x37c8",
+      "category": "data",
+      "data_type": "uint8_t[5]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "can_rx_data_destinations",
       "address": "0x37d0",
       "category": "data",
@@ -282,6 +511,16 @@
       "data_type": "uint8_t[5]",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_done_mask",
+      "address": "0x3810",
+      "category": "data",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -373,11 +612,116 @@
       "timestamp": ""
     },
     {
+      "name": "Handler",
+      "address": "0x38a0",
+      "category": "data",
+      "data_type": "External Interrupt",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Handler",
+      "address": "0x3900",
+      "category": "data",
+      "data_type": "TRAP",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "Handler",
+      "address": "0x3904",
+      "category": "data",
+      "data_type": "Address Exception",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "interrupts",
+      "address": "0x3938",
+      "category": "data",
+      "data_type": "well in theory. in practice it's only used with 0 to enable and 7 to disable maskable",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "system_break_interrupt_handler",
       "address": "0x3954",
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "port",
+      "address": "0x3bec",
+      "category": "data",
+      "data_type": "PortSetOutput(port, mask), saves port i/o state at 0x806e00 +",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "GetP2Data7",
+      "address": "0x3d78",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "SetHighP2Data6Atomic",
+      "address": "0x3d84",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "SetLowP2Data7Atomic",
+      "address": "0x3dd8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "SetOutputP2Data7",
+      "address": "0x3e08",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "etc",
+      "address": "0x3e1c",
+      "category": "data",
+      "data_type": "SetHighOutputP2Data67 and",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "nop6650",
+      "address": "0x6650",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -392,12 +736,32 @@
       "timestamp": ""
     },
     {
+      "name": "Area",
+      "address": "0x7038",
+      "category": "data",
+      "data_type": "Unused",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "v",
       "address": "0x76a8",
       "category": "data",
       "data_type": "uint16_t s_32to16(uint32_t v) return v > 0xffff ? 0xffff :",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "area",
+      "address": "0x7fa8",
+      "category": "data",
+      "data_type": "Unused",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -839,6 +1203,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_cylinder_bank1",
+      "address": "0x8a94",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_trouble_code_table",
       "address": "0x8dc0",
       "category": "data",
@@ -865,6 +1238,15 @@
       "data_type": "uint16_t",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash90f0_struct12a",
+      "address": "0x90f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -947,6 +1329,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_can_rx_handlers",
+      "address": "0x9594",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash9648_u16",
       "address": "0x9648",
       "category": "data",
@@ -977,12 +1368,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash96aa_map8",
+      "address": "0x96ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash9756_axis",
       "address": "0x9756",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash9756_axis",
+      "address": "0x9758",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -997,6 +1406,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash98aa_map8",
+      "address": "0x98ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash993c_map",
       "address": "0x993c",
       "category": "data",
@@ -1007,11 +1425,70 @@
       "timestamp": ""
     },
     {
+      "name": "flash9a74_struct16a",
+      "address": "0x9a74",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "p1",
       "address": "0xc0ec",
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "a970",
+      "address": "0xc6f8",
+      "category": "data",
+      "data_type": "init_mjt_clocks() called once in",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "a970",
+      "address": "0xc788",
+      "category": "data",
+      "data_type": "reset_mask_some_timer_interrupts_spi_transfer() called only in",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "a970",
+      "address": "0xca00",
+      "category": "data",
+      "data_type": "reset_enable_top4() called only in",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "bits",
+      "address": "0xd268",
+      "category": "data",
+      "data_type": "calld268() depends on debug_flags, fp7452_u16, fp13266_u16, modifies P4DATA",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "a970",
+      "address": "0xd5f8",
+      "category": "data",
+      "data_type": "tio02_5_init() called only from",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1032,6 +1509,104 @@
       "data_type": "tio2_regulate(uint16_t val, uint16_t timer_max, uint16_t valmax) regulate",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "a970",
+      "address": "0xec98",
+      "category": "data",
+      "data_type": "spi_cs_up() called only in",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "a970",
+      "address": "0xf540",
+      "category": "data",
+      "data_type": "checked_reset_p3d5() called only in",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjti3_interrupt_handler",
+      "address": "0xf97c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjti2_interrupt_handler",
+      "address": "0xf99c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mapped",
+      "address": "0xf9b4",
+      "category": "data",
+      "data_type": "some interesting area... not",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "etc",
+      "address": "0xfb68",
+      "category": "data",
+      "data_type": "mjt2_interrupt_handler_helper and",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "code",
+      "address": "0x1b58c",
+      "category": "data",
+      "data_type": "call1b58c() not used",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "table",
+      "address": "0x372b8",
+      "category": "data",
+      "data_type": "jump",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "scavenging",
+      "address": "0x3c730",
+      "category": "data",
+      "data_type": "available for",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "once",
+      "address": "0x3e984",
+      "category": "data",
+      "data_type": "sio2_call3e984()",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1116,6 +1691,26 @@
       "timestamp": ""
     },
     {
+      "name": "a970",
+      "address": "0x4aba8",
+      "category": "data",
+      "data_type": "load_and_check_whole_eeprom() used only in",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "once",
+      "address": "0x4ad00",
+      "category": "data",
+      "data_type": "int i2c1_eeprom_read_whole() used",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4b4c4",
       "address": "0x4b4c4",
       "category": "data",
@@ -1132,6 +1727,16 @@
       "data_type": "uint16_t[512]",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "way",
+      "address": "0x4e130",
+      "category": "data",
+      "data_type": "main_loop(), entered in soft reset",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1196,6 +1801,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4eaa6_axis",
+      "address": "0x4eaa8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4eabc_axis",
       "address": "0x4eabc",
       "category": "data",
@@ -1212,6 +1826,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4eade_axis",
+      "address": "0x4eae0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1286,6 +1909,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4eb7a_axis",
+      "address": "0x4eb7c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4eb9c_axis",
       "address": "0x4eb9c",
       "category": "data",
@@ -1316,6 +1948,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_fuel_map_load_axis",
+      "address": "0x4ebd4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4ebf8_axis",
       "address": "0x4ebf8",
       "category": "data",
@@ -1336,12 +1977,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4ec1e_axis",
+      "address": "0x4ec20",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4ec46_axis",
       "address": "0x4ec46",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4ec46_axis",
+      "address": "0x4ec48",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1366,12 +2025,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4ec7e_axis",
+      "address": "0x4ec80",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4ec96_axis",
       "address": "0x4ec96",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4ec96_axis",
+      "address": "0x4ec98",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1386,12 +2063,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4ecaa_axis",
+      "address": "0x4ecac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4ecba_axis",
       "address": "0x4ecba",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4ecba_axis",
+      "address": "0x4ecbc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1422,6 +2117,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4ecfe_coolant_axis",
+      "address": "0x4ed00",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1466,12 +2170,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_basic_iat_corrections_axis",
+      "address": "0x4ed60",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4ed72_map",
       "address": "0x4ed72",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4ed72_map",
+      "address": "0x4ed74",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1486,12 +2208,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4ed8a_axis",
+      "address": "0x4ed8c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4eda6_map",
       "address": "0x4eda6",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4eda6_axis",
+      "address": "0x4eda8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1516,12 +2256,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4edde_axis",
+      "address": "0x4ede0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4edf2_axis",
       "address": "0x4edf2",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4edf2_axis",
+      "address": "0x4edf4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1542,6 +2300,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_idle_coolant_axis",
+      "address": "0x4ee28",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1586,12 +2353,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4ee8e_map",
+      "address": "0x4ee90",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4eeae_map",
       "address": "0x4eeae",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4eeae_axis",
+      "address": "0x4eeb0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1606,12 +2391,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_tct_ttps_axis",
+      "address": "0x4eed0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4eef6_map",
       "address": "0x4eef6",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_torque_calculation_alternator_field_duty_axis",
+      "address": "0x4eef8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1632,6 +2435,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_octane_level_torque_loss_load_axis",
+      "address": "0x4ef34",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1666,6 +2478,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_isv_to_target_throttle_position_axis",
+      "address": "0x4ef8c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4effa_axis",
       "address": "0x4effa",
       "category": "data",
@@ -1676,12 +2497,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_mivec_target_load_axis",
+      "address": "0x4effc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f01e_axis",
       "address": "0x4f01e",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_mivec_target_rpm_axis",
+      "address": "0x4f020",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1736,6 +2575,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f0d2_map",
+      "address": "0x4f0d4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f0f4_axis",
       "address": "0x4f0f4",
       "category": "data",
@@ -1766,6 +2614,16 @@
       "timestamp": ""
     },
     {
+      "name": "upper",
+      "address": "0x4f148",
+      "category": "data",
+      "data_type": "flash4f146_map starts",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f168_map",
       "address": "0x4f168",
       "category": "data",
@@ -1782,6 +2640,16 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "upper",
+      "address": "0x4f184",
+      "category": "data",
+      "data_type": "flash4f182_map starts",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1876,6 +2744,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f2be_map",
+      "address": "0x4f2c0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f3c8_map",
       "address": "0x4f3c8",
       "category": "data",
@@ -1892,6 +2769,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f3ea_map",
+      "address": "0x4f3ec",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1926,12 +2812,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f44a_map",
+      "address": "0x4f44c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f466_map",
       "address": "0x4f466",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f466_map",
+      "address": "0x4f468",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -1996,6 +2900,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f526_map",
+      "address": "0x4f528",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f538_map",
       "address": "0x4f538",
       "category": "data",
@@ -2016,12 +2929,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f54a_map",
+      "address": "0x4f54c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f562_map",
       "address": "0x4f562",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f562_map",
+      "address": "0x4f564",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2046,6 +2977,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f582_axis",
+      "address": "0x4f584",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f59e_axis",
       "address": "0x4f59e",
       "category": "data",
@@ -2056,12 +2996,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f59e_map",
+      "address": "0x4f5a0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f5b6_axis",
       "address": "0x4f5b6",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f5b6_axis",
+      "address": "0x4f5b8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2086,6 +3044,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f5de_axis",
+      "address": "0x4f5e0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f5fc_axis",
       "address": "0x4f5fc",
       "category": "data",
@@ -2102,6 +3069,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f68a_map",
+      "address": "0x4f68c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2126,6 +3102,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f6b6_axis",
+      "address": "0x4f6b8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f6d6_map",
       "address": "0x4f6d6",
       "category": "data",
@@ -2136,12 +3121,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f6d6_map",
+      "address": "0x4f6d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f702_map",
       "address": "0x4f702",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f702_map",
+      "address": "0x4f704",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2186,6 +3189,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f756_axis",
+      "address": "0x4f758",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f778_axis",
       "address": "0x4f778",
       "category": "data",
@@ -2202,6 +3214,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f78e_vehicle_speed_axis",
+      "address": "0x4f790",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2226,6 +3247,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f7ba_coolant_axis",
+      "address": "0x4f7bc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f7d0_axis",
       "address": "0x4f7d0",
       "category": "data",
@@ -2246,6 +3276,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f7e6_axis",
+      "address": "0x4f7e8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f7fc_axis",
       "address": "0x4f7fc",
       "category": "data",
@@ -2262,6 +3301,15 @@
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f812_axis",
+      "address": "0x4f814",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2326,6 +3374,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f8aa_axis",
+      "address": "0x4f8ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f8be_map",
       "address": "0x4f8be",
       "category": "data",
@@ -2336,12 +3393,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash4f8be_map",
+      "address": "0x4f8c0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash4f8d0_map",
       "address": "0x4f8d0",
       "category": "data",
       "data_type": "map_8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash4f90a_axis",
+      "address": "0x4f908",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2896,6 +3971,16 @@
       "timestamp": ""
     },
     {
+      "name": "flash_init_mode_flags3",
+      "address": "0x5009c",
+      "category": "data",
+      "data_type": "uint16_t[8]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash500aa_u16a",
       "address": "0x500aa",
       "category": "data",
@@ -2922,6 +4007,15 @@
       "data_type": "uint8_t[6]",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash500ca_u8a",
+      "address": "0x500cc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -2992,6 +4086,16 @@
       "data_type": "uint8_t[10]",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_default_sw_part_id",
+      "address": "0x500e0",
+      "category": "data",
+      "data_type": "uint8_t[10]",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -3356,6 +4460,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash501ba_map8",
+      "address": "0x501bc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash501c4_map8",
       "address": "0x501c4",
       "category": "data",
@@ -3386,12 +4499,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash501e2_map8",
+      "address": "0x501e4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash501ee_map16",
       "address": "0x501ee",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_torque_max_vs_rpm_2dmap16",
+      "address": "0x501f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -3406,12 +4537,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_torque_min_vs_rpm_2dmap8",
+      "address": "0x50210",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash50220_map8",
       "address": "0x50220",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5022c_map8",
+      "address": "0x5022c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -3482,6 +4631,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5027e_map8",
+      "address": "0x50280",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -3586,6 +4744,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_tct_lg_3dmap16",
+      "address": "0x50540",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash50702_map16",
       "address": "0x50702",
       "category": "data",
@@ -3596,12 +4763,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_tct_hg_3dmap16",
+      "address": "0x50704",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash508c6_map8",
       "address": "0x508c6",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash508c6_map8",
+      "address": "0x508c8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -3622,6 +4807,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash50a0e_map8",
+      "address": "0x50a10",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5066,6 +6260,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash52912_map8",
+      "address": "0x52914",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52924_map8",
       "address": "0x52924",
       "category": "data",
@@ -5082,6 +6285,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52936_map8",
+      "address": "0x52938",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5166,12 +6378,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash5295e_u8a",
+      "address": "0x52960",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5296a_u8a",
       "address": "0x5296a",
       "category": "data",
       "data_type": "uint8_t",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5296a_u8a",
+      "address": "0x5296c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5186,12 +6416,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_air_density_vs_iat_2dmap8",
+      "address": "0x52978",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52982_map8",
       "address": "0x52982",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52982_map8",
+      "address": "0x52984",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5212,6 +6460,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5299e_map8",
+      "address": "0x529a0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5306,12 +6563,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash52a4e_map8",
+      "address": "0x52a50",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52a5e_map8",
       "address": "0x52a5e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52a5e_map8",
+      "address": "0x52a60",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5326,12 +6601,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash52a6a_map8",
+      "address": "0x52a6c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52a7a_map16",
       "address": "0x52a7a",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52a7a_map16",
+      "address": "0x52a7c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5366,12 +6659,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash52aa2_map8",
+      "address": "0x52aa4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52aae_map8",
       "address": "0x52aae",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52aae_zero_map8",
+      "address": "0x52ab0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5386,12 +6697,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash52aba_map8",
+      "address": "0x52abc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52aca_map8",
       "address": "0x52aca",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52aca_map8",
+      "address": "0x52acc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5426,6 +6755,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash52afa_map8",
+      "address": "0x52afc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52b0c_map8",
       "address": "0x52b0c",
       "category": "data",
@@ -5442,6 +6780,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52b1e_map8",
+      "address": "0x52b20",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5506,6 +6853,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_iat_spark_compensation_activation_load_vs_rpm_2dmap8",
+      "address": "0x52b74",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52b82_map8",
       "address": "0x52b82",
       "category": "data",
@@ -5516,12 +6872,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash52b82_map8",
+      "address": "0x52b84",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52b8e_map8",
       "address": "0x52b8e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52b8e_map8",
+      "address": "0x52b90",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5556,6 +6930,33 @@
       "timestamp": ""
     },
     {
+      "name": "flash52bd0_map8",
+      "address": "0x52bd0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52bdc_map8",
+      "address": "0x52bdc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52be8_map8",
+      "address": "0x52be8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52bf4_map8",
       "address": "0x52bf4",
       "category": "data",
@@ -5586,12 +6987,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash52c0e_map8",
+      "address": "0x52c10",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52c1a_map8",
       "address": "0x52c1a",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52c1a_map8",
+      "address": "0x52c1c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5616,6 +7035,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash52c52_map8",
+      "address": "0x52c54",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52c64_map8",
       "address": "0x52c64",
       "category": "data",
@@ -5636,6 +7064,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash52cc6_map8",
+      "address": "0x52cc8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52cd4_map8",
       "address": "0x52cd4",
       "category": "data",
@@ -5652,6 +7089,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash52ce6_map8",
+      "address": "0x52ce8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5786,6 +7232,24 @@
       "timestamp": ""
     },
     {
+      "name": "flash_oxygen_trim_min_vs_coolant_2dmap8",
+      "address": "0x52fa4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_oxygen_trim_max_vs_coolant_2dmap8",
+      "address": "0x52fb0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash52fbc_map8",
       "address": "0x52fbc",
       "category": "data",
@@ -5826,6 +7290,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_coolant_temp_idle_compensation_2dmap8",
+      "address": "0x53140",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5314a_map8",
       "address": "0x5314a",
       "category": "data",
@@ -5836,12 +7309,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash5314a_map8",
+      "address": "0x5314c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53164_map8",
       "address": "0x53156",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53156_map8",
+      "address": "0x53158",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5866,12 +7357,39 @@
       "timestamp": ""
     },
     {
+      "name": "flash53172_map8",
+      "address": "0x53174",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash531c2_map8",
+      "address": "0x531c4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash531ce_map8",
       "address": "0x531ce",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash531ce_map8",
+      "address": "0x531d0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5896,12 +7414,39 @@
       "timestamp": ""
     },
     {
+      "name": "flash53392_map8",
+      "address": "0x53394",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_isv_to_target_throttle_position_2dmap16",
+      "address": "0x533d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53446_map16",
       "address": "0x53446",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53446_map16",
+      "address": "0x53448",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5916,12 +7461,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash53482_map16",
+      "address": "0x53484",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash534be_map8",
       "address": "0x534be",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash534be_map8",
+      "address": "0x534c0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5936,6 +7499,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash534de_map8",
+      "address": "0x534e0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53516_map8",
       "address": "0x53516",
       "category": "data",
@@ -5946,12 +7518,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash53516_map8",
+      "address": "0x53518",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53539_u8a",
       "address": "0x53539",
       "category": "data",
       "data_type": "uint8_t",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53539_u8a",
+      "address": "0x5353c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5976,6 +7566,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash5357a_u8a",
+      "address": "0x5357c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53580_u8a",
       "address": "0x53580",
       "category": "data",
@@ -5992,6 +7591,15 @@
       "data_type": "uint8_t",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53586_u8a",
+      "address": "0x53588",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6036,12 +7644,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash535d6_map8",
+      "address": "0x535d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash536ee_map8",
       "address": "0x536ee",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash536ee_map8",
+      "address": "0x536f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6056,12 +7682,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash53806_map8",
+      "address": "0x53808",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash538ce_map8",
       "address": "0x538ce",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash538ce_map8",
+      "address": "0x538d0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6076,12 +7720,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash539e6_map8",
+      "address": "0x539e8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53afe_map8",
       "address": "0x53afe",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53afe_map8",
+      "address": "0x53b00",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6096,12 +7758,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash53bc6_map8",
+      "address": "0x53bc8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53cde_map8",
       "address": "0x53cde",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53cde_map8",
+      "address": "0x53ce0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6116,12 +7796,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash53df6_map8",
+      "address": "0x53df8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash53ebe_map8",
       "address": "0x53ebe",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash53ebe_map8",
+      "address": "0x53ec0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6136,6 +7834,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash53fa6_map8",
+      "address": "0x53fa8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5408e_map8",
       "address": "0x5408e",
       "category": "data",
@@ -6146,12 +7853,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash5408e_map8",
+      "address": "0x54090",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash540be_map8",
       "address": "0x540be",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash540be_map8",
+      "address": "0x540c0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6176,6 +7901,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash54202_map8",
+      "address": "0x54204",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54258_u8a",
       "address": "0x54258",
       "category": "data",
@@ -6192,6 +7926,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5426a_map8",
+      "address": "0x5426c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6216,12 +7959,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash54376_map8",
+      "address": "0x54378",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54388_map8",
       "address": "0x54388",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54396_map16",
+      "address": "0x54398",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6236,6 +7997,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_fuel_level_sensor_2dmap1616",
+      "address": "0x543b0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash543de_map8",
       "address": "0x543de",
       "category": "data",
@@ -6246,12 +8016,39 @@
       "timestamp": ""
     },
     {
+      "name": "flash543de_map8",
+      "address": "0x543e0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash543f0_map8",
+      "address": "0x543f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54402_map8",
       "address": "0x54402",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54402_map8",
+      "address": "0x54404",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6296,6 +8093,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash54437_u8a",
+      "address": "0x54438",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5443c_map8",
       "address": "0x5443c",
       "category": "data",
@@ -6336,12 +8142,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash545ca_map8",
+      "address": "0x545cc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54646_map16",
       "address": "0x54646",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54646_map8",
+      "address": "0x54648",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6356,12 +8180,39 @@
       "timestamp": ""
     },
     {
+      "name": "flash54652_map8",
+      "address": "0x54654",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5465e_map8",
       "address": "0x5465e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5465e_map8",
+      "address": "0x54660",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54776_map8",
+      "address": "0x54778",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6376,12 +8227,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash54782_map8",
+      "address": "0x54784",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5478e_map8",
       "address": "0x5478e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5478e_map8",
+      "address": "0x54790",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6396,12 +8265,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash5479a_map8",
+      "address": "0x5479c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash547a6_map8",
       "address": "0x547a6",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash547a6_map8",
+      "address": "0x547a8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6416,12 +8303,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash547b2_map8",
+      "address": "0x547b4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash547be_map8",
       "address": "0x547be",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash547be_map8",
+      "address": "0x547c0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6436,12 +8341,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash547ca_map8",
+      "address": "0x547cc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash547da_map8",
       "address": "0x547da",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash547da_map8",
+      "address": "0x547dc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6456,12 +8379,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash547e6_map8",
+      "address": "0x547e8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash547f2_map8",
       "address": "0x547f2",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash547f2_map8",
+      "address": "0x547f4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6476,12 +8417,39 @@
       "timestamp": ""
     },
     {
+      "name": "flash547fe_map8",
+      "address": "0x54800",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash5480e_map8",
       "address": "0x5480e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5480e_map8",
+      "address": "0x54810",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash5481a_map8",
+      "address": "0x5481c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6516,6 +8484,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash54952_map16",
+      "address": "0x54954",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54974_map8",
       "address": "0x54974",
       "category": "data",
@@ -6532,6 +8509,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54986_map8",
+      "address": "0x54988",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6576,6 +8562,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash54b46_map8",
+      "address": "0x54b48",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54b58_map8",
       "address": "0x54b58",
       "category": "data",
@@ -6596,12 +8591,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash54b6a_map8",
+      "address": "0x54b6c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54bd6_map8",
       "address": "0x54bd6",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54bd6_map8",
+      "address": "0x54bd8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6616,12 +8629,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash54be6_map8",
+      "address": "0x54be8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54bf4_map8",
       "address": "0x54bf4",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54c02_map8",
+      "address": "0x54c04",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6636,12 +8667,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash54c2e_map8",
+      "address": "0x54c30",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54c4e_map8",
       "address": "0x54c4e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54c4e_map8",
+      "address": "0x54c50",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6656,12 +8705,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash54c56_map8",
+      "address": "0x54c58",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash54e02_map8",
       "address": "0x54e02",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54e02_map8",
+      "address": "0x54e04",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6682,6 +8749,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash54e26_map8",
+      "address": "0x54e28",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6776,6 +8852,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash5500e_map16",
+      "address": "0x55010",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55078_map8",
       "address": "0x55078",
       "category": "data",
@@ -6826,12 +8911,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55c9e_map8",
+      "address": "0x55ca0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55caa_map8",
       "address": "0x55caa",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55caa_map8",
+      "address": "0x55cac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6846,12 +8949,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55cf2_map8",
+      "address": "0x55cf4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55d3a_map8",
       "address": "0x55d3a",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55d3a_map8",
+      "address": "0x55d3c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6866,12 +8987,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55d46_zero_map8",
+      "address": "0x55d48",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55d52_map8",
       "address": "0x55d52",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55d52_zero_map8",
+      "address": "0x55d54",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6886,12 +9025,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55d5e_map8",
+      "address": "0x55d60",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55d6e_map8",
       "address": "0x55d6e",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55d6e_map8",
+      "address": "0x55d70",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6906,12 +9063,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55d7a_map8",
+      "address": "0x55d7c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55d86_map8",
       "address": "0x55d86",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55d86_map8",
+      "address": "0x55d88",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6926,6 +9101,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash55d92_map8",
+      "address": "0x55d94",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55d9e_map8",
       "address": "0x55d9e",
       "category": "data",
@@ -6936,12 +9120,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55d9e_map8",
+      "address": "0x55da0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55daa_map16",
       "address": "0x55daa",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55daa_map16",
+      "address": "0x55dac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6966,12 +9168,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash_boost_control_target_load_high_gear_3dmap8",
+      "address": "0x55df4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55df2_map8",
       "address": "0x55e54",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_wastegate_duty_compensation_vs_iat_2dmap8",
+      "address": "0x55eb8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -6986,12 +9206,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash55ec2_map8",
+      "address": "0x55ec4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash55ece_map16",
       "address": "0x55ece",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash55ece_map16",
+      "address": "0x55ed0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7112,6 +9350,16 @@
       "data_type": "uint16_t",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "boundary",
+      "address": "0x56000",
+      "category": "data",
+      "data_type": "some important",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7406,12 +9654,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash5625e_map16",
+      "address": "0x56260",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash563ee_map16",
       "address": "0x563ee",
       "category": "data",
       "data_type": "value_map16_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash563ee_map16",
+      "address": "0x563f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7426,12 +9692,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash565b2_map16",
+      "address": "0x565b4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash56776_map8",
       "address": "0x56776",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash56776_map8",
+      "address": "0x56778",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7516,6 +9800,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash56a12_map8",
+      "address": "0x56a14",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash56ab4_map8",
       "address": "0x56ab4",
       "category": "data",
@@ -7532,6 +9825,15 @@
       "data_type": "map8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash56b0a_axis",
+      "address": "0x56b0c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7566,12 +9868,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash56b7a_map8",
+      "address": "0x56b7c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash56bb6_map8",
       "address": "0x56bb6",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash56bb6_map8",
+      "address": "0x56bb8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7606,6 +9926,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash56bea_map",
+      "address": "0x56bec",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash56c2e_map8",
       "address": "0x56c2e",
       "category": "data",
@@ -7616,12 +9945,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash56c2e_map8",
+      "address": "0x56c30",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash56c72_axis",
       "address": "0x56c72",
       "category": "data",
       "data_type": "map8f8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash56c72_axis",
+      "address": "0x56c74",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7646,6 +9993,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash56d9a_map16",
+      "address": "0x56d9c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash570ee_map16",
       "address": "0x570ee",
       "category": "data",
@@ -7656,12 +10012,30 @@
       "timestamp": ""
     },
     {
+      "name": "flash570ee_map16",
+      "address": "0x570f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash572b2_map8",
       "address": "0x572b2",
       "category": "data",
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash572b2_map8",
+      "address": "0x572b4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -7732,6 +10106,15 @@
       "data_type": "value16_map8_description",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash576f2_map8",
+      "address": "0x576f4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -16365,6 +18748,87 @@
   ],
   "functions": [
     {
+      "name": "flasher_program_data",
+      "entry_point": "0x320",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "int16_t",
+      "params": [
+        {
+          "name": "p_source",
+          "storage": "R0",
+          "type": "void *"
+        },
+        {
+          "name": "p_destination",
+          "storage": "R1",
+          "type": "void *"
+        },
+        {
+          "name": "p_size",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "erase_flash_range",
+      "entry_point": "0x620",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p_begin",
+          "storage": "R0",
+          "type": "void *"
+        },
+        {
+          "name": "p_size",
+          "storage": "R1",
+          "type": "unsigned"
+        }
+      ]
+    },
+    {
+      "name": "flash_block_from_address",
+      "entry_point": "0x724",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint32_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "flashing_init",
+      "entry_point": "0x768",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "int"
+    },
+    {
+      "name": "flashing_deinit",
+      "entry_point": "0x79c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "int"
+    },
+    {
       "name": "program_page_memfun",
       "entry_point": "0x7c8",
       "confidence": "high",
@@ -16735,6 +19199,15 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "call18a0",
+      "entry_point": "0x18a0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "can_tx1_id0_fill_and_send2",
@@ -17240,6 +19713,150 @@
       "entry_point": "0x3270",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_327c",
+      "entry_point": "0x327c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_3288",
+      "entry_point": "0x3288",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_3294",
+      "entry_point": "0x3294",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_32a0",
+      "entry_point": "0x32a0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_32ac",
+      "entry_point": "0x32ac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_1_32b8",
+      "entry_point": "0x32b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_32c4",
+      "entry_point": "0x32c4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_32d0",
+      "entry_point": "0x32d0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_1_32dc",
+      "entry_point": "0x32dc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_32e8",
+      "entry_point": "0x32e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_32f4",
+      "entry_point": "0x32f4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_3300",
+      "entry_point": "0x3300",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_330c",
+      "entry_point": "0x330c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_1_3318",
+      "entry_point": "0x3318",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_3324",
+      "entry_point": "0x3324",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_1_3330",
+      "entry_point": "0x3330",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_333c",
+      "entry_point": "0x333c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "setfp3100_2_3348",
+      "entry_point": "0x3348",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -17970,6 +20587,15 @@
       "return_type": "void"
     },
     {
+      "name": "bootloader_cobd_process",
+      "entry_point": "0x4d58",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "bootloader_main_cobd_process",
       "entry_point": "0x4ea8",
       "confidence": "high",
@@ -17992,6 +20618,112 @@
       "entry_point": "0x5010",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can_get_fp52_u16",
+      "entry_point": "0x5088",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_read_ecu_identification",
+      "entry_point": "0x5148",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_security_access",
+      "entry_point": "0x52fc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_communication_stop",
+      "entry_point": "0x5680",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_communication_resume",
+      "entry_point": "0x5728",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "bootloader_cobd_routine_control",
+      "entry_point": "0x57d0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_request_download",
+      "entry_point": "0x5cd0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_transfer_data",
+      "entry_point": "0x5f9c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "encode_inplace",
+      "entry_point": "0x60ac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint8_t *"
+        }
+      ]
+    },
+    {
+      "name": "cobd_request_transfer_exit",
+      "entry_point": "0x60e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_tester_present",
+      "entry_point": "0x6150",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -18449,6 +21181,22 @@
           "name": "v",
           "storage": "R0",
           "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_32to16",
+      "entry_point": "0x76a8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "v",
+          "storage": "R0",
+          "type": "uint32_t"
         }
       ]
     },
@@ -19936,6 +22684,26 @@
       ]
     },
     {
+      "name": "top03_sync_high",
+      "entry_point": "0xc0ec",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "params": [
+        {
+          "name": "mask",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "deadline",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
       "name": "top03_disable_counter",
       "entry_point": "0xc2ec",
       "confidence": "high",
@@ -20325,6 +23093,31 @@
         },
         {
           "name": "valmax",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "calld7e8",
+      "entry_point": "0xd7e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2",
           "storage": "R2",
           "type": "uint16_t"
         }
@@ -21249,6 +24042,15 @@
       "timestamp": ""
     },
     {
+      "name": "baro_pressure_sensor_failure",
+      "entry_point": "0x118b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
       "name": "call11904",
       "entry_point": "0x11904",
       "confidence": "high",
@@ -21888,6 +24690,15 @@
       "timestamp": ""
     },
     {
+      "name": "advanced_engine_state_update",
+      "entry_point": "0x14c00",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "save_some_flags_14c6c",
       "entry_point": "0x14c6c",
       "confidence": "high",
@@ -22077,6 +24888,15 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "update_run_state_flags_extra",
+      "entry_point": "0x15558",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "update_fp12876_b4",
@@ -22635,6 +25455,22 @@
       "timestamp": ""
     },
     {
+      "name": "update_afr_target_final",
+      "entry_point": "0x17a40",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const *"
+        }
+      ]
+    },
+    {
       "name": "call17be4",
       "entry_point": "0x17be4",
       "confidence": "high",
@@ -22733,6 +25569,38 @@
           "name": "ptr",
           "storage": "R0",
           "type": "const some_large_struct *"
+        }
+      ]
+    },
+    {
+      "name": "update_stft_loop_enter_value",
+      "entry_point": "0x180c8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const head *"
+        }
+      ]
+    },
+    {
+      "name": "get_stft_reinit_command",
+      "entry_point": "0x18314",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const cylinder_bank *"
         }
       ]
     },
@@ -23412,6 +26280,15 @@
       "timestamp": ""
     },
     {
+      "name": "suspected_idle_control",
+      "entry_point": "0x1b77c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "math_call_1b844",
       "entry_point": "0x1b844",
       "confidence": "high",
@@ -23727,12 +26604,99 @@
       "return_type": "uint16_t"
     },
     {
+      "name": "get_updated_ac_idle_comp_base_min",
+      "entry_point": "0x1d09c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "map_isv_to_etc_extra_smth",
+      "entry_point": "0x1dcb0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_apps_limiting_stabilizer_flags",
+      "entry_point": "0x1e3e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_target_throttle_position_asc_processed",
+      "entry_point": "0x1e544",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_torque_target_throttle_position",
+      "entry_point": "0x1e630",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p_target",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p_current",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "get_3d_mapped_1e7f4",
+      "entry_point": "0x1e7f4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "x",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "y",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
       "name": "call1ed40",
       "entry_point": "0x1ed40",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "update_support_outputs",
+      "entry_point": "0x1ee98",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "get_3d_mapped_1e7f4",
@@ -23756,12 +26720,73 @@
       ]
     },
     {
+      "name": "call1f320",
+      "entry_point": "0x1f320",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "ac_control",
+      "entry_point": "0x1f358",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "boost_control",
+      "entry_point": "0x1f7d0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "update_fp12106",
       "entry_point": "0x1fc04",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "wastegate_solenoid_duty_update",
+      "entry_point": "0x1fc44",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "base_duty",
+          "storage": "R0",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "fuel_pump_control",
+      "entry_point": "0x1fd00",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "is_fuel_pump_active",
+      "entry_point": "0x1fd34",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
     },
     {
       "name": "reset_fp13274_b6",
@@ -23788,6 +26813,15 @@
       "timestamp": ""
     },
     {
+      "name": "basic_test_with_mil_update",
+      "entry_point": "0x20148",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "reset_call_2016c",
       "entry_point": "0x2016c",
       "confidence": "high",
@@ -23800,6 +26834,23 @@
       "entry_point": "0x20218",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_debug_flags",
+      "entry_point": "0x20260",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call20678",
+      "entry_point": "0x20678",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -23873,10 +26924,181 @@
       "return_type": "uint8_t"
     },
     {
+      "name": "call20d18",
+      "entry_point": "0x20d18",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20d38",
+      "entry_point": "0x20d38",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20d6c",
+      "entry_point": "0x20d6c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20df8",
+      "entry_point": "0x20df8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20dfc",
+      "entry_point": "0x20dfc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20e00",
+      "entry_point": "0x20e00",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20e04",
+      "entry_point": "0x20e04",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
       "name": "flaggy_checks_20e08",
       "entry_point": "0x20e08",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20e4c",
+      "entry_point": "0x20e4c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20e50",
+      "entry_point": "0x20e50",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20e78",
+      "entry_point": "0x20e78",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20e94",
+      "entry_point": "0x20e94",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20eb0",
+      "entry_point": "0x20eb0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20eb4",
+      "entry_point": "0x20eb4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20ee8",
+      "entry_point": "0x20ee8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20f04",
+      "entry_point": "0x20f04",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return2_20f20",
+      "entry_point": "0x20f20",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "callc20f24",
+      "entry_point": "0x20f24",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "return1_20f40",
+      "entry_point": "0x20f40",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call20f44",
+      "entry_point": "0x20f44",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": "",
       "return_type": "uint16_t"
@@ -23890,12 +27112,48 @@
       "timestamp": ""
     },
     {
+      "name": "update_mil",
+      "entry_point": "0x215f0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "debug_mil_condition",
+      "entry_point": "0x21734",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "critical_mil_flash",
+      "entry_point": "0x21910",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
       "name": "call21aac",
       "entry_point": "0x21aac",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "sio0_reply_mut2",
+      "entry_point": "0x21b80",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call21f64",
@@ -23908,6 +27166,22 @@
       "params": [
         {
           "name": "val",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "mut_request_data_or_actuators",
+      "entry_point": "0x21fac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
           "storage": "R0",
           "type": "uint16_t"
         }
@@ -23963,12 +27237,39 @@
       "timestamp": ""
     },
     {
+      "name": "sio0_5baud_init_step",
+      "entry_point": "0x2266c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "call22c38",
       "entry_point": "0x22c38",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "sio0_fill_buffer_default_data",
+      "entry_point": "0x22cbc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_sio0_mut_protocol",
+      "entry_point": "0x22e04",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call23124",
@@ -24508,6 +27809,21 @@
       "return_type": "uint16_t"
     },
     {
+      "name": "call24c80",
+      "entry_point": "0x24c80",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
       "name": "call24ea8",
       "entry_point": "0x24ea8",
       "confidence": "high",
@@ -24552,6 +27868,27 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "calc_ipw_shaft_int",
+      "entry_point": "0x25218",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
     },
     {
       "name": "pure_calc_26124",
@@ -24806,12 +28143,84 @@
       "timestamp": ""
     },
     {
+      "name": "can0_update_bus_state_and_data",
+      "entry_point": "0x2ba70",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_update_bus_state",
+      "entry_point": "0x2ba80",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_update_rx_slots_state",
+      "entry_point": "0x2bb84",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "can_tx2_first_request6",
       "entry_point": "0x2c4d0",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id5_update",
+      "entry_point": "0x2c56c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can_tx2_id4_update",
+      "entry_point": "0x2c688",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can_tx2_id3_dash_update",
+      "entry_point": "0x2c738",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can_tx2_id2_torque_feedback_update",
+      "entry_point": "0x2c7fc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can_tx2_id0_update",
+      "entry_point": "0x2c8c0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "nop2c9d8",
@@ -25242,12 +28651,66 @@
       "timestamp": ""
     },
     {
+      "name": "update_active_faults",
+      "entry_point": "0x33be4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call34170",
+      "entry_point": "0x34170",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "smth *"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t *"
+        }
+      ]
+    },
+    {
       "name": "reset_call341cc",
       "entry_point": "0x341cc",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "call3441c",
+      "entry_point": "0x3441c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "params": [
+        {
+          "name": "mask",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "offset",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "unused",
+          "storage": "R2",
+          "type": "uint32_t"
+        }
+      ]
     },
     {
       "name": "call34458",
@@ -25303,12 +28766,38 @@
       "timestamp": ""
     },
     {
+      "name": "update_sio2_dtc",
+      "entry_point": "0x34b24",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "set_trustful_check_faults",
+      "entry_point": "0x34b84",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "call345c4",
       "entry_point": "0x354c4",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "o2_front_state_check_fault",
+      "entry_point": "0x36b30",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call37168",
@@ -25319,12 +28808,57 @@
       "timestamp": ""
     },
     {
+      "name": "userspace_main_cobd_process",
+      "entry_point": "0x37428",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_service21hex",
+      "entry_point": "0x3776c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "voic"
+    },
+    {
+      "name": "cobd_input_output_control_by_local_id",
+      "entry_point": "0x381a4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "userspace_cobd_routine_control",
+      "entry_point": "0x383dc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "call388b0",
       "entry_point": "0x388b0",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "can_write_eeprom_data_call38904",
+      "entry_point": "0x38904",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call38d64",
@@ -25342,6 +28876,24 @@
       "session": "",
       "timestamp": "",
       "return_type": "uint8_t"
+    },
+    {
+      "name": "cobd_clear_diagnostic_information",
+      "entry_point": "0x38dd8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cobd_request_current_powertrain_diagnostic_data",
+      "entry_point": "0x38f48",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call39000",
@@ -25373,12 +28925,124 @@
       "return_type": "uint8_t"
     },
     {
+      "name": "cobd_request_powertrain_freeze_frame_data",
+      "entry_point": "0x393d8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "obd_get_dtcs",
+      "entry_point": "0x398e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call39994",
+      "entry_point": "0x39994",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "p0"
+        }
+      ]
+    },
+    {
+      "name": "obd_clear_dtc",
+      "entry_point": "0x39af4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call39bac",
+      "entry_point": "0x39bac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint8_t"
+        }
+      ]
+    },
+    {
+      "name": "cobd_request_vehicle_information",
+      "entry_point": "0x39ef0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_vin_from_eeprom",
+      "entry_point": "0x39fdc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_calid_from_eeprom",
+      "entry_point": "0x3a028",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_cal_verification_number",
+      "entry_point": "0x3a0d4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "call3a1b8",
       "entry_point": "0x3a18c",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "call3a1b8",
+      "entry_point": "0x3a1b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_conditionally_set_bus_off_dtc",
+      "entry_point": "0x3a1c8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call3a3d0",
@@ -25412,6 +29076,31 @@
       ]
     },
     {
+      "name": "call3aad0",
+      "entry_point": "0x3aad0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p_ptr",
+          "storage": "R0",
+          "type": "const smth *"
+        }
+      ]
+    },
+    {
+      "name": "sio0_reply_obd",
+      "entry_point": "0x3b644",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "call3b654",
       "entry_point": "0x3b654",
       "confidence": "high",
@@ -25424,6 +29113,22 @@
           "name": "ptr",
           "storage": "R0",
           "type": "const smth *"
+        }
+      ]
+    },
+    {
+      "name": "obd_get_stft",
+      "entry_point": "0x3b6ac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const *"
         }
       ]
     },
@@ -25444,12 +29149,172 @@
       ]
     },
     {
+      "name": "obd_get_o2_front_voltage",
+      "entry_point": "0x3b6d8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const *"
+        }
+      ]
+    },
+    {
+      "name": "obd_get_o2_rear_voltage",
+      "entry_point": "0x3b6f0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const *"
+        }
+      ]
+    },
+    {
+      "name": "obd_get_calculated_engine_load",
+      "entry_point": "0x3b708",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "obd_get_oxygen_sensors_present",
+      "entry_point": "0x3b710",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
       "name": "reset_call_3bc68",
       "entry_point": "0x3bc68",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "call3c108",
+      "entry_point": "0x3c108",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint8_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "call3c140",
+      "entry_point": "0x3c140",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint8_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "call3c270",
+      "entry_point": "0x3c270",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p_buffer",
+          "storage": "R0",
+          "type": "uint8_t *"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "call3c424",
+      "entry_point": "0x3c424",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "int",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint8_t *"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2",
+          "storage": "R2",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "p3",
+          "storage": "R3",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "call3c59c",
+      "entry_point": "0x3c59c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint8_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
     },
     {
       "name": "call3ce28",
@@ -25474,6 +29339,15 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "mjto5_odd_interrupt_sio2_control",
+      "entry_point": "0x3d400",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "call3da18",
@@ -25630,6 +29504,15 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "immo_main_call",
+      "entry_point": "0x40cb8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "half_byte_swap",
@@ -26464,6 +30347,14 @@
       "timestamp": ""
     },
     {
+      "name": "nop49ce4",
+      "entry_point": "0x49ce4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "eeprom_tricky_copy_from_memory_to_data2",
       "entry_point": "0x49d90",
       "confidence": "high",
@@ -26780,12 +30671,48 @@
       "timestamp": ""
     },
     {
+      "name": "calc_purge_control_duty",
+      "entry_point": "0x4b8c8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
       "name": "call4b964",
       "entry_point": "0x4b964",
       "confidence": "high",
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "mode_disabled_update_fuel_level_lamp",
+      "entry_point": "0x4cfcc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_temperature_conditions_fuel_pressure_solenoid_start_flags",
+      "entry_point": "0x4d10c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_gpio1b2",
+      "entry_point": "0x4d178",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "reset_fp11936_bits_4d188",
@@ -26810,6 +30737,33 @@
       "source": "colt_flash",
       "session": "",
       "timestamp": ""
+    },
+    {
+      "name": "fan_control",
+      "entry_point": "0x4d95c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_ac_working_lamp",
+      "entry_point": "0x4dfc0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cdbg_log_call",
+      "entry_point": "0x4dfe8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
     },
     {
       "name": "step_check_used_stack_memory",
@@ -27212,6 +31166,14 @@
       "entry_point": "0x5a648",
       "confidence": "high",
       "source": "colt_flash",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "call5ae00",
+      "entry_point": "0x5ae00",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },

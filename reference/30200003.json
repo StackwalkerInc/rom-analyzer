@@ -4,11 +4,74 @@
   "rom_sha256": "fbc9d10ad84390147398de8fd0b7001fb250966847a8544d3035a0feae4e85a6",
   "symbols": [
     {
+      "name": "flash_fuel_trims_disable_load_min_vs_rpm_low_octane_2dmap8",
+      "address": "0x284c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_open_loop_load_vs_rpm_low_octane_2dmap8",
+      "address": "0x2860",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_open_loop_tps_vs_rpm_i1b6on_2dmap8",
+      "address": "0x2870",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_open_loop_tps_vs_rpm_i1b6off_2dmap8",
+      "address": "0x2884",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash28c4_iat_2dmap8",
+      "address": "0x28c4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_unused_hot_start_start_ipw_vs_coolant_2dmap16",
+      "address": "0x2a2c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_coolant_temp_spark_compensation_2dmap8",
+      "address": "0x2b24",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_combustion_torque_output_3dmap16",
       "address": "0x380c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -22,11 +85,47 @@
       "timestamp": ""
     },
     {
+      "name": "flash39d6_3dmap8",
+      "address": "0x39d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash3a24_3dmap16",
+      "address": "0x3a24",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash3c4e_3dmap8",
+      "address": "0x3c50",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_torque_loss_vs_rpm_2dmap8",
       "address": "0x3caa",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_torque_loss_vs_rpm_2dmap8",
+      "address": "0x3cac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -67,11 +166,218 @@
       "timestamp": ""
     },
     {
+      "name": "flash_alternator_torque_loss_3dmap8",
+      "address": "0x3dfc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_target_torque_rpm_x_ttp_3dmap8",
       "address": "0x4680",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_low_gear_apps_limit_vs_rpm_2dmap8",
+      "address": "0x4af4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_high_octane_mivec_advance_max_3dmap8",
+      "address": "0x4b50",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_low_octane_mivec_advance_max_3dmap8",
+      "address": "0x4cb0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_warmup_retard_mivec_advance_max_3dmap8",
+      "address": "0x4e0c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_high_octane_mivec_advance_target_3dmap8",
+      "address": "0x5228",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_low_octane_mivec_advance_target_3dmap8",
+      "address": "0x5384",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_warmup_retard_mivec_advance_target_3dmap8",
+      "address": "0x54e4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_high_octane_mivec_advance_min_3dmap8",
+      "address": "0x5640",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_low_octane_mivec_advance_min_3dmap8",
+      "address": "0x57a0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_warmup_retard_mivec_advance_min_3dmap8",
+      "address": "0x58fc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_high_octane_fuel_3dmap8",
+      "address": "0x5a5c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_low_octane_fuel_3dmap8",
+      "address": "0x5b60",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_start_ipw_vs_coolant_2dmap16",
+      "address": "0x5e64",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_mivec_target_3dmap8",
+      "address": "0x6058",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_apps_non_neutral_spark_compensation_3dmap8",
+      "address": "0x66c0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_maf_charge_max_base_vs_rpm_2dmap16",
+      "address": "0x6a90",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_wastegate_correction_vs_tps_limit_2dmap8",
+      "address": "0x6c7c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_wastegate_duty_vs_load_error_correction_2dmap8",
+      "address": "0x6c8c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_load_limit_vs_rpm_2dmap8",
+      "address": "0x6d30",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_maf_tps_high_2dmap8",
+      "address": "0x8570",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_maf_load_high_2dmap16",
+      "address": "0x8584",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_maf_apps_high_2dmap8",
+      "address": "0x85ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -85,11 +391,65 @@
       "timestamp": ""
     },
     {
+      "name": "flash_target_throttle_position_rpm_x_torque_3dmap16",
+      "address": "0x867c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8a18_2dmap8",
+      "address": "0x8a18",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8a36_2dmap16",
+      "address": "0x8a38",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_fuel_trims_disable_load_min_vs_rpm_high_octane_2dmap8",
+      "address": "0x8c94",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_open_loop_load_vs_rpm_high_octane_2dmap8",
+      "address": "0x8ca4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_acceleration_gear_shift_apps_limit_low_gear_nonneutral_2dmap8",
       "address": "0x8cb6",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_acceleration_gear_shift_apps_limit_low_gear_nonneutral_2dmap8",
+      "address": "0x8cb8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -157,11 +517,65 @@
       "timestamp": ""
     },
     {
+      "name": "flash_wastegate_base_duty_low_gear_3dmap8",
+      "address": "0x9bf4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_wastegate_base_duty_high_gear_3dmap8",
+      "address": "0x9c7c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash9f28_3dmap8",
+      "address": "0x9f28",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasha080_3dmap8",
+      "address": "0xa080",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasha436_constff_2dmap8",
+      "address": "0xa438",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_overboost_on_load8_vs_rpm_2dmap8",
       "address": "0xab1a",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_overboost_on_load8_vs_rpm_2dmap8",
+      "address": "0xab1c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -175,11 +589,47 @@
       "timestamp": ""
     },
     {
+      "name": "flash_overboost_off_load8_vs_rpm_2dmap8",
+      "address": "0xab2c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_overboost_off_wastegate_duty_vs_rpm_2dmap8",
       "address": "0xab3a",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_overboost_off_wastegate_duty_vs_rpm_2dmap8",
+      "address": "0xab3c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashab4a__unused_3dmap8",
+      "address": "0xab4c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashac94_unused_3dmap8",
+      "address": "0xac94",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -193,11 +643,20 @@
       "timestamp": ""
     },
     {
+      "name": "flash_boost_target_load_low_gear_3dmap8",
+      "address": "0xade0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_boost_target_load_high_gear_3dmap8",
       "address": "0xae64",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -211,11 +670,47 @@
       "timestamp": ""
     },
     {
+      "name": "flash_wastegate_duty_compensation_vs_iat_2dmap8",
+      "address": "0xaeec",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashb08a_2dmap8",
+      "address": "0xb08c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_afterstart_warmup_target_idle_rpm_vs_coolant_2dmap8",
+      "address": "0xb150",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_basic_rpm_axis",
       "address": "0xb234",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_open_loop_rpm_axis",
+      "address": "0xb250",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -229,6 +724,15 @@
       "timestamp": ""
     },
     {
+      "name": "flash_apps_limiting_stabilizer_rpm_axis",
+      "address": "0xb28c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_fuel_map_rpm_axis",
       "address": "0xb3e6",
       "category": "data",
@@ -238,11 +742,47 @@
       "timestamp": ""
     },
     {
+      "name": "flash_fuel_map_rpm_axis",
+      "address": "0xb3e8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_fuel_map_load_axis",
+      "address": "0xb428",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_main_spark_maps_rpm_axis",
       "address": "0xb47c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_main_spark_maps_load_axis",
+      "address": "0xb4a8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashb57c_axis",
+      "address": "0xb57c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -256,11 +796,38 @@
       "timestamp": ""
     },
     {
+      "name": "flash_ttp_rpm_axis",
+      "address": "0xb598",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_internal_torque_axis",
       "address": "0xb5ba",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_internal_torque_axis",
+      "address": "0xb5bc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashb6a2_axis",
+      "address": "0xb6a4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -274,11 +841,11 @@
       "timestamp": ""
     },
     {
-      "name": "flash_torque_calculations_coolant_axis",
+      "name": "flash_b898_coolant_axis",
       "address": "0xb898",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -287,7 +854,7 @@
       "address": "0xb8f4",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -301,11 +868,38 @@
       "timestamp": ""
     },
     {
-      "name": "flash_apps_neutral_torque_rpm_axis",
+      "name": "flash_torque_calculations_rpm_axis",
+      "address": "0xb91c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_low_gear_apps_limit_rpm_axis",
+      "address": "0xb93c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashb958_rpm_axis",
       "address": "0xb958",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_torque_output_calculations_tps_axis",
+      "address": "0xb968",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -314,7 +908,7 @@
       "address": "0xb990",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -324,6 +918,15 @@
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_torque_calculations_ac_pressure_axis",
+      "address": "0xb9ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -346,6 +949,24 @@
       "timestamp": ""
     },
     {
+      "name": "flash_combustion_torque_output_load_axis",
+      "address": "0xba04",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_mivec_target_load_axis",
+      "address": "0xbb3c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_mivec_target_rpm_axis",
       "address": "0xbb66",
       "category": "data",
@@ -355,11 +976,38 @@
       "timestamp": ""
     },
     {
+      "name": "flash_mivec_target_rpm_axis",
+      "address": "0xbb68",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_torque_calculations_ttp_axis",
       "address": "0xbc8c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_apps_non_neutral_spark_compensation_rpm_axis",
+      "address": "0xbef0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_apps_non_neutral_spark_compensation_load_axis",
+      "address": "0xbf00",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -368,7 +1016,34 @@
       "address": "0xc118",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_wastegate_correction_vs_tps_axis",
+      "address": "0xc13c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_boost_control_load_error_axis",
+      "address": "0xc154",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_overload_rpm_axis",
+      "address": "0xc190",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -382,11 +1057,29 @@
       "timestamp": ""
     },
     {
+      "name": "flashc2f6_vsf_axis",
+      "address": "0xc2f8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_maf_calc_rpm_axis",
+      "address": "0xc344",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_apps_limiting_stabilizer_apps_limited_axis",
       "address": "0xc5bc",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -396,6 +1089,177 @@
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_boost_control3d_tps_axis",
+      "address": "0xc608",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashc682_axis",
+      "address": "0xc684",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashc6a8_efa_secondary_speed_safe_axis",
+      "address": "0xc6a8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_idle_coolant_axis",
+      "address": "0xc9f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashcbe6_rpm_axis",
+      "address": "0xcbe8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashcbf8_load_axis",
+      "address": "0xcbf8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flashcc5c_axis",
+      "address": "0xcc5c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_high_octane_fuel_multimap8",
+      "address": "0xcd38",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_low_octane_fuel_multimap8",
+      "address": "0xcd58",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_warmup_retard_mivec_advance_max_multimap8",
+      "address": "0xcd78",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_warmup_retard_mivec_advance_min_multimap8",
+      "address": "0xcd98",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_warmup_retard_mivec_advance_target_multimap8",
+      "address": "0xcdb8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_high_octane_mivec_advance_max_multimap8",
+      "address": "0xce78",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_high_octane_mivec_advance_min_multimap8",
+      "address": "0xce98",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_high_octane_mivec_advance_target_multimap8",
+      "address": "0xceb8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_low_octane_mivec_advance_max_multimap8",
+      "address": "0xced8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_low_octane_mivec_advance_min_multimap8",
+      "address": "0xcef8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_spark_angle_low_octane_mivec_advance_target_multimap8",
+      "address": "0xcf18",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_load_limit_vs_rpm_2dmultimap8",
+      "address": "0xcfd8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -413,7 +1277,121 @@
       "address": "0xd04c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_unused_fast_log_entries_ptru16a",
+      "address": "0x11b28",
+      "category": "data",
+      "data_type": "uint16_t *[6]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash11b40_ptru16a",
+      "address": "0x11b40",
+      "category": "data",
+      "data_type": "uint16_t *[7]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_slot_control_registers_ptru8a",
+      "address": "0x11b5c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_slot_timestamp_ptru16a",
+      "address": "0x11f1c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_init_can0_sid0",
+      "address": "0x11f6c",
+      "category": "data",
+      "data_type": "uint8_t[16]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_init_can0_sid1",
+      "address": "0x11f7c",
+      "category": "data",
+      "data_type": "uint8_t[16]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_cylinder_head",
+      "address": "0x126b0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_trouble_code_table",
+      "address": "0x12bd4",
+      "category": "data",
+      "data_type": "uint16_t[17][16]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_eeprom_data_map",
+      "address": "0x3c004",
+      "category": "data",
+      "data_type": "uint8_t *[256]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_mut_variables_table",
+      "address": "0x3c404",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "to_g16",
+      "address": "0x4f3b4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio0_reply_obd",
+      "address": "0x5ec5c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -427,11 +1405,155 @@
       "timestamp": ""
     },
     {
+      "name": "flash_atf_temp_sensor_axis",
+      "address": "0x81000",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81030_atf_temp_filtered_axis",
+      "address": "0x81030",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81050_atf_temp_filtered_axis",
+      "address": "0x81050",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_at_engine_rpm_avg_axis",
+      "address": "0x8109c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash810c2_tss_to_engine_rpm_ratio_axis",
+      "address": "0x810c4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_at_accel_axis",
+      "address": "0x81108",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_at_accel_avg_axis",
+      "address": "0x81124",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_at_engine_rpm_filtered_axis",
+      "address": "0x81140",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_at_engine_rpm_avg_axis",
+      "address": "0x81164",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_afe_engine_rpm_8kmax_axis",
+      "address": "0x8118c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash811d8_fp1754_u16_axis",
+      "address": "0x811d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_line_pressure_axis",
+      "address": "0x811ec",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_primary_speed_axis",
+      "address": "0x811fc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_primary_speed_axis",
+      "address": "0x81224",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_secondary_speed_safe_axis",
+      "address": "0x81248",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_secondary_speed_safe_axis",
+      "address": "0x81270",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_basic3_secondary_speed_safe_axis",
       "address": "0x8128c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -445,11 +1567,128 @@
       "timestamp": ""
     },
     {
+      "name": "flash_basic4_secondary_speed_safe_axis",
+      "address": "0x812b4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash812e2_axis",
+      "address": "0x812e4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_secondary_speed_smoothed_negdelta_axis",
+      "address": "0x81308",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_secondary_speed_smoothed_negdelta_axis",
+      "address": "0x81314",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_atgear_ratio_safe_lores_avg_axis",
+      "address": "0x81360",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81386_lp_error_axis",
+      "address": "0x81388",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic3_at_accel_avg_axis",
+      "address": "0x813f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_turbine_speed_axis",
+      "address": "0x81420",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8146c_fp2104_u16_axis",
+      "address": "0x8146c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_at_accel_avg_axis",
+      "address": "0x814b8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic3_at_engine_rpm_avg_axis",
+      "address": "0x814d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash814fc_at_accel8_axis",
+      "address": "0x814fc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_atgear_ratio_safe_lores_avg_axis",
+      "address": "0x81524",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_base_lpsd_target_lp_axis",
       "address": "0x8154c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -463,11 +1702,371 @@
       "timestamp": ""
     },
     {
+      "name": "flash_base_lpsd_rpm_axis",
+      "address": "0x81570",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8158c_atf_temp_filtered_axis",
+      "address": "0x8158c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash815b8_atf_temp_filtered_axis",
+      "address": "0x815b8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash815d6_torque_axis",
+      "address": "0x815d8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81608_atf_temp_filtered_axis",
+      "address": "0x81608",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic4_at_engine_rpm_avg_axis",
+      "address": "0x81614",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81626_atgear_ratio_safe_lores_avg_axis",
+      "address": "0x81628",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic2_line_pressure_axis",
+      "address": "0x81650",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic3_line_pressure_axis",
+      "address": "0x81668",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic3_primary_speed_axis",
+      "address": "0x81698",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash816ac_axis",
+      "address": "0x816ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash816e4_fp60_u16_axis",
+      "address": "0x816e4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8173e_secondary_speed_safe_axis",
+      "address": "0x81740",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8176e_at_accel_avg_axis",
+      "address": "0x81770",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8178e_afe_steadystate_torque_output_max_axis",
+      "address": "0x81790",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash817ec_axis",
+      "address": "0x817ec",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81802_cvt_vehicle_speed_lores_axis",
+      "address": "0x81804",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81810_power_mismatch_lores_axis",
+      "address": "0x81810",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8181e_ss_axis",
+      "address": "0x81820",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81890_power_mismatch_lores_axis",
+      "address": "0x81890",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81900_ss_axis",
+      "address": "0x81900",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81918_atf_temp_filtered_axis",
+      "address": "0x81918",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8193e_axis",
+      "address": "0x81940",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_cvt_engine_torque_limit_case1_rpm_axis",
       "address": "0x81976",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81976_at_engine_rpm_avg_axis",
+      "address": "0x81978",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81a36_rpm_axis",
+      "address": "0x81a38",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81a5a_tlp_axis",
+      "address": "0x81a5c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash81a6c_atf_temp_axis",
+      "address": "0x81a6c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_basic_turbine_to_primary_delta_axis",
+      "address": "0x81b48",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_atf_temp_sensor_2dmap8",
+      "address": "0x82000",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8204c_2dmap8",
+      "address": "0x8204c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82070_vs_accel_x_rpm_3dmap8",
+      "address": "0x82070",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82144_torque_x_rpm_3dmap8",
+      "address": "0x82144",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8225a_const00_2dmap8",
+      "address": "0x8225c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82264_constff_2dmap8",
+      "address": "0x82264",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_lp_torque_loss_3dmap8",
+      "address": "0x82278",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash822ee_2dmap8",
+      "address": "0x822f0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82302_2dmap8",
+      "address": "0x82304",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82316_2dmap8",
+      "address": "0x82318",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82330_2dmap8",
+      "address": "0x82330",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_main_target_primary_shaft_speed_drive_3dmap8",
+      "address": "0x8242c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -481,11 +2080,29 @@
       "timestamp": ""
     },
     {
+      "name": "flash_inhibitor_position_pss_min_main_2dmap8",
+      "address": "0x82554",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82586_vs_ss_2dmap8",
+      "address": "0x82588",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_cvt_manual_mode_primary_speed_1st_2dmap8",
       "address": "0x8259c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -499,11 +2116,20 @@
       "timestamp": ""
     },
     {
+      "name": "flash_cvt_manual_mode_primary_speed_2nd_2dmap8",
+      "address": "0x825b8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_cvt_manual_mode_primary_speed_3rd_2dmap8",
       "address": "0x825d0",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -517,11 +2143,20 @@
       "timestamp": ""
     },
     {
-      "name": "flash_cvt_manual_mode_primary_speed_5th_2dmap8",
+      "name": "flash_cvt_manual_mode_primary_speed_4th_2dmap8",
+      "address": "0x825ec",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82604_2dmap8",
       "address": "0x82604",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -535,11 +2170,74 @@
       "timestamp": ""
     },
     {
+      "name": "flash8261e_2dmap8",
+      "address": "0x82620",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82744_pssmin_vs_ss_x_ssnegdelta_3dmap8",
+      "address": "0x82744",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash827ae_rpm_x_atf_temp_3dmap8",
+      "address": "0x827b0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82816_vs_torque_2dmap8",
+      "address": "0x82818",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8283c_vs_torque_2dmap8",
+      "address": "0x8283c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_psst_kickdown_drive_vs_ss_2dmap8",
       "address": "0x8288c",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash828a6_vs_gratio_2dmap8",
+      "address": "0x828a8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash828ba_2dmap8",
+      "address": "0x828bc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -553,11 +2251,299 @@
       "timestamp": ""
     },
     {
+      "name": "flash_inhibitor_position_pss_min_ds_2dmap8",
+      "address": "0x828cc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash828fe_vs_rpm_x_accel_3dmap8",
+      "address": "0x82900",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_main_target_primary_shaft_speed_nondrive_3dmap8",
+      "address": "0x82a28",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_base_lpsd_vs_rpm_x_target_lp_3dmap8",
       "address": "0x82b3e",
       "category": "data",
       "confidence": "high",
       "source": "description_ld",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_base_lpsd_vs_rpm_x_target_lp_3dmap8",
+      "address": "0x82b40",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_integral_lpsd_correction_max_2dmap8",
+      "address": "0x82cac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82cbc_2dmap",
+      "address": "0x82cbc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_base_lpsd_max_vs_atf_temp_2dmap8",
+      "address": "0x82cd0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_lp_solenoid_duty_max_vs_atf_temp_2dmap8",
+      "address": "0x82ce0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82d0e_belt_torque_loss_3dmap8",
+      "address": "0x82d10",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82ddc_pulley_torque_loss_3dmap8",
+      "address": "0x82ddc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82f04_vs_atgear_ratio_2dmap8",
+      "address": "0x82f04",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_positive_torque_to_tlp_multiplier_vs_atgear_ratio_2dmap16",
+      "address": "0x82f1c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_negative_torque_to_tlp_multiplier_vs_atgear_ratio_2dmap16",
+      "address": "0x82f44",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82f84_tlp_correction_vs_vs_atgear_ratio_2dmap8",
+      "address": "0x82f84",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82f9a_tlp_correction_vs_atgear_ratio_2dmap8",
+      "address": "0x82f9c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash82fb0_const0_vs_atgear_ratio_2dmap8",
+      "address": "0x82fb0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83074_tlp_correction_vs_atgear_ratio_2dmap8",
+      "address": "0x83074",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8308a_tlp_correction_vs_atgear_ratio_2dmap8",
+      "address": "0x8308c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash830a0_const0_vs_atgear_ratio_2dmap8",
+      "address": "0x830a0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8318e_vs_atf_temp_2dmap8",
+      "address": "0x83190",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8319c_vs_atf_temp_2dmap8",
+      "address": "0x8319c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash831aa_vs_atf_temp_2dmap8",
+      "address": "0x831ac",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash831b8_torque_max_vs_rpm_2dmap8",
+      "address": "0x831b8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash831cc_speed_2dmap8",
+      "address": "0x831cc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83248_vs_rpm_2dmap8",
+      "address": "0x83248",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8325c_vs_rpm_2dmap8",
+      "address": "0x8325c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83270_vs_rpm_2dmap8",
+      "address": "0x83270",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83396_2dmap8",
+      "address": "0x83398",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash833a2_normal_3dmap16",
+      "address": "0x833a4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash833cc_drivesport_3dmap16",
+      "address": "0x833cc",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8340a_psst_vs_ss_2dmap8",
+      "address": "0x8340c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8358c_zero_2dmap8",
+      "address": "0x8358c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -571,11 +2557,119 @@
       "timestamp": ""
     },
     {
+      "name": "flash_psst_kickdown_nondrive_vs_ss_2dmap8",
+      "address": "0x83598",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_overheat_psst_min_atf_x_ss_3dmap8",
+      "address": "0x83604",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8365a_vs_ss_2dmap8",
+      "address": "0x8365c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8368a_2dmap8",
+      "address": "0x8368c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83812_torque_max_vs_rpm_2dmap8",
+      "address": "0x83814",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83836_const128_3dmap8",
+      "address": "0x83838",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash8394e_const128_3dmap8",
+      "address": "0x83950",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_tlp_correction_vs_tlp_x_rpm_3dmap8",
+      "address": "0x83cd0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_tlp_correction_vs_atf_temp_2dmap8",
+      "address": "0x83d34",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83d3e_lp_2dmap8",
+      "address": "0x83d40",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83d48_lp_2dmap8",
+      "address": "0x83d48",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_cvt_manual_mode_psst_min_vs_ss_2dmap8",
+      "address": "0x83db4",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "flash_psst_max_tclocked_auto_vs_ss_2dmap8",
       "address": "0x83ddc",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -584,7 +2678,7 @@
       "address": "0x83df0",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -593,7 +2687,7 @@
       "address": "0x83e04",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -602,7 +2696,172 @@
       "address": "0x83e18",
       "category": "data",
       "confidence": "high",
-      "source": "description_ld",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83e2c_psst_vs_ss_2dmap8",
+      "address": "0x83e2c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83e84_vs_atgear_ratio_2dmap8",
+      "address": "0x83e84",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83f38_2dmap8",
+      "address": "0x83f38",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83f4c_2dmap8",
+      "address": "0x83f4c",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83f60_const128_2dmap8",
+      "address": "0x83f60",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash83f74_const128_2dmap8",
+      "address": "0x83f74",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash88000_u16a",
+      "address": "0x88000",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash881f8_f8a",
+      "address": "0x881f8",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_at_dtc_var_pointers",
+      "address": "0x882b0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash882d0_struct12a",
+      "address": "0x882d0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_tc_lock_state_functions",
+      "address": "0x88634",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_tc_lock_state_functions2",
+      "address": "0x88650",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rate",
+      "address": "0x9ca34",
+      "category": "data",
+      "data_type": "uint16_t double_aprxu32(uint16_t p_value, uint32_t *p_store1, uint32_t *p_store2, uint16_t",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "calla28ac",
+      "address": "0xa28ac",
+      "category": "data",
+      "data_type": "void",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasha8c00_diag_table",
+      "address": "0xa8c00",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasha8ee0_diag_table",
+      "address": "0xa8ee0",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_mut_at_variables",
+      "address": "0xbf784",
+      "category": "data",
+      "data_type": "uint8_t *[207]",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "at_call_table",
+      "address": "0xbff80",
+      "category": "data",
+      "confidence": "high",
+      "source": "colt_s",
       "session": "",
       "timestamp": ""
     },
@@ -5967,7 +8226,3527 @@
       "timestamp": ""
     }
   ],
-  "functions": [],
+  "functions": [
+    {
+      "name": "sio0_dma_fill_free_form_log",
+      "entry_point": "0x11774",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "port",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "get_mut_pointer",
+      "entry_point": "0x11a30",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint8_t *",
+      "params": [
+        {
+          "name": "req",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "update_gpinputs",
+      "entry_point": "0x144f0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_ig1",
+      "entry_point": "0x14710",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "adc_convert_maf",
+      "entry_point": "0x147f8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_tio5_duty",
+      "entry_point": "0x14ebc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "port_set_alt_mode",
+      "entry_point": "0x15000",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "port",
+          "storage": "R0",
+          "type": "uint8_t"
+        },
+        {
+          "name": "mask",
+          "storage": "R1",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "rom_crc_check_step",
+      "entry_point": "0x15448",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "adc_run",
+      "entry_point": "0x15538",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "ch",
+          "storage": "R0",
+          "type": "int"
+        },
+        {
+          "name": "byte_result_ptr",
+          "storage": "R1",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "full_result_ptr",
+          "storage": "R2",
+          "type": "uint16_t *"
+        }
+      ]
+    },
+    {
+      "name": "dma5_interrupt_handler",
+      "entry_point": "0x18164",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "gearbox_speed_sensor_init",
+      "entry_point": "0x18c64",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "dma59_interrupt_handler",
+      "entry_point": "0x19534",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "tod0_output_interrupt_handler",
+      "entry_point": "0x195a8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_slot_tx_update",
+      "entry_point": "0x19fa4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "slot",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "d0",
+          "storage": "R1",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d1",
+          "storage": "R2",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d2",
+          "storage": "R3",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d3",
+          "storage": "stack",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d4",
+          "storage": "stack",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d5",
+          "storage": "stack",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d6",
+          "storage": "stack",
+          "type": "uint8_t"
+        },
+        {
+          "name": "d7",
+          "storage": "stack",
+          "type": "uint8_t"
+        }
+      ]
+    },
+    {
+      "name": "reset_interrupt_handler",
+      "entry_point": "0x1b6c0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "write_g32",
+      "entry_point": "0x1b770",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "dest",
+          "storage": "R0",
+          "type": "g32_t *"
+        },
+        {
+          "name": "value",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "memory_check",
+      "entry_point": "0x1b784",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint32_t *",
+      "params": [
+        {
+          "name": "start",
+          "storage": "R0",
+          "type": "uint32_t *"
+        },
+        {
+          "name": "end",
+          "storage": "R1",
+          "type": "uint32_t *"
+        }
+      ]
+    },
+    {
+      "name": "s_array_sub16",
+      "entry_point": "0x1b7b0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "start",
+          "storage": "R0",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "end",
+          "storage": "R1",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "value",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_array_add16",
+      "entry_point": "0x1b7ec",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "start",
+          "storage": "R0",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "end",
+          "storage": "R1",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "value",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "main",
+      "entry_point": "0x1b830",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "base_engine_state_update",
+      "entry_point": "0x1c200",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_discrete_inputs",
+      "entry_point": "0x1c4b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_and_process_alt_inputs",
+      "entry_point": "0x1c508",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calc_iat",
+      "entry_point": "0x1d304",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_transient_aggregate_load_compensation",
+      "entry_point": "0x1d654",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calculate_engine_load",
+      "entry_point": "0x1db40",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_maf_smooth_rate",
+      "entry_point": "0x1dec4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_engine_loads",
+      "entry_point": "0x1e268",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_data_age_and_decays",
+      "entry_point": "0x1e51c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_accel_speed_limit_correction",
+      "entry_point": "0x1ed04",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "probably_torque_output_calculation",
+      "entry_point": "0x1efd0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_cct_ho",
+      "entry_point": "0x1f460",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p_load",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "cvt_manual_mode_overrev_protection",
+      "entry_point": "0x1f4b4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_octane_level_torque_loss",
+      "entry_point": "0x1f5b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_meteo_torque_correction",
+      "entry_point": "0x1f610",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_rpm_torque_loss",
+      "entry_point": "0x1f638",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "alt_process_at_drive",
+      "entry_point": "0x1f848",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "update_mivec_spark_state",
+      "entry_point": "0x1f880",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_cantx_asc_predicted_torque_output",
+      "entry_point": "0x1fbc8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "zs16_add_u16",
+      "entry_point": "0x1fe9c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "zs16_mul_divu16",
+      "entry_point": "0x1fed0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sh16_divu16",
+      "entry_point": "0x200b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "zs16_mul_u16",
+      "entry_point": "0x20134",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uin32_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_zs32_to_zs16",
+      "entry_point": "0x20160",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "calc_tps_airflow_maps",
+      "entry_point": "0x20188",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fuel_cut_conditions",
+      "entry_point": "0x215d4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "is_camshaft_fault_detected",
+      "entry_point": "0x218a4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "is_overload_detected",
+      "entry_point": "0x218d4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_updated_speed_limit_engagement",
+      "entry_point": "0x21940",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_1k5rpm_limit_call22224",
+      "entry_point": "0x22224",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "ipw_calcs",
+      "entry_point": "0x234f0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fuel_map_target_afr",
+      "entry_point": "0x239d0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_afr_target_final",
+      "entry_point": "0x23ccc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "ptr",
+          "storage": "R0",
+          "type": "const *"
+        }
+      ]
+    },
+    {
+      "name": "update_cranking_ipw",
+      "entry_point": "0x24c5c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_injector_latency",
+      "entry_point": "0x24f98",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_spark_advance",
+      "entry_point": "0x268e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_spark_advance_final",
+      "entry_point": "0x26bc8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_spark_engine_load",
+      "entry_point": "0x26be4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_engine_load_iat_compensated",
+      "entry_point": "0x26c40",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "spark_correction_call271e0",
+      "entry_point": "0x271e0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "call27284",
+      "entry_point": "0x27284",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_updated_base_spark_advance_limit",
+      "entry_point": "0x27320",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "coolant_temp_spark_compensation",
+      "entry_point": "0x27748",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "iat_high_load_spark_compensation",
+      "entry_point": "0x27778",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "probably_idle_spark_correction",
+      "entry_point": "0x278b4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_updated_probably_hot_engine_start_spark_compensation",
+      "entry_point": "0x27a34",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "spark_spool_advance_limit",
+      "entry_point": "0x27ad0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "at_neutral_spark_advance_additive",
+      "entry_point": "0x27c34",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_apps_non_neutral_spark_compensation",
+      "entry_point": "0x27c90",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_mapped_spark_advance",
+      "entry_point": "0x27cd4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "suspected_idle_control",
+      "entry_point": "0x2829c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_target_idle_rpm",
+      "entry_point": "0x28584",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_gear_shift_limits",
+      "entry_point": "0x2bab4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_support_outputs",
+      "entry_point": "0x2cea8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "boost_control",
+      "entry_point": "0x2d210",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_boost_control_flags",
+      "entry_point": "0x2d238",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calc_wastegate_duty",
+      "entry_point": "0x2d560",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint32_t"
+    },
+    {
+      "name": "update_wastegate_duty_error",
+      "entry_point": "0x2d604",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "base_duty",
+          "storage": "R0",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "update_boost_target_load",
+      "entry_point": "0x2d71c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "wastegate_solenoid_duty_update",
+      "entry_point": "0x2d764",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "base_duty",
+          "storage": "R0",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "update_fp11446",
+      "entry_point": "0x2db50",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_mivec_target_and_limits",
+      "entry_point": "0x2e8d4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "basic_test_with_mil_update",
+      "entry_point": "0x2eb90",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "some_coil_fault_slow_test",
+      "entry_point": "0x2f61c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "coolant_temp_sensor_fault_detection",
+      "entry_point": "0x2f66c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "generator_field_terminal_fault_detection",
+      "entry_point": "0x2f710",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "update_mil",
+      "entry_point": "0x2fe88",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "debug_mil_condition",
+      "entry_point": "0x2ffe0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "critical_mil_flash",
+      "entry_point": "0x301bc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "sio0_fast_model_call",
+      "entry_point": "0x30398",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "sio0_reply_mut2",
+      "entry_point": "0x30488",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_sio0_mut_protocol",
+      "entry_point": "0x31610",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "test_substitute_target_throttle_position_at_start",
+      "entry_point": "0x3207c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "shaft_period1_calc_extra_continuation",
+      "entry_point": "0x323cc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "calc_ipw_shaft_int",
+      "entry_point": "0x33b34",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "reset_tps_sneuc_apps_ineuc",
+      "entry_point": "0x35c70",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calc_fast_engine_model",
+      "entry_point": "0x35f7c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "unused_call3a368",
+      "entry_point": "0x3a368",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "regen_crankshaft_rotation_decays",
+      "entry_point": "0x419b0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_slot_group0_tx_update",
+      "entry_point": "0x486d8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_slot0_apps_tps_extra_tx_update",
+      "entry_point": "0x48744",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_slot1_rpm_extra_tx_update",
+      "entry_point": "0x48828",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_slot2_dash_revolutions_odometer_coolant_tx_update",
+      "entry_point": "0x48894",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_slot4_tx_update",
+      "entry_point": "0x48a74",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_slot5_cvt_tx_update",
+      "entry_point": "0x48b20",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_simple_slots_rx_update",
+      "entry_point": "0x48c38",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "can0_slot14_abs_rx_update",
+      "entry_point": "0x48fa8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_active_faults",
+      "entry_point": "0x56740",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "probably_reset_dtc",
+      "entry_point": "0x56fb8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "mask",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "idx",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "probably_set_dtc",
+      "entry_point": "0x57038",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "mask",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "idx",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2_unused",
+          "storage": "R2",
+          "type": "uint32_t"
+        },
+        {
+          "name": "p3_unused",
+          "storage": "R3",
+          "type": "uint32_t"
+        }
+      ]
+    },
+    {
+      "name": "engine_overboost_check",
+      "entry_point": "0x5da20",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "trouble_code_translate",
+      "entry_point": "0x5df8c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "word",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "bit",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "call5e320",
+      "entry_point": "0x5e088",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p_stored_errors",
+          "storage": "R0",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "p_err",
+          "storage": "R1",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "p_err_prev",
+          "storage": "R2",
+          "type": "uint16_t *"
+        }
+      ]
+    },
+    {
+      "name": "reinit_call88818",
+      "entry_point": "0x88818",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_ignition",
+      "entry_point": "0x88828",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_convert_sensors",
+      "entry_point": "0x8885c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "nop88920",
+      "entry_point": "0x88920",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_convert_pressures",
+      "entry_point": "0x88924",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "reinit_call88a18",
+      "entry_point": "0x88a18",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "primary_speed_sensor_interrupt_handler",
+      "entry_point": "0x88aa4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "turbine_speed_sensor_interrupt_handler",
+      "entry_point": "0x88b3c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "reinit_call88d9c",
+      "entry_point": "0x88d9c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_control_power_dependant_pwm",
+      "entry_point": "0x8913c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_call89400",
+      "entry_point": "0x89400",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call89b84",
+      "entry_point": "0x89b84",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_atint_timers",
+      "entry_point": "0x89c00",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "trampoline_reinit_call88818",
+      "entry_point": "0x8a00c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "reset_at_accel_adaptation",
+      "entry_point": "0x8a414",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_inputs_parameters",
+      "entry_point": "0x8a5fc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_user_at_controls",
+      "entry_point": "0x8a68c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "update_agpins",
+      "entry_point": "0x8a6e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "probably_resolve_at_selector_gpinputs",
+      "entry_point": "0x8ab84",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "decode_inhibitor_call8ad58",
+      "entry_point": "0x8ad58",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_adc_sensors",
+      "entry_point": "0x8b0f8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_atf_temp",
+      "entry_point": "0x8b11c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calc_atf_temp",
+      "entry_point": "0x8b138",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calc_atf_temp_axes",
+      "entry_point": "0x8b288",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_atf_temp_flags",
+      "entry_point": "0x8b2b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_line_pressure",
+      "entry_point": "0x8b3b0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_line_pressure_axes",
+      "entry_point": "0x8b44c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_accel",
+      "entry_point": "0x8b46c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_accel_adapt",
+      "entry_point": "0x8b68c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_accel_adaptation",
+      "entry_point": "0x8b894",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_accel_axes",
+      "entry_point": "0x8b9e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_power_at_voltage",
+      "entry_point": "0x8ba10",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_control_power",
+      "entry_point": "0x8ba3c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_control_power_corrections",
+      "entry_point": "0x8baac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "afe_copy",
+      "entry_point": "0x8bafc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_speed_sensors_counters",
+      "entry_point": "0x8c05c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_turbine_speed_counters",
+      "entry_point": "0x8c074",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_primary_speed_counters",
+      "entry_point": "0x8c0bc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_secondary_speed_counters",
+      "entry_point": "0x8c104",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_afe_gearbox_speed_counters",
+      "entry_point": "0x8c14c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_engine_rpm",
+      "entry_point": "0x8c17c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_engine_rpm_from_cshaft_period",
+      "entry_point": "0x8c350",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_engine_rpm_delta",
+      "entry_point": "0x8c3f4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_engine_rpm_axes",
+      "entry_point": "0x8c478",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_turbine_speed",
+      "entry_point": "0x8c4c0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call8c65c",
+      "entry_point": "0x8c65c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "update_turbine_speed_delta",
+      "entry_point": "0x8c678",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_turbine_speed_jerk",
+      "entry_point": "0x8c6cc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_turbine_speed_axes",
+      "entry_point": "0x8c6e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_primary_speed",
+      "entry_point": "0x8c6f8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_primary_speed_delta",
+      "entry_point": "0x8c864",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_primary_speed_axes",
+      "entry_point": "0x8c93c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_secondary_speed",
+      "entry_point": "0x8c964",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_secondary_speed_delta",
+      "entry_point": "0x8cab8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_secondary_speed_axes",
+      "entry_point": "0x8cb3c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_tc_delta",
+      "entry_point": "0x8cb74",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_atgear_ratio",
+      "entry_point": "0x8cbe8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call8cea4",
+      "entry_point": "0x8cea4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call8d1d0_update_off0_off2",
+      "entry_point": "0x8d1d0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p_engine_torque",
+          "storage": "R0",
+          "type": "uint16"
+        },
+        {
+          "name": "ptr",
+          "storage": "R1",
+          "type": " *"
+        }
+      ]
+    },
+    {
+      "name": "update_preconverted_and_psend_torques",
+      "entry_point": "0x8d368",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "p0"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "p_ptr"
+        }
+      ]
+    },
+    {
+      "name": "update_primary_speed_smoothed_2tick_delta_smoothed",
+      "entry_point": "0x8d478",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_adc_pressures",
+      "entry_point": "0x8d4b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_adc_lp_avg",
+      "entry_point": "0x8d4e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_primary_pressure",
+      "entry_point": "0x8d538",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_adc_pp_avg",
+      "entry_point": "0x8d5e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_engine_torque_limit",
+      "entry_point": "0x8d690",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_fuel_cut_limp",
+      "entry_point": "0x8de50",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_torque_model",
+      "entry_point": "0x8e24c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_turbine_to_primary_slip",
+      "entry_point": "0x8e3e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "disabled_call8e7e4",
+      "entry_point": "0x8e7e4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "disabled_call8e8f8",
+      "entry_point": "0x8e8f8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_cvt_axle_speeds",
+      "entry_point": "0x8e904",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "nop8ec0c",
+      "entry_point": "0x8ec0c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "dec_fp1740_u16",
+      "entry_point": "0x8f828",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call8f840",
+      "entry_point": "0x8f840",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp924_f16_bits_call8f9e8",
+      "entry_point": "0x8f9e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cvt_slip_detection",
+      "entry_point": "0x8fbe4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cvt_axle_speed_sanity_check",
+      "entry_point": "0x904c0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cvt_wheel_speed_sanity_check",
+      "entry_point": "0x90544",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cvt_speeds_sanity_check_completion",
+      "entry_point": "0x9082c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "tc_lock_control",
+      "entry_point": "0x90c38",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call912c4",
+      "entry_point": "0x912c4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_reset_call915b8",
+      "entry_point": "0x915b8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call915cc",
+      "entry_point": "0x915cc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call91620",
+      "entry_point": "0x91620",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call91924",
+      "entry_point": "0x91924",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call91be0",
+      "entry_point": "0x91be0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call91cc8",
+      "entry_point": "0x91cc8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "indirect_call938a4",
+      "entry_point": "0x938a4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call93cf4",
+      "entry_point": "0x93cf4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call93e28",
+      "entry_point": "0x93e28",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "limp_cpsd_call9404c",
+      "entry_point": "0x9404c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cpsd_call94ff4",
+      "entry_point": "0x94ff4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cpsd_call950e4",
+      "entry_point": "0x950e4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp1640_cpsd_correction",
+      "entry_point": "0x95440",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp1680_f16_b10",
+      "entry_point": "0x954e8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "conditionally_reset_fp1676_u16",
+      "entry_point": "0x95e78",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "zs16_div50_to_zs8",
+      "entry_point": "0x95f88",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint8_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "init_fp854_downcounter16",
+      "entry_point": "0x960d8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "clutch_slip_detection_routine",
+      "entry_point": "0x96188",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call96a30",
+      "entry_point": "0x96a30",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "main_update_target_primary_speed",
+      "entry_point": "0x96ad0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_cvt_manual_mode_targt_primary_speed",
+      "entry_point": "0x97048",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_cvt_manual_mode_primary_speed_thresholds",
+      "entry_point": "0x974a4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "get_appropriate_cvt_manual_range",
+      "entry_point": "0x97508",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "get_cvt_manual_range_from_current_speed",
+      "entry_point": "0x975a0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "update_cvt_manual_intra_range_progress",
+      "entry_point": "0x97600",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "round_cvt_manual_mode",
+      "entry_point": "0x97670",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "round2_cvt_manual_mode",
+      "entry_point": "0x976b0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "cvt_manual_mode_need_gear_down",
+      "entry_point": "0x976f8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p_gear",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "reset_cvt_manual_mode_state",
+      "entry_point": "0x977a8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp1540_u16",
+      "entry_point": "0x977d8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call98734",
+      "entry_point": "0x98734",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_target_pss_max",
+      "entry_point": "0x98d34",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_another_psst_min_call99f90",
+      "entry_point": "0x99f90",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "reset_call9a80c",
+      "entry_point": "0x9a80c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_lp_control_state",
+      "entry_point": "0x9af90",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "half_limp_line_pressure_duty_calculations",
+      "entry_point": "0x9b408",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_proportional_lpsd_correction",
+      "entry_point": "0x9b44c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_base_lp_solenoid_duty",
+      "entry_point": "0x9b888",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp924_f16_call9c640",
+      "entry_point": "0x9c640",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call9c800",
+      "entry_point": "0x9c800",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p2",
+          "storage": "R2",
+          "type": "uint16_t *"
+        }
+      ]
+    },
+    {
+      "name": "at_smooth16",
+      "entry_point": "0x9c85c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": " *"
+        }
+      ]
+    },
+    {
+      "name": "ps_avg16",
+      "entry_point": "0x9c9c8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "double_aprxu16_256",
+      "entry_point": "0x9c9f4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "value",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "store1",
+          "storage": "R1",
+          "type": "uint16_t *"
+        },
+        {
+          "name": "store2",
+          "storage": "R2",
+          "type": "uint16_t"
+        },
+        {
+          "name": "rate",
+          "storage": "R3",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_correct16",
+      "entry_point": "0x9ca74",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_delta16",
+      "entry_point": "0x9caa8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s16_mul_sh16",
+      "entry_point": "0x9cad8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sh16_scale_base128",
+      "entry_point": "0x9cb24",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sh16_scale_base256",
+      "entry_point": "0x9cb80",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "delayed_delta",
+      "entry_point": "0x9cbdc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "val",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "size",
+          "storage": "R1",
+          "type": "uint16_t"
+        },
+        {
+          "name": "delay_line",
+          "storage": "R2",
+          "type": "uint16_t *"
+        }
+      ]
+    },
+    {
+      "name": "sh16_mul16_divu16",
+      "entry_point": "0x9cc98",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t1"
+        },
+        {
+          "name": "p2",
+          "storage": "R2",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sqrt",
+      "entry_point": "0x9ce54",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "unsigned",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "unsigned"
+        }
+      ]
+    },
+    {
+      "name": "zs16_divu16",
+      "entry_point": "0x9ce84",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "s_sh16abs",
+      "entry_point": "0x9d034",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "multipleof16",
+      "entry_point": "0x9d058",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "sqr16",
+      "entry_point": "0x9d0f8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint32_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "at_update_active_faults_call9d478",
+      "entry_point": "0x9d478",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call9d590",
+      "entry_point": "0x9d590",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "line_pressure_shorted_detection",
+      "entry_point": "0x9d5e4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "line_pressure_shorted_ground_detection",
+      "entry_point": "0x9d600",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "line_pressure_shorted_power_detection",
+      "entry_point": "0x9d704",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "primary_pressure_shorted_detection",
+      "entry_point": "0x9d84c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "primary_pressure_shorted_ground_detection",
+      "entry_point": "0x9d868",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "primary_pressure_shorted_power_detection",
+      "entry_point": "0x9d96c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "atf_temp_shorted_check",
+      "entry_point": "0x9da64",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "atf_temp_short_power_check",
+      "entry_point": "0x9db54",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "atf_temp_short_ground_check",
+      "entry_point": "0x9dbf0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "line_pressure_solenoid_fault_detection",
+      "entry_point": "0x9dc64",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "shift_solenoid_fault_detection",
+      "entry_point": "0x9dd7c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "damper_clutch_fault_detection",
+      "entry_point": "0x9dfe0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "clutch_pressure_solenoid_fault_detection",
+      "entry_point": "0x9e278",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "turbine_speed_sensor_fault_detection",
+      "entry_point": "0x9e514",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "primary_speed_sensor_fault_detection",
+      "entry_point": "0x9e64c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "secondary_speed_sensor_fault_detection",
+      "entry_point": "0x9e77c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "inhibitor_switch_open_curcuit_dtc_detection",
+      "entry_point": "0x9e9cc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "zero_dtc_fault_detection_call9eaac",
+      "entry_point": "0x9eaac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "stop_lamp_check",
+      "entry_point": "0x9ebc8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "stop_lamp_fault_detection_53",
+      "entry_point": "0x9ec68",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "stop_lamp_fault_detection_54",
+      "entry_point": "0x9ece8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_control_relay_system_fault_detection",
+      "entry_point": "0x9edf4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "speed_system_by_gear_ratio_fault_detection",
+      "entry_point": "0x9ef50",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "secondary_speed_system_fault_check_25",
+      "entry_point": "0x9ef78",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "primary_speed_system_fault_check_26",
+      "entry_point": "0x9f0c0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "fault41_check",
+      "entry_point": "0x9f208",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "call9f2a4",
+      "entry_point": "0x9f2a4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "fault42_check_call9f3cc",
+      "entry_point": "0x9f3cc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "fault42_check_call9f454",
+      "entry_point": "0x9f454",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "fault43_check_call9f500",
+      "entry_point": "0x9f500",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "damper_clutch_fault_check",
+      "entry_point": "0x9f5ac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "damper_clutch_fault44_check",
+      "entry_point": "0x9f5d4",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "damper_clutch_fault_45_detection",
+      "entry_point": "0x9f734",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "cluctch_fault_check",
+      "entry_point": "0x9f80c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "clutch_fault46_check",
+      "entry_point": "0x9f840",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "clutch_fault48_check",
+      "entry_point": "0x9fa04",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "steel_belt_fault59_check",
+      "entry_point": "0xa002c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_dtc_set",
+      "entry_point": "0xa01fc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p_code",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "at_diag_code_index37_code57_lp_system_fault",
+      "entry_point": "0xa0304",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_lp_71_72_system_fault",
+      "entry_point": "0xa0620",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_freeze_frame",
+      "entry_point": "0xa09d8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_save_free_frame",
+      "entry_point": "0xa0a5c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "atf_temp_overheat_check",
+      "entry_point": "0xa0d94",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_solenoid_duties",
+      "entry_point": "0xa1028",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_solenoids_corrected_duty",
+      "entry_point": "0xa1044",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_at_solenoid_corrected_duty",
+      "entry_point": "0xa108c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "at_update_solenoid_duty16",
+      "entry_point": "0xa10fc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_update_solenoid_duty8",
+      "entry_point": "0xa1208",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "conditionally_reset_solenoid_duty16",
+      "entry_point": "0xa1240",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calla1824",
+      "entry_point": "0xa1824",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "set_fp2254_f16_b4",
+      "entry_point": "0xa19cc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp2254_f16_b5",
+      "entry_point": "0xa19dc",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "wtf_calla1a20",
+      "entry_point": "0xa1a20",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "maybe_update_cvt_can_tx_data",
+      "entry_point": "0xa1f30",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "at_mut_request_data_or_actuators",
+      "entry_point": "0xa2468",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": "uint16_t"
+        }
+      ]
+    },
+    {
+      "name": "reset_calla32ac",
+      "entry_point": "0xa32ac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp52_u32",
+      "entry_point": "0xa3c70",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "reset_drive_force_smoothed",
+      "entry_point": "0xa3c84",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calla3f68",
+      "entry_point": "0xa3f68",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_power_mismatch_lores",
+      "entry_point": "0xa4144",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_power_mismatch",
+      "entry_point": "0xa4324",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_drive_force",
+      "entry_point": "0xa4fc0",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "calla5244",
+      "entry_point": "0xa5244",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp76_u16",
+      "entry_point": "0xa5320",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "pure_condition_calla56ac",
+      "entry_point": "0xa56ac",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t"
+    },
+    {
+      "name": "update_fpp13952_u16_fp26_u16",
+      "entry_point": "0xa572c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp74_u16",
+      "entry_point": "0xa579c",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "update_fp72_u16",
+      "entry_point": "0xa57c8",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "void"
+    },
+    {
+      "name": "map8u16_mul",
+      "entry_point": "0xa7c00",
+      "confidence": "high",
+      "source": "colt_s",
+      "session": "",
+      "timestamp": "",
+      "return_type": "uint16_t",
+      "params": [
+        {
+          "name": "p0",
+          "storage": "R0",
+          "type": " *"
+        },
+        {
+          "name": "p1",
+          "storage": "R1",
+          "type": "uint16_t"
+        }
+      ]
+    }
+  ],
   "struct_definitions": [],
   "comments": []
 }
