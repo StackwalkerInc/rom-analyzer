@@ -240,32 +240,12 @@
       "timestamp": ""
     },
     {
-      "name": "flash_mode_flags0_init_270",
-      "address": "0x270",
-      "category": "data",
-      "data_type": "uint16_t[8]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_mode_flags1_init",
       "address": "0x27e",
       "category": "data",
       "data_type": "uint16_t[8]",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_mode_flags1_init_280",
-      "address": "0x280",
-      "category": "data",
-      "data_type": "uint16_t[8]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -280,32 +260,12 @@
       "timestamp": ""
     },
     {
-      "name": "flash_mode_flags2_init_290",
-      "address": "0x290",
-      "category": "data",
-      "data_type": "uint16_t[8]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_mode_flags3_init",
       "address": "0x29e",
       "category": "data",
       "data_type": "uint16_t",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_mode_flags3_init_2a0",
-      "address": "0x2a0",
-      "category": "data",
-      "data_type": "uint16_t[8]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -320,32 +280,12 @@
       "timestamp": ""
     },
     {
-      "name": "flash_mode_flags4_init_2b0",
-      "address": "0x2b0",
-      "category": "data",
-      "data_type": "uint16_t[8]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_mode_flags5_init",
       "address": "0x2be",
       "category": "data",
       "data_type": "uint16_t",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_mode_flags5_init_2c0",
-      "address": "0x2c0",
-      "category": "data",
-      "data_type": "uint16_t[8]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -11248,31 +11188,11 @@
       "timestamp": ""
     },
     {
-      "name": "flash_oxygen_trim_dec_step_u8a_28ac",
-      "address": "0x28ac",
-      "category": "data",
-      "data_type": "uint8_t[12]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_oxygen_trim_inc_step_u8a",
       "address": "0x28b7",
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_oxygen_trim_inc_step_u8a_28b8",
-      "address": "0x28b8",
-      "category": "data",
-      "data_type": "uint8_t[12]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -11775,16 +11695,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash_fan_control_vehicle_speed_thresholds_ac_off_2d74",
-      "address": "0x2d74",
-      "category": "data",
-      "data_type": "uint8_t[4]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_fan_control_vehicle_speed_thresholds_ac_on",
       "address": "0x2d76",
       "category": "data",
@@ -11795,31 +11705,11 @@
       "timestamp": ""
     },
     {
-      "name": "flash_fan_control_vehicle_speed_thresholds_ac_on_2d78",
-      "address": "0x2d78",
-      "category": "data",
-      "data_type": "uint8_t[4]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_fan_control_coolant_temp_threshold_ac_off",
       "address": "0x2d7a",
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_fan_control_coolant_temp_threshold_ac_off_2d7c",
-      "address": "0x2d7c",
-      "category": "data",
-      "data_type": "uint8_t[18]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -12130,31 +12020,11 @@
       "timestamp": ""
     },
     {
-      "name": "flash_oxygen_trim_dec_step_low_coolant_u8a_34a8",
-      "address": "0x34a8",
-      "category": "data",
-      "data_type": "uint8_t[12]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_oxygen_trim_inc_step_low_coolant_u8a",
       "address": "0x34b3",
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_oxygen_trim_inc_step_low_coolant_u8a_34b4",
-      "address": "0x34b4",
-      "category": "data",
-      "data_type": "uint8_t[12]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -12441,16 +12311,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash_spark_advance_cranking_4398",
-      "address": "0x4398",
-      "category": "data",
-      "data_type": "uint8_t[18]",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash43aa_2dmap8",
       "address": "0x43ac",
       "category": "data",
@@ -12665,16 +12525,6 @@
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_engine_braking_rpm_corrections_5490",
-      "address": "0x5490",
-      "category": "data",
-      "data_type": "uint8_t[18]",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -12920,15 +12770,6 @@
       "data_type": "map_3d_u8_desc",
       "confidence": "high",
       "source": "xml",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_mivec_target_3dmap8_57e8",
-      "address": "0x57e8",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -13302,15 +13143,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash_ipw_addition_load_delta_min_fast_throttle_vs_load_2dmap8_63b8",
-      "address": "0x63b8",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_ipw_subtraction_load_delta_min_vs_load_2dmap8",
       "address": "0x63c8",
       "category": "data",
@@ -13325,15 +13157,6 @@
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_ipw_subtraction_load_delta_min_fast_throttle_vs_load_2dmap8_63dc",
-      "address": "0x63dc",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -13410,29 +13233,11 @@
       "timestamp": ""
     },
     {
-      "name": "flash_maf_limits_coolant_compensation_2dmap8_64cc",
-      "address": "0x64cc",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_maf_limits_iat_compensation_2dmap8",
       "address": "0x64d6",
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_maf_limits_iat_compensation_2dmap8_64d8",
-      "address": "0x64d8",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -15094,15 +14899,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash_mivec_target_load_axis_ba34",
-      "address": "0xba34",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_mivec_target_load_axis_data",
       "address": "0xba38",
       "category": "data",
@@ -16076,15 +15872,6 @@
       "category": "data",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_torque_correction_vs_iat_2dmap8_ce04",
-      "address": "0xce04",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -18322,15 +18109,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash_coolant_temp_sensor_axis_131c8",
-      "address": "0x131c8",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash_coolant_temp_sensor_axis_data",
       "address": "0x131cc",
       "category": "data",
@@ -18356,15 +18134,6 @@
       "data_type": "axis_desc",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "flash_iat_sensor_axis_133ac",
-      "address": "0x133ac",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },
@@ -18521,15 +18290,6 @@
       "data_type": "pointer",
       "confidence": "high",
       "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "mid32_4f0e4",
-      "address": "0x4f0e4",
-      "category": "data",
-      "confidence": "high",
-      "source": "z27ag_s",
       "session": "",
       "timestamp": ""
     },

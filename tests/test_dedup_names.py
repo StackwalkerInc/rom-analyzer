@@ -54,3 +54,23 @@ def test_no_change_when_already_unique():
         AnnotationFunction(name="b", entry_point=0x20),
     ])
     assert dedup_symbol_names(st) == 0
+
+
+def test_drop_imprecise_s_duplicates_removes_rounded_artifact():
+    from rom_analyzer.scripts.build_reference_from_txt import drop_imprecise_s_duplicates
+    st = _store(symbols=[
+        AnnotationSymbol(name="flash_x", address=0x2d72, category="data", source="colt_flash"),
+        AnnotationSymbol(name="flash_x", address=0x2d74, category="data", source="z27ag_s"),
+    ])
+    n = drop_imprecise_s_duplicates(st)
+    assert n == 1
+    assert [(s.name, s.address, s.source) for s in st.symbols] == [("flash_x", 0x2d72, "colt_flash")]
+
+
+def test_drop_keeps_far_apart_same_name():
+    from rom_analyzer.scripts.build_reference_from_txt import drop_imprecise_s_duplicates
+    st = _store(functions=[
+        AnnotationFunction(name="h", entry_point=0x48ef0, source="z27ag_s"),
+        AnnotationFunction(name="h", entry_point=0x49ef0, source="colt_flash"),  # 0x1000 apart
+    ])
+    assert drop_imprecise_s_duplicates(st) == 0  # genuine, not an artifact
