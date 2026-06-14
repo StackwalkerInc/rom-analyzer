@@ -74,3 +74,25 @@ def test_drop_keeps_far_apart_same_name():
         AnnotationFunction(name="h", entry_point=0x49ef0, source="colt_flash"),  # 0x1000 apart
     ])
     assert drop_imprecise_s_duplicates(st) == 0  # genuine, not an artifact
+
+
+def test_drop_erased_flash_entries():
+    from rom_analyzer.scripts.build_reference_from_txt import drop_erased_flash_entries
+    rom = bytearray(0x200)
+    rom[0x100:0x110] = b"\xff" * 16            # erased region
+    rom[0x40:0x50] = b"\x2e\x7f" * 8           # real code bytes
+    st = _store(
+        functions=[
+            AnnotationFunction(name="real_fn", entry_point=0x40),
+            AnnotationFunction(name="typo_fn", entry_point=0x100),  # lands in 0xFF
+        ],
+        symbols=[
+            AnnotationSymbol(name="ram_keep", address=0x804000, category="ram_global"),
+            # real data in an erased/blank area must be KEPT (only functions checked)
+            AnnotationSymbol(name="blank_init_data", address=0x100, category="data"),
+        ],
+    )
+    removed = drop_erased_flash_entries(st, bytes(rom), window=16)
+    assert removed == ["typo_fn"]
+    assert {f.name for f in st.functions} == {"real_fn"}
+    assert {s.name for s in st.symbols} == {"ram_keep", "blank_init_data"}

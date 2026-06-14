@@ -53144,24 +53144,6 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "can0_slot11_rx_update_49ef0",
-      "entry_point": "0x49ef0",
-      "confidence": "high",
-      "source": "colt_flash",
-      "session": "",
-      "timestamp": "",
-      "return_type": "void"
-    },
-    {
-      "name": "can0_slot12_rx_update_49fa8",
-      "entry_point": "0x49fa8",
-      "confidence": "high",
-      "source": "colt_flash",
-      "session": "",
-      "timestamp": "",
-      "return_type": "void"
-    },
-    {
       "name": "pushi",
       "entry_point": "0x4ef00",
       "confidence": "high",

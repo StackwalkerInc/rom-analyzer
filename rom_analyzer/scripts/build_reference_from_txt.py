@@ -403,6 +403,32 @@ def drop_imprecise_s_duplicates(store: AnnotationStore, tol: int = 4) -> int:
     return n0 - (len(store.functions) + len(store.symbols))
 
 
+def drop_erased_flash_entries(
+    store: AnnotationStore, rom_bytes: bytes, window: int = 8
+) -> list[str]:
+    """Remove FUNCTION entries whose entry point lands in erased flash (0xFF).
+
+    A function in erased flash is a typo: it matches no code block (e.g. a
+    colt_flash can0_slot11_rx_update mistyped as 0x49ef0, which is 0xFF padding,
+    vs the real 0x48ef0). Only functions are checked — data labels are NOT, since
+    a real table can legitimately live in an erased/blank area (e.g.
+    flash_specific_area_init_data). Returns the function names removed.
+    """
+    def _erased(addr: int) -> bool:
+        return (addr + window <= len(rom_bytes)
+                and all(b == 0xFF for b in rom_bytes[addr:addr + window]))
+
+    removed: list[str] = []
+    kept_fn = []
+    for f in store.functions:
+        if _erased(f.entry_point):
+            removed.append(f.name)
+        else:
+            kept_fn.append(f)
+    store.functions = kept_fn
+    return removed
+
+
 def dedup_symbol_names(store: AnnotationStore) -> int:
     """Make every symbol/function name unique across the whole store.
 
@@ -434,7 +460,8 @@ def dedup_symbol_names(store: AnnotationStore) -> int:
 
 def build_store(flash_path: Path | None, map_path: Path | None,
                 description_ld_path: Path | None, asm_path: Path | None,
-                rom_id: str, rom_sha256: str) -> AnnotationStore:
+                rom_id: str, rom_sha256: str,
+                rom_bytes: bytes | None = None) -> AnnotationStore:
     symbols: list[AnnotationSymbol] = []
     functions: list[AnnotationFunction] = []
     if flash_path:
@@ -458,6 +485,8 @@ def build_store(flash_path: Path | None, map_path: Path | None,
         functions=_dedup_functions(functions),
     )
     drop_imprecise_s_duplicates(store)
+    if rom_bytes is not None:
+        drop_erased_flash_entries(store, rom_bytes)
     dedup_symbol_names(store)
     return store
 
@@ -482,12 +511,11 @@ def main() -> None:
     if not (args.flash or args.map or args.description_ld or args.asm):
         ap.error("provide at least one of --flash / --map / --description-ld / --asm")
 
-    rom_sha256 = ""
-    if args.rom:
-        rom_sha256 = hashlib.sha256(args.rom.read_bytes()).hexdigest()
+    rom_bytes = args.rom.read_bytes() if args.rom else None
+    rom_sha256 = hashlib.sha256(rom_bytes).hexdigest() if rom_bytes else ""
 
     store = build_store(args.flash, args.map, args.description_ld, args.asm,
-                        args.rom_id, rom_sha256)
+                        args.rom_id, rom_sha256, rom_bytes=rom_bytes)
     save_annotations(args.out, store)
 
     n_data = sum(1 for s in store.symbols if s.category == "data")
