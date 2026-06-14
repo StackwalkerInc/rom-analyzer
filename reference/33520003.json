@@ -21844,7 +21844,7 @@
       "timestamp": ""
     },
     {
-      "name": "fp12962_u16",
+      "name": "tacho_output_state",
       "address": "0x804d5e",
       "category": "ram_global",
       "data_type": "uint16_t",
