@@ -52,16 +52,6 @@
       "timestamp": ""
     },
     {
-      "name": "flash202_u8",
-      "address": "0x201",
-      "category": "data",
-      "data_type": "uint8_t",
-      "confidence": "high",
-      "source": "colt_flash",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "can_rx_hook4_enabled",
       "address": "0x203",
       "category": "data",
@@ -10123,16 +10113,6 @@
       "timestamp": ""
     },
     {
-      "name": "vehicle_movement_decay",
-      "address": "0x804d88",
-      "category": "ram_global",
-      "data_type": "uint16_t",
-      "confidence": "high",
-      "source": "colt_map",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "vehicle_speed_decay",
       "address": "0x804d8c",
       "category": "ram_global",
@@ -11456,15 +11436,6 @@
       "timestamp": ""
     },
     {
-      "name": "si1_tx_count",
-      "address": "0x805240",
-      "category": "ram_global",
-      "confidence": "high",
-      "source": "colt_map",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "fp11708_u16",
       "address": "0x805244",
       "category": "ram_global",
@@ -12500,16 +12471,6 @@
       "timestamp": ""
     },
     {
-      "name": "time_in_memory_call",
-      "address": "0x805828",
-      "category": "ram_global",
-      "data_type": "uint32_t",
-      "confidence": "high",
-      "source": "colt_map",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "idle_ttb",
       "address": "0x80582c",
       "category": "ram_global",
@@ -12813,6 +12774,236 @@
       "timestamp": ""
     },
     {
+      "name": "fp9996_u16",
+      "address": "0x8058f4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9994_u16",
+      "address": "0x8058f6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9992_u16",
+      "address": "0x8058f8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "bootloader_heartbeat_deadline",
+      "address": "0x805900",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "bootloader_heartbeat_ticks250",
+      "address": "0x805902",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9976_u16",
+      "address": "0x805908",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9970_u16",
+      "address": "0x80590e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9960_u16",
+      "address": "0x805918",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_flags",
+      "address": "0x80591a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_errors",
+      "address": "0x805920",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx_errors",
+      "address": "0x805922",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_lost_flags",
+      "address": "0x805930",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can0_long_timeout_flags",
+      "address": "0x805934",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_target_idle_rpm",
+      "address": "0x805946",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_asc_active_lamp",
+      "address": "0x805948",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_fp9908_f16",
+      "address": "0x80594c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "engine_rpm_direct_bound",
+      "address": "0x80594e",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_fp9904_f16",
+      "address": "0x805950",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_fp9902_f16",
+      "address": "0x805952",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_coolant_temp",
+      "address": "0x805954",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "const_fp9898_u16",
+      "address": "0x805956",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "const_fp9896_u16",
+      "address": "0x805958",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_fan_command",
+      "address": "0x80595a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx10_data0_u16",
+      "address": "0x805962",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "can_rx9_data1_u16",
       "address": "0x805966",
       "category": "ram_global",
@@ -12853,10 +13044,3319 @@
       "timestamp": ""
     },
     {
+      "name": "can_rx8_data1_u16",
+      "address": "0x805970",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx8_data45_u16",
+      "address": "0x805976",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx8_data67_u16",
+      "address": "0x805978",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx6_data0_u16",
+      "address": "0x805980",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx6_data1_u16",
+      "address": "0x805982",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx5_data0_u16",
+      "address": "0x805984",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx5_data1_u16",
+      "address": "0x805986",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx5_data4_u16",
+      "address": "0x80598a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx5_data45_u16",
+      "address": "0x80598c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx3_data56_u16",
+      "address": "0x805996",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx2_data01_u16",
+      "address": "0x805998",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "knock_mil_flags",
+      "address": "0x80599a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx2_data234_u32",
+      "address": "0x80599c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx1_data0_u8",
+      "address": "0x8059a0",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx1_data3_u16",
+      "address": "0x8059a2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "knock_mil_state",
+      "address": "0x8059a4",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx0_data0_u16",
+      "address": "0x8059a6",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_ac_control_flags",
+      "address": "0x8059a8",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_ac_pressure_int",
+      "address": "0x8059aa",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_ac_pressure",
+      "address": "0x8059ac",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx0_data2_u16",
+      "address": "0x8059ae",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "canrx10_keepalive_fuel_pump_on",
+      "address": "0x8059b2",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9804_u16",
+      "address": "0x8059b4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9784_u16",
+      "address": "0x8059c8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9756_u16",
+      "address": "0x8059e4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9680_u16",
+      "address": "0x805a30",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9672_u16",
+      "address": "0x805a38",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9670_u16",
+      "address": "0x805a3a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9668_u16",
+      "address": "0x805a3c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9664_u16",
+      "address": "0x805a40",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9662_u16",
+      "address": "0x805a42",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9660_u16",
+      "address": "0x805a44",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9658_u16",
+      "address": "0x805a46",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9656_u16",
+      "address": "0x805a48",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9654_u16a",
+      "address": "0x805a4a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9642_u16a",
+      "address": "0x805a56",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9618_u16",
+      "address": "0x805a6e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9616_u16",
+      "address": "0x805a70",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9614_u16a",
+      "address": "0x805a72",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9602_u16a",
+      "address": "0x805a7e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9586_u16a",
+      "address": "0x805a8e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9562_u16a",
+      "address": "0x805aa6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9550_u16",
+      "address": "0x805ab2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "apps_to_ttp_correction",
+      "address": "0x805abe",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9430_f16",
+      "address": "0x805b2a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9396_u16",
+      "address": "0x805b4c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc112_byte_result",
+      "address": "0x805b80",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9220_u16",
+      "address": "0x805bfc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_vehicle_speed",
+      "address": "0x805bfe",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "diag_adc_full_accel_pedal_main_corrected",
+      "address": "0x805c2a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9172_f16",
+      "address": "0x805c2c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rom_check_crc",
+      "address": "0x805c30",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "apps_to_ttp_correction_copy",
+      "address": "0x805c3a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mivec_angle_limit_by_coolant",
+      "address": "0x805c7a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx9_data2345_avg",
+      "address": "0x805c86",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9062_u16",
+      "address": "0x805c9a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9056_u16",
+      "address": "0x805ca0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9052_u32",
+      "address": "0x805ca4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ttps_tct_ho_pct",
+      "address": "0x805cb2",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ttps_ttq_pct",
+      "address": "0x805cb4",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ttps_ttq_nm",
+      "address": "0x805cb6",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9024_u16",
+      "address": "0x805cc0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9020_u16",
+      "address": "0x805cc4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9016_u16",
+      "address": "0x805cc8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9014_u16",
+      "address": "0x805cca",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9012_u16",
+      "address": "0x805ccc",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc13_byte_result",
+      "address": "0x805cce",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp9008_f16",
+      "address": "0x805cd0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8996_f16",
+      "address": "0x805cdc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8994_u16",
+      "address": "0x805cde",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8888_u32",
+      "address": "0x805ce4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8932_f16",
+      "address": "0x805d1c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8922_f16",
+      "address": "0x805d26",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "accel_pedal_sub_test_flags",
+      "address": "0x805d30",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tomo_variant_coding1",
+      "address": "0x805d3e",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8896_f16",
+      "address": "0x805d40",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8888_g32a",
+      "address": "0x805d48",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8808_g32",
+      "address": "0x805d98",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8804_g32",
+      "address": "0x805d9c",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8800_g32",
+      "address": "0x805da0",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8796_g32",
+      "address": "0x805da4",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tomo_asc_ttq_nm",
+      "address": "0x805df0",
+      "category": "ram_global",
+      "data_type": "g32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc1_byte_result_copy1_guarded",
+      "address": "0x805e3c",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8576_g32a",
+      "address": "0x805e80",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tomo_apps_to_ttp_correction_guarded",
+      "address": "0x805e88",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "apps_to_ttp_correction_guarded",
+      "address": "0x805e8c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tomo_apps_to_ttp_correction_max_guarded",
+      "address": "0x805e90",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp8556_g32",
+      "address": "0x805e94",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc_byte_power_source_guarded",
+      "address": "0x805ecc",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rolling_engine_braking",
+      "address": "0x8061cc",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rolling_apps_neutral",
+      "address": "0x8061ce",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "engine_braking_target_throttle_position_min",
+      "address": "0x8061e8",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7660_u16",
+      "address": "0x806214",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7656_u16",
+      "address": "0x806218",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7654_u16",
+      "address": "0x80621a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7652_u32",
+      "address": "0x80621c",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7624_u32",
+      "address": "0x806238",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "can_vehicle_speed_frequency",
       "address": "0x80624c",
       "category": "ram_global",
       "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7564_u32",
+      "address": "0x806274",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7560_u16",
+      "address": "0x806278",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7558_u16",
+      "address": "0x80627a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7542_f16",
+      "address": "0x80628a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7536_f16",
+      "address": "0x806290",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7530_u16",
+      "address": "0x806296",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rom_special_pages_crc",
+      "address": "0x8062ac",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rom_check_crc2",
+      "address": "0x8062b0",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "rom_crc_check1_done_ok_marker",
+      "address": "0x8062b4",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7476_u16",
+      "address": "0x8062cc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7474_u16",
+      "address": "0x8062ce",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7472_u16",
+      "address": "0x8062d0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7470_u16",
+      "address": "0x8062d2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tomo_torque_max_nm",
+      "address": "0x8062e0",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7452_u16",
+      "address": "0x8062e4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "apps_limiting_stabilizer_low_limit",
+      "address": "0x8062ea",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "apps_limiting_stabilizer_low_limit_update_decay",
+      "address": "0x8062ec",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7440_f16",
+      "address": "0x8062f0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "low_gear_flags",
+      "address": "0x80632a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ignition_decay",
+      "address": "0x806330",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ignition_decay_prev",
+      "address": "0x806332",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "speed_compensated_coolant_temp",
+      "address": "0x806336",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "dash_coolant_temp32",
+      "address": "0x806338",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cantx_dash_compensated_coolant_temp",
+      "address": "0x80633c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7362_f16",
+      "address": "0x80633e",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7336_f16",
+      "address": "0x80635a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7334_f16",
+      "address": "0x80635c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7332_f16",
+      "address": "0x80635e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7330_f16",
+      "address": "0x806360",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "maf_x_iat_mapped",
+      "address": "0x80636c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7304_f16",
+      "address": "0x80637a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc1_byte_result",
+      "address": "0x80637c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7274_u16",
+      "address": "0x806396",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si0_rx_swapped_buffer1",
+      "address": "0x8063ec",
+      "category": "ram_global",
+      "data_type": "uint16_t[6]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si0_rx_swapped_buffer0",
+      "address": "0x8063f8",
+      "category": "ram_global",
+      "data_type": "uint16_t[6]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si0_tx_dma_buffers",
+      "address": "0x806404",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si0_rx_dma_buffers",
+      "address": "0x806438",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7060_u16a",
+      "address": "0x80646c",
+      "category": "ram_global",
+      "data_type": "uint16_t[1]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7056_u16a",
+      "address": "0x806470",
+      "category": "ram_global",
+      "data_type": "uint16_t[1]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7054_u16a",
+      "address": "0x806472",
+      "category": "ram_global",
+      "data_type": "uint16_t[1]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_call_counter",
+      "address": "0x806474",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "throttle_update_flags",
+      "address": "0x80647c",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7042_u16",
+      "address": "0x80647e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7040_u8",
+      "address": "0x806480",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7033_f8",
+      "address": "0x806487",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7012_u16",
+      "address": "0x80649c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp7002_u16",
+      "address": "0x8064a6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc_full_tps_sub",
+      "address": "0x8064aa",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc8_full_result",
+      "address": "0x8064ac",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc0_full_result",
+      "address": "0x8064ae",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc3_full_result",
+      "address": "0x8064b0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc0_result_filtered",
+      "address": "0x8064b2",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc3_result_filtered",
+      "address": "0x8064b4",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6986_u16",
+      "address": "0x8064b6",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6982_u16",
+      "address": "0x8064ba",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6978_u16",
+      "address": "0x8064be",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6976_u16",
+      "address": "0x8064c0",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6974_u16a",
+      "address": "0x8064c2",
+      "category": "ram_global",
+      "data_type": "uint16_t[8]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6958_u16",
+      "address": "0x8064d2",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6956_u8",
+      "address": "0x8064d4",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6955_u8",
+      "address": "0x8064d5",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6954_u8",
+      "address": "0x8064d6",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6952_u8a",
+      "address": "0x8064d8",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6940_u16",
+      "address": "0x8064e4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6928_u16",
+      "address": "0x8064f0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6926_u16",
+      "address": "0x8064f2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6924_u16",
+      "address": "0x8064f4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6922_u16",
+      "address": "0x8064f6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6416_u32",
+      "address": "0x8064fc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6412_u32",
+      "address": "0x806500",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6408_u32",
+      "address": "0x806504",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6404_u32",
+      "address": "0x806508",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6900_u16",
+      "address": "0x80650e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6896_u16",
+      "address": "0x806510",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6894_u16",
+      "address": "0x806512",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6892_u16",
+      "address": "0x806514",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6890_u16",
+      "address": "0x806516",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6888_u16",
+      "address": "0x806518",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6886_u16",
+      "address": "0x80651a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6884_u16",
+      "address": "0x80651c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6798_u16",
+      "address": "0x806572",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6775_u8",
+      "address": "0x806589",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6774_u8",
+      "address": "0x80658a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6773_u8",
+      "address": "0x80658b",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6772_u8",
+      "address": "0x80658c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6771_u8",
+      "address": "0x80658d",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6770_u8",
+      "address": "0x80658e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6756_u16",
+      "address": "0x80659c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6744_u16",
+      "address": "0x8065a8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6738_u16",
+      "address": "0x8065ae",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6728_u16",
+      "address": "0x8065b8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6726_u16",
+      "address": "0x8065ba",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6724_u16",
+      "address": "0x8065bc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6722_u16",
+      "address": "0x8065be",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc9_full_result",
+      "address": "0x8065ca",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc10_full_result",
+      "address": "0x8065cc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "adc11_full_result",
+      "address": "0x8065ce",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6684_u16",
+      "address": "0x8065e4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6682_u16",
+      "address": "0x8065e6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6680_u16",
+      "address": "0x8065e8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6676_u16",
+      "address": "0x8065ec",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6672_u32",
+      "address": "0x8065f0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6668_u32",
+      "address": "0x8065f4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6664_u32",
+      "address": "0x8065f8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6660_u32",
+      "address": "0x8065fc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6656_u16",
+      "address": "0x806600",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6654_u16",
+      "address": "0x806602",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6652_u16",
+      "address": "0x806604",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6650_u16",
+      "address": "0x806606",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6648_u16",
+      "address": "0x806608",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6646_u16",
+      "address": "0x80660a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6616_f16",
+      "address": "0x806628",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6604_u16",
+      "address": "0x806634",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6602_u16",
+      "address": "0x806636",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6600_u16",
+      "address": "0x806638",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6592_u32",
+      "address": "0x806640",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6568_f8",
+      "address": "0x806658",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6566",
+      "address": "0x80665a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "engine_model_recalc_deadline",
+      "address": "0x80665c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tio3ih_execution_time",
+      "address": "0x80665e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tio3ih_execution_start",
+      "address": "0x806660",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tio3ih_remaining_calls",
+      "address": "0x806662",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "heartbeat750_deadline",
+      "address": "0x806666",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6544_u16",
+      "address": "0x806670",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6540_ptru32",
+      "address": "0x806674",
+      "category": "ram_global",
+      "data_type": "uint32_t *",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6536_struct4a",
+      "address": "0x806678",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6448_f8",
+      "address": "0x8066d0",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6447_f8",
+      "address": "0x8066d1",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6440_f8a",
+      "address": "0x8066d8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si2_tx_buffer",
+      "address": "0x8066ec",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "s2_rx_dma_buffer",
+      "address": "0x8066f2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si2_error_set",
+      "address": "0x8066fa",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si2_error_timestamp",
+      "address": "0x8066fc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_mode",
+      "address": "0x8066fe",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "sio2_subcon_keepalive_decay",
+      "address": "0x806702",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si2_tx_index",
+      "address": "0x806704",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "si2_tx_count",
+      "address": "0x806706",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "heartbeat1250_deadline",
+      "address": "0x80670c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6378_u16",
+      "address": "0x806714",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6360_u16",
+      "address": "0x806728",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id0_source",
+      "address": "0x806790",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id1_source",
+      "address": "0x806798",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id2_source",
+      "address": "0x8067a0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id3_source",
+      "address": "0x8067a8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id4_source",
+      "address": "0x8067b0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id5_source",
+      "address": "0x8067b8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_id6_source",
+      "address": "0x8067c0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_done_flags",
+      "address": "0x8067c8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_last_id_index",
+      "address": "0x8067d0",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_request_count",
+      "address": "0x8067d1",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx2_request_flags",
+      "address": "0x8067d2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_slot_idx",
+      "address": "0x8067d9",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp6180_u8p",
+      "address": "0x8067dc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "specific_area",
+      "address": "0x806cac",
+      "category": "ram_global",
+      "data_type": "uint8_t[256]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "port_states",
+      "address": "0x806e00",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "port_modes",
+      "address": "0x806e18",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "get_random_number_call_parameter",
+      "address": "0x806e2d",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_random_number",
+      "address": "0x806e30",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_security_key_fault_count",
+      "address": "0x806e34",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_multipacket_tx_index",
+      "address": "0x806e3a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_multipacket_buffer_tail_const257",
+      "address": "0x806e40",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "ctx0i",
+      "address": "0x806e42",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp4540_f8",
+      "address": "0x806e44",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id0_send_request_flag",
+      "address": "0x806e45",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_data_size",
+      "address": "0x806e48",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_data",
+      "address": "0x806e4a",
+      "category": "ram_global",
+      "data_type": "uint8_t[250]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_multipacket_rx_ack_delay",
+      "address": "0x806f4c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_last_id_index",
+      "address": "0x806f52",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_nested_disable_count",
+      "address": "0x806f53",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_request_count",
+      "address": "0x806f54",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_request_flags",
+      "address": "0x806f55",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_nested_psw",
+      "address": "0x806f58",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_hw_slots",
+      "address": "0x806f5c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_slot_controls",
+      "address": "0x806f60",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_id_index",
+      "address": "0x806f64",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_slot_buffer_ptr",
+      "address": "0x806f68",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx_active",
+      "address": "0x806f6c",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_slot_buffer",
+      "address": "0x806f6e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id0_long_message_frame_count",
+      "address": "0x806f80",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp4221_u16",
+      "address": "0x806f83",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_tx_sequence_index",
+      "address": "0x806f86",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1id0_frame_to_frame_init_decay",
+      "address": "0x806f87",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id0_long_message_last_frame_stub_size",
+      "address": "0x806f88",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp4215_f8",
+      "address": "0x806f89",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_blocking_transmission_marker",
+      "address": "0x806f8a",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_debug_rx_data_buffer_index",
+      "address": "0x806f8c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_debug_rx_data_size",
+      "address": "0x806f8e",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_flow_flags",
+      "address": "0x806f90",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id0_long_message_frame_to_frame_decay",
+      "address": "0x806f92",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_blocking_transmission_decay",
+      "address": "0x806f93",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx235_hook_sid",
+      "address": "0x806f94",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "tx1id1_single_data",
+      "address": "0x806f98",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_flags",
+      "address": "0x806fa0",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp4191_f8",
+      "address": "0x806fa1",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_memory_pointers",
+      "address": "0x806fa4",
+      "category": "ram_global",
+      "data_type": "uint8_t *[3]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_queue_size",
+      "address": "0x806fb0",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_queue_head",
+      "address": "0x806fb1",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_queue_data",
+      "address": "0x806fb2",
+      "category": "ram_global",
+      "data_type": "uint8_t[128]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_item_pointer",
+      "address": "0x807034",
+      "category": "ram_global",
+      "data_type": "can_log_time_based_item",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_instances",
+      "address": "0x807038",
+      "category": "ram_global",
+      "data_type": "can_log_time_based_instance[2]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_security_access_flags",
+      "address": "0x8073c9",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_memcrc_left",
+      "address": "0x8073cc",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_memcpy_left",
+      "address": "0x8073d0",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_memcpy_size",
+      "address": "0x8073d4",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "vflash_bank_16k",
+      "address": "0x8073d8",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cdbg_log_tx_frame_buffer",
+      "address": "0x8073dc",
+      "category": "ram_global",
+      "data_type": "uint8_t[8]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp3100_u8",
+      "address": "0x8073e4",
+      "category": "ram_global",
+      "data_type": "uint8_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto5_call_counter",
+      "address": "0x8073e6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "canrx_hook1_sid",
+      "address": "0x8073e8",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto5_call_hook_replenish_counts",
+      "address": "0x8073ea",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto5_call_hook_remaining_calls",
+      "address": "0x8073f2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "mjto5_call_hooks",
+      "address": "0x8073fc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id0_source",
+      "address": "0x80740c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id1_source",
+      "address": "0x807414",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_id2_destination",
+      "address": "0x80741c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_done_flags",
+      "address": "0x807424",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_rx_done_flags",
+      "address": "0x807428",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "eeprom_flags",
+      "address": "0x80742e",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "eeprom_data_area",
+      "address": "0x80744c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "eeprom_data1",
+      "address": "0x80746c",
+      "category": "ram_global",
+      "data_type": "uint8_t[124]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp2432_u32a",
+      "address": "0x807680",
+      "category": "ram_global",
+      "data_type": "uint32_t[500]",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "interrupt_flags_stack_head",
+      "address": "0x807f6c",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "heartbeat_deadline",
+      "address": "0x807f80",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasher_ticks",
+      "address": "0x807f82",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "execution_deadline_4cc0",
+      "address": "0x807f84",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "integrity_fault",
+      "address": "0x807f86",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_block_state",
+      "address": "0x807f88",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_tx1_id0_completion",
+      "address": "0x807f8a",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "boot_ignition_decay",
+      "address": "0x807f8c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_destination",
+      "address": "0x807f90",
+      "category": "ram_global",
+      "data_type": "void *",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_size",
+      "address": "0x807f94",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_inblock_index",
+      "address": "0x807f98",
+      "category": "ram_global",
+      "data_type": "uint32_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_crypto_mode",
+      "address": "0x807f9c",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_block_reference_crc",
+      "address": "0x807f9e",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_current_block_calculated_crc",
+      "address": "0x807fa0",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "can_flasher_block_index",
+      "address": "0x807fa2",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp92_u32",
+      "address": "0x807fa4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasher_init_public_key1",
+      "address": "0x807fa8",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flasher_init_public_key2",
+      "address": "0x807faa",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_init_secret_key1",
+      "address": "0x807fac",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "flash_init_secret_key2",
+      "address": "0x807fae",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_security_access_flags",
+      "address": "0x807fb0",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp78_g16",
+      "address": "0x807fb2",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp76_g16",
+      "address": "0x807fb4",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp74_g16",
+      "address": "0x807fb6",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_session_id",
+      "address": "0x807fbe",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_session_id_prev",
+      "address": "0x807fc0",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "cobd_bootload_session_request_marker",
+      "address": "0x807fc2",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "enforce_integrity_fault_magic",
+      "address": "0x807fc4",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp58_f16",
+      "address": "0x807fc6",
+      "category": "ram_global",
+      "data_type": "uint16_t",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_counter",
+      "address": "0x807fc8",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "fp54_u16",
+      "address": "0x807fca",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "hrd_reset_guard",
+      "address": "0x807fcc",
+      "category": "ram_global",
+      "confidence": "high",
+      "source": "colt_map",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "reset_memory_guard",
+      "address": "0x807fd0",
+      "category": "ram_global",
       "confidence": "high",
       "source": "colt_map",
       "session": "",

@@ -21,3 +21,13 @@ variant = "fp8000"
 priority = 50
 features = ["can_bootloader", "dma", "cvt_dash"]
 notes = "Colt CZT Z37A 5MT; CAN bootloader + DMA/CAN handlers decoded (from mmc-research colt_flash/colt_map)"
+
+[[reference]]
+id = "30200003"
+json = "30200003.json"
+rom = "30200003.bin"
+family = "z27w"
+variant = "fp8000"
+priority = 40
+features = ["cvt", "cvt_maps", "torque_model"]
+notes = "Colt Z27W CVT; most-decoded CVT (torque model + CVT/PSST/LPSD flash maps, RAM globals from mmc-research singa_map + description.ld). No function table."

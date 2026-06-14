@@ -47,6 +47,7 @@ from rom_analyzer.annotations_io import (
 _ADDR_RE = re.compile(r"^0x[0-9a-fA-F]+$")
 _FP_RE = re.compile(r"^fp[+-]\d+$")
 _IDENT_RE = re.compile(r"^[A-Za-z_]\w*$")
+_LD_ASSIGN_RE = re.compile(r"^\s*([A-Za-z_]\w*)\s*=\s*(0x[0-9a-fA-F]+)\s*;")
 _ARG_REGS = ("R0", "R1", "R2", "R3")
 
 
@@ -229,11 +230,16 @@ def parse_colt_map(path: Path) -> list[AnnotationSymbol]:
         if not _ADDR_RE.match(fields[0]):
             continue
         addr = int(fields[0], 16)
-        # The declaration is the field after the fp-OFFSET (RAddress) column.
+        # The declaration is the next non-empty field after the fp-OFFSET
+        # (RAddress) column. Some tables pad with an extra tab (fp-NNNN\t\tdecl),
+        # so skip empty fields rather than blindly taking fields[i+1].
         decl = ""
         for i, f in enumerate(fields):
-            if _FP_RE.match(f) and i + 1 < len(fields):
-                decl = fields[i + 1].strip()
+            if _FP_RE.match(f):
+                for nxt in fields[i + 1:]:
+                    if nxt:
+                        decl = nxt
+                        break
                 break
         if not decl or decl in ("-", "?"):
             continue
@@ -248,15 +254,58 @@ def parse_colt_map(path: Path) -> list[AnnotationSymbol]:
     return symbols
 
 
-def build_store(flash_path: Path, map_path: Path, rom_id: str,
+def parse_description_ld(path: Path) -> list[AnnotationSymbol]:
+    """Parse a description.ld of 'name = 0xADDR;' assignments into symbols.
+
+    Used for ROMs (e.g. CVT decodes) whose flash labels live in a linker
+    fragment rather than a colt_flash table. No type info is available, so
+    data_type is None. Address decides category against the flash/RAM boundary
+    at 0x800000 (RAM start): < 0x800000 -> flash data (ROM images run up to
+    0xC0000 on the larger parts), >= 0x800000 -> ram_global. Linker constructs
+    (SECTIONS, etc.) don't match the assignment pattern and are ignored.
+    """
+    symbols: list[AnnotationSymbol] = []
+    for line in path.read_text(errors="replace").splitlines():
+        m = _LD_ASSIGN_RE.match(line)
+        if not m:
+            continue
+        name, addr_s = m.group(1), m.group(2)
+        addr = int(addr_s, 16)
+        category = "data" if addr < 0x800000 else "ram_global"
+        symbols.append(AnnotationSymbol(
+            name=name, address=addr, category=category,
+            data_type=None, confidence="high", source="description_ld",
+        ))
+    return symbols
+
+
+def build_store(flash_path: Path | None, map_path: Path | None,
+                description_ld_path: Path | None, rom_id: str,
                 rom_sha256: str) -> AnnotationStore:
-    data_syms, functions = parse_colt_flash(flash_path)
-    ram_syms = parse_colt_map(map_path) if map_path else []
+    symbols: list[AnnotationSymbol] = []
+    functions: list[AnnotationFunction] = []
+    if flash_path:
+        data_syms, functions = parse_colt_flash(flash_path)
+        symbols += data_syms
+    if map_path:
+        symbols += parse_colt_map(map_path)
+    if description_ld_path:
+        symbols += parse_description_ld(description_ld_path)
+
+    # De-duplicate symbols by (address, category): a colt_flash entry (typed)
+    # wins over a description_ld entry (untyped) at the same flash address.
+    by_key: dict[tuple[int, str], AnnotationSymbol] = {}
+    for s in symbols:
+        key = (s.address, s.category)
+        existing = by_key.get(key)
+        if existing is None or (existing.data_type is None and s.data_type is not None):
+            by_key[key] = s
+
     return AnnotationStore(
         schema_version=1,
         rom_id=rom_id,
         rom_sha256=rom_sha256,
-        symbols=data_syms + ram_syms,
+        symbols=list(by_key.values()),
         functions=functions,
     )
 
@@ -264,19 +313,26 @@ def build_store(flash_path: Path, map_path: Path, rom_id: str,
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--flash", required=True, type=Path, help="colt_flash.txt path")
-    ap.add_argument("--map", type=Path, default=None, help="colt_map.txt path (RAM)")
+    ap.add_argument("--flash", type=Path, default=None, help="colt_flash.txt path")
+    ap.add_argument("--map", type=Path, default=None,
+                    help="colt_map.txt / singa_map.txt path (RAM globals)")
+    ap.add_argument("--description-ld", type=Path, default=None,
+                    help="description.ld of 'name = 0xADDR;' flash labels (CVT decodes)")
     ap.add_argument("--rom", type=Path, default=None,
                     help="ROM bin to hash for rom_sha256 (recommended)")
     ap.add_argument("--rom-id", required=True, help="ROM id, e.g. 47110032")
     ap.add_argument("--out", required=True, type=Path, help="output JSON path")
     args = ap.parse_args()
 
+    if not (args.flash or args.map or args.description_ld):
+        ap.error("provide at least one of --flash / --map / --description-ld")
+
     rom_sha256 = ""
     if args.rom:
         rom_sha256 = hashlib.sha256(args.rom.read_bytes()).hexdigest()
 
-    store = build_store(args.flash, args.map, args.rom_id, rom_sha256)
+    store = build_store(args.flash, args.map, args.description_ld,
+                        args.rom_id, rom_sha256)
     save_annotations(args.out, store)
 
     n_data = sum(1 for s in store.symbols if s.category == "data")
