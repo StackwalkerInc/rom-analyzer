@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "rom_id": "e5090011",
-  "rom_sha256": "",
+  "rom_sha256": "96009e479c7f8429422dc0519f47d3de469e01988d94fca85d33096accf51bfc",
   "symbols": [
     {
       "name": "flash_apps_corrected_neutral",
