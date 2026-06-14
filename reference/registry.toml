@@ -31,3 +31,13 @@ variant = "fp8000"
 priority = 40
 features = ["cvt", "cvt_maps", "torque_model"]
 notes = "Colt Z27W CVT; most-decoded CVT (torque model + CVT/PSST/LPSD flash maps, RAM globals from mmc-research singa_map + description.ld). No function table."
+
+[[reference]]
+id = "e5090011"
+json = "e5090011.json"
+rom = "e5090011.bin"
+family = "cs7a"
+variant = "fp8000"
+priority = 30
+features = ["cruise_control", "map_sensor", "returnless_fuel", "na", "4g18"]
+notes = "Lancer Ralliart CS7A USDM 4AT; 4G18 NA SOHC-MIVEC, MPI. Cruise control + MAP/MDP returnless-fuel compensation decoded (from mmc-research said_map + said_art.S). No stock bin extracted yet (sha256 empty); skipped at runtime until roms/e5090011.bin is supplied."
