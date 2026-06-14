@@ -203,3 +203,25 @@ def test_gather_forward_and_back_function_candidates():
     # back: new name onto ref (target=33520003)
     assert back[0].target == "33520003" and back[0].proposed == "call200"
     assert back[0].current == "sio_dma_reset" and back[0].address == 0x10000
+
+
+from rom_analyzer.enrich import is_generic
+
+
+def test_is_generic():
+    for n in ("out", "in", "x", "tmp", "data", "value", "fn", "abc"):
+        assert is_generic(n), n
+    for n in ("sio_dma_reset", "tacho_set", "main", "popi", "max16", "sqrt"):
+        assert not is_generic(n), n
+
+
+def test_classify_generic_gap_goes_to_review_not_auto():
+    # a NEW function gap with a too-generic proposed name must be reviewed,
+    # not silently auto-applied (the "out" regression)
+    cands = [
+        _cand(0x3a200, "function", None, "out"),               # generic gap -> review
+        _cand(0x10000, "function", None, "sio_dma_reset"),     # real gap -> auto
+    ]
+    out = classify(cands, erased=set())
+    assert [c.proposed for c in out.auto] == ["sio_dma_reset"]
+    assert [c.proposed for c in out.review] == ["out"]

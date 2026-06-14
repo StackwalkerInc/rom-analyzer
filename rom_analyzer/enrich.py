@@ -19,9 +19,26 @@ _PLACEHOLDER_RE = re.compile(
 )
 
 
+# Real-looking but meaningless names that should never silently fill a gap
+# (they slip past the auto-name / placeholder filters — e.g. "out").
+_JUNK_NAMES = frozenset({
+    "out", "in", "tmp", "temp", "foo", "bar", "data", "val", "value", "ptr",
+    "ret", "end", "sub", "fn", "func", "stub", "todo", "tbd", "unknown", "x",
+})
+
+
 def is_auto_name(name: str) -> bool:
     """True for Ghidra auto-generated names with no human meaning."""
     return bool(_AUTO_RE.match(name))
+
+
+def is_generic(name: str) -> bool:
+    """True for names too generic to auto-apply (<=3 chars or a bare junk word).
+
+    These pass is_auto_name/is_placeholder but carry no domain meaning (e.g.
+    "out"); they must be reviewed, not silently applied as a gap-fill.
+    """
+    return len(name) <= 3 or name.lower() in _JUNK_NAMES
 
 
 def is_placeholder(name: str) -> bool:
@@ -63,7 +80,8 @@ class Classified:
 def classify(candidates: list[LabelCandidate], erased: set[int]) -> Classified:
     """Split candidates into auto-apply / review / drop.
 
-    AUTO  : a new function (gap, current is None), real name, entry not erased.
+    AUTO  : a new function (gap, current is None), real non-generic name, entry
+            not erased.
     DROP  : auto-names anywhere; functions whose entry is in erased flash.
     REVIEW: name conflicts (current set and differs from proposed); all RAM/data
             candidates (raw-offset data is filtered upstream; what arrives here
@@ -81,7 +99,10 @@ def classify(candidates: list[LabelCandidate], erased: set[int]) -> Classified:
             if c.address in erased:
                 continue  # typo landing in 0xFF
             if c.current is None:
-                auto.append(c)         # new function gap — cross-family safe
+                if is_generic(c.proposed):
+                    review.append(c)   # too generic to auto-apply — review it
+                else:
+                    auto.append(c)     # new function gap — cross-family safe
             else:
                 review.append(c)       # genuine fn name conflict
         else:
