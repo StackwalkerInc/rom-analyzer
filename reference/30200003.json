@@ -15222,7 +15222,7 @@
       "return_type": "void"
     },
     {
-      "name": "out",
+      "name": "sio2_error_recover",
       "entry_point": "0x3b114",
       "confidence": "medium",
       "source": "xref:33520003",

@@ -16211,10 +16211,10 @@
       "return_type": "void"
     },
     {
-      "name": "out",
+      "name": "sio2_error_recover",
       "entry_point": "0x3ac50",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "xref:33520003",
       "session": "",
       "timestamp": "",
       "return_type": "uint8_t"

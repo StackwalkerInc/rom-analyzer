@@ -51796,7 +51796,7 @@
       "return_type": "void"
     },
     {
-      "name": "out",
+      "name": "sio2_error_recover",
       "entry_point": "0x3a200",
       "confidence": "medium",
       "source": "xref:39670016",
