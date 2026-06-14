@@ -21,6 +21,7 @@ from rom_analyzer.emit_ld import (
     emit_flash_free_toml,
     emit_mode23_binding_line,
     emit_omni_stub,
+    emit_can_slots_toml,
     emit_obd_pid_symbols,
     emit_ram_free_toml,
     emit_reference_conflicts_md,
@@ -318,6 +319,9 @@ def analyze_against_reference(project, entry, language_id, rom_path, rom_bytes,
               help="Resolve and append the mode-0x23 code splice-site bindings to description.ld")
 @click.option("--emit-obd", is_flag=True, default=False,
               help="Extract OBD PID + DTC ground-truth labels and emit dtc-map.toml")
+@click.option("--emit-can-slots", is_flag=True, default=False,
+              help="Decode per-slot CAN SIDs and emit can-slots.toml (semantic "
+                   "names by SID, reliable across slot-index shifts)")
 @click.option("--registry", "registry_path", type=click.Path(path_type=Path),
               default=_REFERENCE_DIR / "registry.toml",
               help="Reference registry TOML (multi-reference). Falls back to "
@@ -333,7 +337,7 @@ def analyze_against_reference(project, entry, language_id, rom_path, rom_bytes,
 def main(rom_path, variant, reference, reference_rom, ghidra_home,
          project_dir, project_name, out_dir, min_flash_block, min_ram_block,
          reference_name, clean_project, enrich_project, inline_source_annotations,
-         emit_mode23, emit_obd,
+         emit_mode23, emit_obd, emit_can_slots,
          registry_path, reference_ids, exclude_ids, fast):
     """Analyze a ROM and emit description.ld, omni.ld stub, and reports.
 
@@ -571,6 +575,49 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
             )
             obd_pid_text = emit_obd_pid_symbols(obd_result.pid_entries)
 
+        # [5.8/7] CAN slot SID decode + semantic enrichment
+        can_slots_result = None
+        if emit_can_slots:
+            import re as _re
+            from rom_analyzer.can_slots import analyze_can_slots
+            click.echo("[5.8/7] CAN slot SID decode")
+            prop_by_name = {p.name: p.new_address for p in propagated_all}
+            check_addr = prop_by_name.get("can0_slot_check_sid")
+            if check_addr is None:
+                check_addr = next(
+                    (m.new_address for m in matches if m.ref_name == "can0_slot_check_sid"),
+                    None,
+                )
+            if check_addr is None:
+                click.echo("   warning: can0_slot_check_sid not located; CAN slot decode skipped")
+            else:
+                # Map slot index -> (rx_handler, tx_handler) from labeled handlers,
+                # accepting both plain (can0_slot11_rx_update) and already-semantic
+                # (can0_slot0_apps_tps_extra_tx_update) names.
+                _h = _re.compile(r"^can0_slot(\d+)_(?:.+_)?(rx|tx)_update$")
+                slot_handlers: dict[int, list[int | None]] = {}
+                for p in propagated_all:
+                    mm = _h.match(p.name)
+                    if mm is None:
+                        continue
+                    slot, direction = int(mm.group(1)), mm.group(2)
+                    rx, tx = slot_handlers.setdefault(slot, [None, None])
+                    # Prefer the lowest (canonical) address when a name is
+                    # duplicated across mirrored code regions.
+                    if direction == "rx":
+                        if rx is None or p.new_address < rx:
+                            slot_handlers[slot] = [p.new_address, tx]
+                    else:
+                        if tx is None or p.new_address < tx:
+                            slot_handlers[slot] = [rx, p.new_address]
+                handlers = {k: (v[0], v[1]) for k, v in slot_handlers.items()}
+                can_slots_result = analyze_can_slots(rom_bytes, check_addr, handlers)
+                known = sum(1 for s in can_slots_result if s.semantic)
+                click.echo(
+                    f"   decoded {len(can_slots_result)} slots, "
+                    f"{known} with known semantics"
+                )
+
         # [6/7] Detect CRC, scan free space
         click.echo("[6/7] Detecting CRC, scanning free space")
 
@@ -697,6 +744,10 @@ def main(rom_path, variant, reference, reference_rom, ghidra_home,
             dtc_map_path = out_dir / "dtc-map.toml"
             dtc_map_path.write_text(emit_dtc_map_toml(obd_result.dtc_entries))
             click.echo(f"   wrote {dtc_map_path}")
+        if can_slots_result is not None:
+            can_slots_path = out_dir / "can-slots.toml"
+            can_slots_path.write_text(emit_can_slots_toml(can_slots_result))
+            click.echo(f"   wrote {can_slots_path}")
 
         (out_dir / "reference-conflicts.md").write_text(
             emit_reference_conflicts_md(disagreements, cross_family))

@@ -181,6 +181,29 @@ def emit_dtc_map_toml(dtc_entries: list) -> str:
     return tomli_w.dumps({"dtc": rows})
 
 
+def emit_can_slots_toml(slots: list) -> str:
+    """Render can-slots.toml: per-slot decoded CAN SID + semantic + handlers.
+
+    Each slot carries its decoded SID, the known semantic (when the SID is in
+    CAN_SID_NAMES), the rx/tx handler addresses (when matched), and a suggested
+    semantic handler name for enrichment.
+    """
+    from rom_analyzer.can_slots import propose_handler_name
+    rows = []
+    for s in slots:
+        row: dict = {"slot": s.slot, "sid": f"0x{s.sid:03x}"}
+        if s.semantic:
+            row["semantic"] = s.semantic
+        if s.rx_handler is not None:
+            row["rx_handler"] = f"0x{s.rx_handler:x}"
+            row["rx_name"] = propose_handler_name(s.slot, s.semantic, "rx")
+        if s.tx_handler is not None:
+            row["tx_handler"] = f"0x{s.tx_handler:x}"
+            row["tx_name"] = propose_handler_name(s.slot, s.semantic, "tx")
+        rows.append(row)
+    return tomli_w.dumps({"slot": rows})
+
+
 def emit_obd_pid_symbols(pid_entries: list) -> str:
     """Render OBD PID source RAM addresses as PROVIDE() lines for description.ld."""
     if not pid_entries:
