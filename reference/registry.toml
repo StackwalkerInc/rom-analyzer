@@ -39,5 +39,5 @@ rom = "e5090011.bin"
 family = "cs7a"
 variant = "fp8000"
 priority = 30
-features = ["cruise_control", "map_sensor", "returnless_fuel", "na", "4g18"]
-notes = "Lancer Ralliart CS7A USDM 4AT; 4G18 NA SOHC-MIVEC, MPI. Cruise control + MAP/MDP returnless-fuel compensation decoded (from mmc-research said_map + said_art.S). Reference ROM is a modified read-as-colt 768KB dump (id e5090011 at 0x222); supply roms/e5090011.bin locally (gitignored) to enable at runtime."
+features = ["cruise_control", "map_sensor", "returnless_fuel", "na", "4g69"]
+notes = "Lancer Ralliart CS7A USDM 4AT; 4G69 2.4L NA SOHC-MIVEC, MPI. Cruise control + MAP/MDP returnless-fuel compensation decoded (from mmc-research said_map + said_art.S). Reference ROM is a modified read-as-colt 768KB dump (id e5090011 at 0x222); supply roms/e5090011.bin locally (gitignored) to enable at runtime."
