@@ -7,6 +7,7 @@ Drives headless Ghidra (PyGhidra) over the reference Z27AG ROM. Emits:
 
 Run with the project venv:  .venv/bin/python scripts/dma_activation_analysis.py
 """
+import os
 import sys
 from pathlib import Path
 
@@ -24,7 +25,7 @@ REPO = Path(__file__).resolve().parent.parent
 ROM = REPO / "roms" / "Z27AG_JDM_5MT_1860B104.bin"
 REF_JSON = REPO / "reference" / "33520003.json"
 LANG = "m32r:2:fp8000"
-GHIDRA_HOME = Path("/opt/homebrew/opt/ghidra/libexec")
+GHIDRA_HOME = Path(os.environ.get("GHIDRA_HOME", "/opt/homebrew/opt/ghidra/libexec"))
 PROJ_DIR = Path.home() / "rom-analyzer-projects" / "rom-analyzer"
 PROJ_NAME = "rom-analyzer"
 

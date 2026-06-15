@@ -12,6 +12,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -19,7 +20,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-GHIDRA_HOME = Path("/opt/homebrew/opt/ghidra/libexec")
+GHIDRA_HOME = Path(os.environ.get("GHIDRA_HOME", "/opt/homebrew/opt/ghidra/libexec"))
 PROJ_DIR = Path.home() / "rom-analyzer-projects"
 PROJ_NAME = "rom-analyzer"
 REGISTRY = REPO / "reference" / "registry.toml"

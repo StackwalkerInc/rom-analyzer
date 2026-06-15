@@ -1,4 +1,5 @@
 """Decompile OBD-II + remaining MUT functions for the protocol spec (static derivation)."""
+import os
 import sys
 from pathlib import Path
 from rom_analyzer.ghidra import setup_environment, import_and_dump, ghidriff_program_name, decompile_function
@@ -8,6 +9,7 @@ REPO = Path(__file__).resolve().parent.parent
 ROM = REPO / "roms" / "Z27AG_JDM_5MT_1860B104.bin"
 REF_JSON = REPO / "reference" / "33520003.json"
 LANG = "m32r:2:fp8000"
+GHIDRA_HOME = Path(os.environ.get("GHIDRA_HOME", "/opt/homebrew/opt/ghidra/libexec"))
 PROJ_DIR = Path.home() / "rom-analyzer-projects" / "rom-analyzer"
 
 TARGETS = {
@@ -20,7 +22,7 @@ OUT = REPO / "out" / "obd_decode_report.txt"
 
 
 def main() -> None:
-    setup_environment(Path("/opt/homebrew/opt/ghidra/libexec"))
+    setup_environment(GHIDRA_HOME)
     import pyghidra
     pyghidra.start()
     project = pyghidra.open_project(PROJ_DIR, "rom-analyzer", create=True)
