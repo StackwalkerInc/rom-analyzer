@@ -741,18 +741,30 @@ def apply_labels(
         bookmark_mgr = program.getBookmarkManager()
         with pyghidra.transaction(program, "Apply labels"):
             flat = FlatProgramAPI(program)
+            func_mgr = program.getFunctionManager()
             for s in symbols:
                 addr = flat.toAddr(s.new_address)
                 if addr is None:
                     continue
-                try:
-                    flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
-                    count += 1
-                except Exception:
-                    pass
                 if s.category == "function":
+                    # Rename via the function object to avoid creating a parallel
+                    # label symbol alongside the function's own symbol.
+                    func = func_mgr.getFunctionAt(addr)
+                    if func is None:
+                        try:
+                            func = flat.createFunction(addr, s.name)
+                        except Exception:
+                            pass
+                    if func is not None:
+                        try:
+                            func.setName(s.name, SourceType.USER_DEFINED)
+                            count += 1
+                        except Exception:
+                            pass
+                else:
                     try:
-                        flat.createFunction(addr, s.name)
+                        flat.createLabel(addr, s.name, True, SourceType.USER_DEFINED)
+                        count += 1
                     except Exception:
                         pass
                 if s.source:
