@@ -128,7 +128,7 @@ def _build_variable_ctx(
             if caller_name not in named_writers:
                 named_writers.append(caller_name)
                 named_writer_funcs[caller_name] = caller
-        else:
+        elif ref_type.isRead():
             if caller_name not in named_readers:
                 named_readers.append(caller_name)
 
@@ -145,6 +145,9 @@ def _build_variable_ctx(
                 "data_type": sym.data_type,
             })
     adjacent.sort(key=lambda x: x["offset"])
+
+    if not named_readers and not named_writers and not adjacent:
+        return None
 
     # Decompile single named writer if exactly one exists
     writer_decompile = None
@@ -246,7 +249,7 @@ def main():
                         continue
                     out_path.write_text(json.dumps(ctx, indent=2))
                     print(f"  [{rom}] {address_str}: wrote {out_path.name} "
-                          f"({len(set(ctx['callers']))} callers, {len(set(ctx['callees']))} callees)")
+                          f"({len(ctx['callers'])} callers, {len(ctx['callees'])} callees)")
 
             written += 1
 
