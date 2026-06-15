@@ -12,8 +12,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import dataclasses
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -50,6 +50,7 @@ def main():
     parser.add_argument("--project-name", default=PROJ_NAME)
     args = parser.parse_args()
 
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
     queue_path = STATE_DIR / "queue_vars.json"
     yield_path = STATE_DIR / "yield_history_vars.json"
 
@@ -117,7 +118,7 @@ def main():
 
                     named_readers: set[str] = set()
                     named_writers: set[str] = set()
-                    reader_writer_eps: set[str] = set()
+                    named_ref_eps: set[str] = set()
 
                     for ref in ref_mgr.getReferencesTo(addr_obj):
                         ref_type = ref.getReferenceType()
@@ -130,7 +131,7 @@ def main():
                         if is_auto_name(caller_name) or is_placeholder(caller_name):
                             continue
                         caller_ep = f"0x{int(caller.getEntryPoint().getOffset()) & 0xFFFFFFFF:x}"
-                        reader_writer_eps.add(caller_ep)
+                        named_ref_eps.add(caller_ep)
                         if ref_type.isWrite():
                             named_writers.add(caller_name)
                         else:
@@ -152,7 +153,7 @@ def main():
                         prog_name=prog_name,
                         named_neighbor_count=len(named_readers) + len(named_writers),
                         priority=priority,
-                        neighbor_addresses=sorted(reader_writer_eps),
+                        neighbor_addresses=sorted(named_ref_eps),
                         item_type="variable",
                         category=cat,
                         sibling_addresses=[],   # filled in post-pass below
@@ -176,7 +177,7 @@ def main():
             and c.category == e.category
             and 0 < abs(int(c.address, 16) - addr_int) <= args.sibling_window
         )
-        final_queue.append(dataclasses.replace(e, sibling_addresses=siblings))
+        final_queue.append(replace(e, sibling_addresses=siblings))
 
     final_queue.sort(key=lambda e: e.priority, reverse=True)
     save_var_queue(STATE_DIR, final_queue)
