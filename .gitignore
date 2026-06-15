@@ -18,6 +18,7 @@ htmlcov/
 out/
 out_pre_task/
 .cache/
+agent_enrich_state/
 
 # Editor swap files
 *.swp
