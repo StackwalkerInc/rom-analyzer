@@ -396,6 +396,55 @@ def fetch_callers_of(
         return sorted(out)
 
 
+def fetch_callees_of(
+    project,
+    prog_name: str,
+    function_address: int,
+) -> list[int]:
+    """Return entry-point addresses of functions called by the function at function_address.
+
+    Uses the function body's outgoing CALL references. Addresses masked to uint32,
+    sorted, de-duplicated. Returns [] if no function exists at function_address.
+    """
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        func_mgr = program.getFunctionManager()
+        af = program.getAddressFactory().getDefaultAddressSpace()
+        addr = af.getAddress(function_address)
+        func = func_mgr.getFunctionAt(addr)
+        if func is None:
+            return []
+        body = func.getBody()
+        ref_mgr = program.getReferenceManager()
+        out: set[int] = set()
+        for ref in ref_mgr.getReferencesFromBody(body):
+            if ref.getReferenceType().isCall():
+                target = ref.getToAddress()
+                target_func = func_mgr.getFunctionAt(target)
+                if target_func is not None:
+                    out.add(int(target_func.getEntryPoint().getOffset()) & 0xFFFFFFFF)
+        return sorted(out)
+
+
+def fetch_function_name(
+    project,
+    prog_name: str,
+    entry_point: int,
+) -> str | None:
+    """Return the Ghidra name of the function at entry_point, or None if absent."""
+    import pyghidra
+
+    with pyghidra.program_context(project, f"/{prog_name}") as program:
+        func_mgr = program.getFunctionManager()
+        af = program.getAddressFactory().getDefaultAddressSpace()
+        addr = af.getAddress(entry_point)
+        func = func_mgr.getFunctionAt(addr)
+        if func is None:
+            return None
+        return str(func.getName())
+
+
 def fetch_data_read_sites(
     project,
     prog_name: str,
