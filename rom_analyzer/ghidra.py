@@ -418,12 +418,13 @@ def fetch_callees_of(
         body = func.getBody()
         ref_mgr = program.getReferenceManager()
         out: set[int] = set()
-        for ref in ref_mgr.getReferencesFromBody(body):
-            if ref.getReferenceType().isCall():
-                target = ref.getToAddress()
-                target_func = func_mgr.getFunctionAt(target)
-                if target_func is not None:
-                    out.add(int(target_func.getEntryPoint().getOffset()) & 0xFFFFFFFF)
+        for body_addr in body.getAddresses(True):
+            for ref in ref_mgr.getReferencesFrom(body_addr):
+                if ref.getReferenceType().isCall():
+                    target = ref.getToAddress()
+                    target_func = func_mgr.getFunctionAt(target)
+                    if target_func is not None:
+                        out.add(int(target_func.getEntryPoint().getOffset()) & 0xFFFFFFFF)
         return sorted(out)
 
 

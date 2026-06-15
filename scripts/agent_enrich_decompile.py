@@ -95,14 +95,15 @@ def main():
 
                 callees: list[str] = []
                 body = func.getBody()
-                for ref in ref_mgr.getReferencesFromBody(body):
-                    if ref.getReferenceType().isCall():
-                        callee_func = func_mgr.getFunctionAt(ref.getToAddress())
-                        if callee_func is not None:
-                            name = str(callee_func.getName())
-                            if not (name.startswith("FUN_")
-                                    or is_auto_name(name) or is_placeholder(name)):
-                                callees.append(name)
+                for body_addr in body.getAddresses(True):
+                    for ref in ref_mgr.getReferencesFrom(body_addr):
+                        if ref.getReferenceType().isCall():
+                            callee_func = func_mgr.getFunctionAt(ref.getToAddress())
+                            if callee_func is not None:
+                                name = str(callee_func.getName())
+                                if not (name.startswith("FUN_")
+                                        or is_auto_name(name) or is_placeholder(name)):
+                                    callees.append(name)
 
             ctx = {
                 "rom": rom,

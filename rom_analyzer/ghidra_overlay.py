@@ -166,7 +166,7 @@ def _create_struct_types(program, store: "AnnotationStore") -> None:
                     struct.replaceAtOffset(m.offset, dt, dt.getLength(), m.name, "")
                 except Exception:
                     pass
-        dtm.addDataType(struct, DataTypeConflictHandler.SKIP_HANDLER)
+        dtm.addDataType(struct, DataTypeConflictHandler.KEEP_HANDLER)
 
 
 # ---------------------------------------------------------------------------

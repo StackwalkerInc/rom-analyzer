@@ -145,19 +145,20 @@ def main():
                                     named_eps.add(caller_ep)
 
                     body = func.getBody()
-                    for ref in ref_mgr.getReferencesFromBody(body):
-                        if ref.getReferenceType().isCall():
-                            callee_func = func_mgr.getFunctionAt(ref.getToAddress())
-                            if callee_func is not None:
-                                callee_ep = (
-                                    int(callee_func.getEntryPoint().getOffset()) & 0xFFFFFFFF
-                                )
-                                neighbor_eps.add(callee_ep)
-                                callee_name = str(callee_func.getName())
-                                if not (callee_name.startswith("FUN_")
-                                        or is_auto_name(callee_name)
-                                        or is_placeholder(callee_name)):
-                                    named_eps.add(callee_ep)
+                    for body_addr in body.getAddresses(True):
+                        for ref in ref_mgr.getReferencesFrom(body_addr):
+                            if ref.getReferenceType().isCall():
+                                callee_func = func_mgr.getFunctionAt(ref.getToAddress())
+                                if callee_func is not None:
+                                    callee_ep = (
+                                        int(callee_func.getEntryPoint().getOffset()) & 0xFFFFFFFF
+                                    )
+                                    neighbor_eps.add(callee_ep)
+                                    callee_name = str(callee_func.getName())
+                                    if not (callee_name.startswith("FUN_")
+                                            or is_auto_name(callee_name)
+                                            or is_placeholder(callee_name)):
+                                        named_eps.add(callee_ep)
 
                     queue.append(QueueEntry(
                         rom=entry.id,
