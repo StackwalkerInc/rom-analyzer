@@ -124,7 +124,7 @@ def main():
                         continue
 
                     neighbor_eps: set[int] = set()
-                    named_count = 0
+                    named_eps: set[int] = set()
 
                     ref_mgr = program.getReferenceManager()
                     target_addr = af.getAddress(ep)
@@ -142,7 +142,7 @@ def main():
                                 if not (caller_name.startswith("FUN_")
                                         or is_auto_name(caller_name)
                                         or is_placeholder(caller_name)):
-                                    named_count += 1
+                                    named_eps.add(caller_ep)
 
                     body = func.getBody()
                     for ref in ref_mgr.getReferencesFromBody(body):
@@ -157,15 +157,15 @@ def main():
                                 if not (callee_name.startswith("FUN_")
                                         or is_auto_name(callee_name)
                                         or is_placeholder(callee_name)):
-                                    named_count += 1
+                                    named_eps.add(callee_ep)
 
                     queue.append(QueueEntry(
                         rom=entry.id,
                         address=f"0x{ep:x}",
                         current_name=name,
                         prog_name=prog_name,
-                        named_neighbor_count=named_count,
-                        priority=named_count,
+                        named_neighbor_count=len(named_eps),
+                        priority=len(named_eps),
                         neighbor_addresses=sorted(f"0x{a:x}" for a in neighbor_eps),
                     ))
 
