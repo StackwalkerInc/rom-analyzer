@@ -10301,10 +10301,10 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call_101a4",
+      "name": "reset_ecu_subsystems",
       "entry_point": "0x1baa4",
-      "confidence": "medium",
-      "source": "xref:39670016",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -10318,10 +10318,10 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "application_reset_call1bcfc",
+      "name": "init_all_subsystems",
       "entry_point": "0x1bd18",
-      "confidence": "medium",
-      "source": "xref:33520003",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -10871,6 +10871,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "uint16_t"
+    },
+    {
+      "name": "torque_calc_steadystate_limit",
+      "entry_point": "0x1f650",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "alt_process_at_drive",
@@ -12958,6 +12966,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "update_all_idle_compensations",
+      "entry_point": "0x2832c",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "update_coolant_temp_idle_compensation_extra",
@@ -15178,6 +15194,14 @@
       "return_type": "void"
     },
     {
+      "name": "cvt_calc_torque_losses",
+      "entry_point": "0x39da4",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "unused_call3a368",
       "entry_point": "0x3a368",
       "confidence": "high",
@@ -15811,10 +15835,10 @@
       "return_type": "void"
     },
     {
-      "name": "knock_mf_sync_call45768",
+      "name": "knock_sync_timing_update",
       "entry_point": "0x45710",
-      "confidence": "medium",
-      "source": "xref:33520003",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -21038,10 +21062,10 @@
       "return_type": "void"
     },
     {
-      "name": "call8cea4",
+      "name": "at_update_torque_converter_ratios",
       "entry_point": "0x8cea4",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -21305,10 +21329,10 @@
       "return_type": "void"
     },
     {
-      "name": "indirect_call91620",
+      "name": "damper_clutch_duty_calc",
       "entry_point": "0x91620",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -22019,10 +22043,10 @@
       ]
     },
     {
-      "name": "at_update_active_faults_call9d478",
+      "name": "at_run_fault_detection",
       "entry_point": "0x9d478",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"

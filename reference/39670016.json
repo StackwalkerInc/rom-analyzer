@@ -10765,10 +10765,10 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call_101a4",
+      "name": "reset_engine_state_and_ram_guards",
       "entry_point": "0x1bc94",
-      "confidence": "medium",
-      "source": "xref:47110032",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -10782,10 +10782,10 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "application_reset_call1bcfc",
+      "name": "application_init_subsystems",
       "entry_point": "0x1bf10",
-      "confidence": "medium",
-      "source": "xref:33520003",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -10834,10 +10834,10 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call1bf28",
+      "name": "init_ram_state_on_reset",
       "entry_point": "0x1c120",
       "confidence": "high",
-      "source": "colt_flash",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -16814,10 +16814,10 @@
       "return_type": "void"
     },
     {
-      "name": "knock_mf_sync_call45768",
+      "name": "knock_sync_state_update",
       "entry_point": "0x456d4",
-      "confidence": "medium",
-      "source": "xref:33520003",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -19803,10 +19803,10 @@
       "return_type": "void"
     },
     {
-      "name": "call57da4",
+      "name": "obd_dtc_set_flag",
       "entry_point": "0x57da4",
       "confidence": "high",
-      "source": "colt_flash",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void",

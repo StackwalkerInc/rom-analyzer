@@ -1,6 +1,6 @@
 # Call-Graph-Driven Function Matching
 
-**Status:** Design  
+**Status:** Design
 **Context:** rom-analyzer v0.2 ships ghidriff cross-ROM diff. Failures occur
 where bytecode similarity drops below ghidriff's threshold even though the
 logical function is identical — different peripheral addresses, different

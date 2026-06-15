@@ -1,6 +1,6 @@
 # Agent-Enrich: LLM-Driven Naming Loop
 
-**Status:** Implementation planned  
+**Status:** Implementation planned
 **Date:** 2026-06-14
 
 ---

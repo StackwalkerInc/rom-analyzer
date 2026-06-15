@@ -5751,6 +5751,14 @@
       "return_type": "void"
     },
     {
+      "name": "idle_update_all_compensations",
+      "entry_point": "0x1dd34",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "update_target_idle_rpm_min",
       "entry_point": "0x1dd88",
       "confidence": "medium",
@@ -6594,6 +6602,14 @@
       "timestamp": ""
     },
     {
+      "name": "shaft_event_process",
+      "entry_point": "0x25c84",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "update_knock_sum_and_related_state",
       "entry_point": "0x267a0",
       "confidence": "medium",
@@ -6626,10 +6642,10 @@
       "timestamp": ""
     },
     {
-      "name": "pure_status_call2f54c",
+      "name": "shaft_event_update",
       "entry_point": "0x27104",
-      "confidence": "medium",
-      "source": "xref:39670016",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -6772,10 +6788,10 @@
       "timestamp": ""
     },
     {
-      "name": "call57da4",
+      "name": "obd_dtc_set_flag",
       "entry_point": "0x2cd60",
-      "confidence": "medium",
-      "source": "xref:39670016",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },

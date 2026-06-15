@@ -46081,10 +46081,10 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "application_reset_call1bcfc",
+      "name": "application_init_subsystems",
       "entry_point": "0x1bcfc",
       "confidence": "high",
-      "source": "z27ag_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -46135,10 +46135,10 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call1bf28",
+      "name": "engine_reset_state",
       "entry_point": "0x1bf28",
       "confidence": "high",
-      "source": "z27ag_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"
@@ -52473,10 +52473,10 @@
       "return_type": "void"
     },
     {
-      "name": "knock_mf_sync_call45768",
+      "name": "knock_mf_sync_update",
       "entry_point": "0x45768",
       "confidence": "high",
-      "source": "z27ag_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"

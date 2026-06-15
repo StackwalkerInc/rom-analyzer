@@ -5003,6 +5003,14 @@
       "return_type": "void"
     },
     {
+      "name": "idle_calc_isc_correction",
+      "entry_point": "0x22480",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "check_lt_idle_corr_ac_extra",
       "entry_point": "0x22928",
       "confidence": "medium",
@@ -5655,10 +5663,10 @@
       "timestamp": ""
     },
     {
-      "name": "call57da4",
+      "name": "obd_dtc_set_flag",
       "entry_point": "0x2eb90",
-      "confidence": "medium",
-      "source": "xref:39670016",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -6068,6 +6076,14 @@
       "entry_point": "0x37760",
       "confidence": "medium",
       "source": "xref:c7280010",
+      "session": "",
+      "timestamp": ""
+    },
+    {
+      "name": "obd_build_freeze_frame",
+      "entry_point": "0x377ac",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },

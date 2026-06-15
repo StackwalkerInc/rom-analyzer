@@ -20977,10 +20977,10 @@
       "timestamp": ""
     },
     {
-      "name": "calla970",
+      "name": "hw_init",
       "entry_point": "0xa970",
       "confidence": "high",
-      "source": "colt_flash",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -22583,10 +22583,10 @@
       "timestamp": ""
     },
     {
-      "name": "call10064",
+      "name": "sys_init_eeprom_and_integrity",
       "entry_point": "0x10064",
       "confidence": "high",
-      "source": "colt_flash",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -28012,10 +28012,10 @@
       "timestamp": ""
     },
     {
-      "name": "call3441c",
+      "name": "dtc_set_fault_bit",
       "entry_point": "0x3441c",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "params": [
@@ -28037,10 +28037,10 @@
       ]
     },
     {
-      "name": "call34458",
+      "name": "dtc_set_fault_flags",
       "entry_point": "0x34458",
       "confidence": "high",
-      "source": "colt_flash",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "params": [
@@ -28520,6 +28520,14 @@
       ]
     },
     {
+      "name": "obd_update_dtc_freeze_frame",
+      "entry_point": "0x3a648",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "call3aad0",
       "entry_point": "0x3aad0",
       "confidence": "high",
@@ -28961,10 +28969,10 @@
       ]
     },
     {
-      "name": "call3e984",
+      "name": "selftest_startup_ram_rom",
       "entry_point": "0x3e984",
       "confidence": "high",
-      "source": "colt_flash",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
