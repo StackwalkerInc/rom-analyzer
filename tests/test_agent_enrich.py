@@ -57,7 +57,7 @@ def test_append_yield(state_dir):
     assert history[1] == {"round": 2, "applied": 9, "review": 4}
 
 
-def test_pop_batch_full(state_dir):
+def test_pop_batch_full():
     q = [make_entry(f"0x{i:x}", i) for i in range(30, 0, -1)]
     batch, remaining = pop_batch(q, k=20)
     assert len(batch) == 20
@@ -65,7 +65,7 @@ def test_pop_batch_full(state_dir):
     assert batch[0].priority == 30
 
 
-def test_pop_batch_smaller_than_k(state_dir):
+def test_pop_batch_smaller_than_k():
     q = [make_entry("0x100", 5), make_entry("0x200", 3)]
     batch, remaining = pop_batch(q, k=20)
     assert len(batch) == 2
@@ -85,11 +85,25 @@ def test_rescore_neighbors_increments_affected(state_dir):
     assert by_addr["0x300"].priority == 2   # had 0xabc → +1
 
 
-def test_rescore_keeps_sort_order(state_dir):
-    q = [make_entry("0x100", 5), make_entry("0x200", 1, neighbors=["0xabc"])]
-    updated = rescore_neighbors(q, newly_named={"0xabc"})
+def test_rescore_flips_sort_order(state_dir):
+    # 0x100 has priority 1, 0x200 has priority 0 with two neighbors
+    q = [make_entry("0x100", 1), make_entry("0x200", 0, neighbors=["0xabc", "0xdef"])]
+    updated = rescore_neighbors(q, newly_named={"0xabc", "0xdef"})
+    # 0x200: 0 + 2 = 2; 0x100: 1 + 0 = 1 → 0x200 should now be first
+    assert updated[0].address == "0x200"
+    assert updated[0].priority == 2
+    assert updated[1].address == "0x100"
+    assert updated[1].priority == 1
+
+
+def test_rescore_neighbors_empty_newly_named():
+    q = [make_entry("0x100", 5, neighbors=["0x999"]), make_entry("0x200", 3)]
+    updated = rescore_neighbors(q, newly_named=set())
+    # Nothing changes
     assert updated[0].address == "0x100"
+    assert updated[0].priority == 5
     assert updated[1].address == "0x200"
+    assert updated[1].priority == 3
 
 
 def test_check_stop_false_not_enough_history(state_dir):

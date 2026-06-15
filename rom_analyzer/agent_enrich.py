@@ -5,6 +5,7 @@ No Ghidra imports — this module is unit-testable in CI without a JVM.
 """
 from __future__ import annotations
 
+import dataclasses
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -91,14 +92,10 @@ def rescore_neighbors(
     for entry in queue:
         gain = len(set(entry.neighbor_addresses) & newly_named)
         if gain > 0:
-            updated.append(QueueEntry(
-                rom=entry.rom,
-                address=entry.address,
-                current_name=entry.current_name,
-                prog_name=entry.prog_name,
+            updated.append(dataclasses.replace(
+                entry,
                 named_neighbor_count=entry.named_neighbor_count + gain,
                 priority=entry.priority + gain,
-                neighbor_addresses=entry.neighbor_addresses,
             ))
         else:
             updated.append(entry)
