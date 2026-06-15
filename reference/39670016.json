@@ -10934,10 +10934,10 @@
       "timestamp": ""
     },
     {
-      "name": "call11524",
+      "name": "sensor_process_slow",
       "entry_point": "0x1d208",
-      "confidence": "medium",
-      "source": "xref:47110032",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },

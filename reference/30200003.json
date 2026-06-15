@@ -19184,10 +19184,10 @@
       ]
     },
     {
-      "name": "call5df8c",
+      "name": "obd_update_dtc_state",
       "entry_point": "0x5dcdc",
-      "confidence": "medium",
-      "source": "xref:33520003",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void"

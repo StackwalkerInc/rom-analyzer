@@ -651,26 +651,6 @@
       "timestamp": ""
     },
     {
-      "name": "port",
-      "address": "0x3bec",
-      "category": "data",
-      "data_type": "PortSetOutput(port, mask), saves port i/o state at 0x806e00 +",
-      "confidence": "high",
-      "source": "colt_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
-      "name": "etc",
-      "address": "0x3e1c",
-      "category": "data",
-      "data_type": "SetHighOutputP2Data67 and",
-      "confidence": "high",
-      "source": "colt_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "crc_table",
       "address": "0x6658",
       "category": "data",
@@ -18800,7 +18780,7 @@
       "timestamp": ""
     },
     {
-      "name": "PortSetOutput",
+      "name": "port_set_out",
       "entry_point": "0x3bec",
       "confidence": "high",
       "source": "colt_flash",
@@ -18910,7 +18890,7 @@
       ]
     },
     {
-      "name": "GetP2Data7",
+      "name": "get_sda",
       "entry_point": "0x3d78",
       "confidence": "high",
       "source": "colt_flash",
@@ -18918,7 +18898,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetHighP2Data6Atomic",
+      "name": "scl_up",
       "entry_point": "0x3d84",
       "confidence": "high",
       "source": "colt_flash",
@@ -18926,7 +18906,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetLowP2Data6Atomic",
+      "name": "scl_down",
       "entry_point": "0x3da0",
       "confidence": "high",
       "source": "colt_flash",
@@ -18934,7 +18914,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetHighP2Data7Atomic",
+      "name": "sda_up",
       "entry_point": "0x3dbc",
       "confidence": "high",
       "source": "colt_flash",
@@ -18942,7 +18922,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetLowP2Data7Atomic",
+      "name": "sda_down",
       "entry_point": "0x3dd8",
       "confidence": "high",
       "source": "colt_flash",
@@ -18950,7 +18930,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetInputP2Data7",
+      "name": "sda_in",
       "entry_point": "0x3df4",
       "confidence": "high",
       "source": "colt_flash",
@@ -18958,7 +18938,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetOutputP2Data7",
+      "name": "sda_out",
       "entry_point": "0x3e08",
       "confidence": "high",
       "source": "colt_flash",
@@ -18966,7 +18946,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetHighOutputP2Data67",
+      "name": "i2c_init",
       "entry_point": "0x3e1c",
       "confidence": "high",
       "source": "colt_flash",
@@ -18974,7 +18954,7 @@
       "timestamp": ""
     },
     {
-      "name": "SetOutputP2Data6",
+      "name": "i2c_reinit",
       "entry_point": "0x3e4c",
       "confidence": "high",
       "source": "colt_flash",
@@ -21009,7 +20989,7 @@
       "timestamp": ""
     },
     {
-      "name": "calc13220_10306",
+      "name": "update_fast_inputs",
       "entry_point": "0xaec4",
       "confidence": "high",
       "source": "colt_flash",
@@ -21035,7 +21015,7 @@
       "return_type": "uint16_t"
     },
     {
-      "name": "get_p13d1_inverted",
+      "name": "get_p131_inv",
       "entry_point": "0xafc4",
       "confidence": "high",
       "source": "colt_flash",
@@ -21150,7 +21130,7 @@
       "timestamp": ""
     },
     {
-      "name": "update_p3d3",
+      "name": "update_charging_system_out",
       "entry_point": "0xb64c",
       "confidence": "high",
       "source": "colt_flash",
@@ -21158,7 +21138,7 @@
       "timestamp": ""
     },
     {
-      "name": "toggle_p6d1",
+      "name": "toggle_p61",
       "entry_point": "0xb684",
       "confidence": "high",
       "source": "colt_flash",
@@ -21166,7 +21146,7 @@
       "timestamp": ""
     },
     {
-      "name": "get_p6d1",
+      "name": "get_p61",
       "entry_point": "0xb6b4",
       "confidence": "high",
       "source": "colt_flash",
@@ -21174,7 +21154,7 @@
       "timestamp": ""
     },
     {
-      "name": "set_p6d3_low",
+      "name": "reset_p63",
       "entry_point": "0xb6cc",
       "confidence": "high",
       "source": "colt_flash",
@@ -21206,7 +21186,7 @@
       "timestamp": ""
     },
     {
-      "name": "trampoline_tio0_regulate",
+      "name": "update_purge_control_solenoid_duty",
       "entry_point": "0xb928",
       "confidence": "high",
       "source": "colt_flash",
@@ -30558,7 +30538,7 @@
       "timestamp": ""
     },
     {
-      "name": "call4a500",
+      "name": "inc_eeprom_sequence_index",
       "entry_point": "0x4a500",
       "confidence": "high",
       "source": "colt_flash",
@@ -30723,7 +30703,7 @@
       "timestamp": ""
     },
     {
-      "name": "sub_some",
+      "name": "rom_crc_finalize",
       "entry_point": "0x4b0ac",
       "confidence": "high",
       "source": "colt_flash",
@@ -30828,7 +30808,7 @@
       "return_type": "void"
     },
     {
-      "name": "call4b964",
+      "name": "update_purge_flags_extra",
       "entry_point": "0x4b964",
       "confidence": "high",
       "source": "colt_flash",
