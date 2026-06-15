@@ -231,7 +231,9 @@ def test_rescore_var_neighbors_reorders():
         make_var_entry("0x804200", 0, siblings=["0x804100"]),
     ]
     updated = rescore_var_neighbors(q, newly_named=set(), newly_named_vars={"0x804100"})
-    assert updated[0].address == "0x804200"   # now priority 1, tied or first
+    assert [e.address for e in updated] == ["0x804200", "0x804100"]
+    assert updated[0].priority == 1
+    assert updated[1].priority == 1
 
 
 def test_var_done_sentinel(state_dir):

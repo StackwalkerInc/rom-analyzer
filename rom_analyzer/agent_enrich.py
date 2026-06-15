@@ -155,10 +155,13 @@ def rescore_var_neighbors(
 ) -> list[QueueEntry]:
     """Rescore variable queue entries using two boost signals.
 
-    newly_named: all addresses named this round (functions + variables). Boosts
-        entries whose neighbor_addresses (named-function EPs) overlap this set.
-    newly_named_vars: variable addresses named this round. Boosts entries whose
-        sibling_addresses overlap this set (sibling proximity boost).
+    newly_named: hex addresses of functions named this round. Boosts entries whose
+        neighbor_addresses (which store named-function EPs only, not variable
+        addresses) overlap this set. Passing variable addresses here is harmless
+        because function EPs (flash, 0x10000+) and variable addresses (RAM,
+        0x804000+) do not overlap in M32R ECU ROMs.
+    newly_named_vars: hex addresses of variables named this round. Boosts entries
+        whose sibling_addresses overlap this set (sibling proximity boost).
     """
     updated = []
     gains = []
