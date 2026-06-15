@@ -14,7 +14,7 @@ from dataclasses import dataclass
 _AUTO_RE = re.compile(r"^(FUN|LAB|DAT|SUB)_[0-9a-fA-F]+$|^(icu_isr|isr_vector)_\d+$")
 # Address-derived placeholder names a real name should beat.
 _PLACEHOLDER_RE = re.compile(
-    r"(^|_)(call|nop|ret\d*|reset_call|sub)[0-9a-fA-F_]{2,}(?=_|$|[^a-zA-Z0-9_])"   # callNNNN, nopNNNN, ret0_NNNN, subNNNN
+    r"(^|_)(call|nop|ret\d*|reset_call|sub)[0-9a-fA-F_]{4,}(?=_|$|[^a-zA-Z0-9_])"   # callNNNN, nopNNNN, ret0_NNNN, subNNNN
     r"|(^|_)fp[0-9a-fA-F]{3,}(_|$)"                                                    # fpNNNN_*, get_fpNNNN
 )
 
