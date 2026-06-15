@@ -6,7 +6,7 @@ This test is marked `e2e` and only runs when:
 
 It requires:
 - Ghidra 12.x at $GHIDRA_HOME (or /opt/homebrew/opt/ghidra/libexec)
-- The RcusStackwalker/ghidra-m32r processor module installed in that Ghidra
+- The StackwalkerInc/ghidra-m32r processor module installed in that Ghidra
 - A user-supplied ROM at roms/Z27AG_JDM_5MT_1860B104.bin (gitignored)
 
 ROMs are never distributed (CLAUDE.md). The test SKIPs if the ROM is absent.

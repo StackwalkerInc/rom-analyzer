@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # scripts/run-e2e.sh — runs the E2E self-diff locally against a user-supplied ROM.
-# Requires GHIDRA_HOME pointing at a Ghidra install with the RcusStackwalker/ghidra-m32r
+# Requires GHIDRA_HOME pointing at a Ghidra install with the StackwalkerInc/ghidra-m32r
 # extension already installed, plus the ROM at roms/Z27AG_JDM_5MT_1860B104.bin.
 set -euo pipefail
 cd "$(dirname "$0")/.."

@@ -18,7 +18,7 @@ ENV GHIDRA_HOME=/opt/ghidra
 ENV PATH="${GHIDRA_HOME}/support:${PATH}"
 
 # Install ghidra-m32r extension at the merged SHA from Spec B
-RUN git clone https://github.com/RcusStackwalker/ghidra-m32r.git /tmp/ghidra-m32r \
+RUN git clone https://github.com/StackwalkerInc/ghidra-m32r.git /tmp/ghidra-m32r \
     && cd /tmp/ghidra-m32r \
     && git checkout bb40b00a17c5fb9580eb212d97fda5afe2c56740 \
     && mkdir -p ${GHIDRA_HOME}/Ghidra/Processors/M32R \

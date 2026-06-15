@@ -221,7 +221,7 @@ refresh the golden: re-run `rom-analyzer analyze … --emit-mode23` and update `
 
 ## Companion repos
 
-- [RcusStackwalker/ghidra-m32r](https://github.com/RcusStackwalker/ghidra-m32r) — Ghidra processor module with `m32r:2:fp8000` and `m32r:2:fpc000` variants.
+- [StackwalkerInc/ghidra-m32r](https://github.com/StackwalkerInc/ghidra-m32r) — Ghidra processor module with `m32r:2:fp8000` and `m32r:2:fpc000` variants.
 - [RcusStackwalker/mmc-patches](https://github.com/RcusStackwalker/mmc-patches) — patch repository consuming `description.ld` fragments produced here.
 - [RcusStackwalker/codeinjector](https://github.com/RcusStackwalker/codeinjector) — Rust tool that turns compiled M32R ELFs into EcuFlash XML patches.
 
