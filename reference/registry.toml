@@ -9,7 +9,7 @@ rom = "Z27AG_JDM_5MT_1860B104.bin"
 family = "z27ag"
 variant = "fp8000"
 priority = 100
-features = ["obd", "mut", "crc", "mode23"]
+features = ["obd", "mut"]
 notes = "primary Z27AG reference (Z27AG_JDM_5MT_1860B104)"
 
 [[reference]]
@@ -20,7 +20,7 @@ family = "z27a"
 variant = "fp8000"
 priority = 90
 features = ["obd", "mut", "immobilizer", "rear_o2"]
-notes = "Colt Ralliart Z27A AUDM 5MT; 1.5L turbo, sibling of 33520003 with immobilizer support + rear O2 sensor. Well-decoded (colt_flash + colt_map + coltOth.S)."
+notes = "Colt Ralliart Z27A AUDM 5MT; 1.5L turbo, sibling of 33520003 with immobilizer support + rear O2 sensor"
 
 [[reference]]
 id = "47110032"
@@ -29,8 +29,8 @@ rom = "47110032.bin"
 family = "z37a"
 variant = "fp8000"
 priority = 50
-features = ["can_bootloader", "dma", "cvt_dash"]
-notes = "Colt CZT Z37A 5MT; CAN bootloader + DMA/CAN handlers decoded (from mmc-research colt_flash/colt_map)"
+features = ["can_bootloader"]
+notes = "Colt CZT Z37A 5MT; CAN bootloader"
 
 [[reference]]
 id = "30200003"
@@ -39,8 +39,8 @@ rom = "30200003.bin"
 family = "z27w"
 variant = "fp8000"
 priority = 40
-features = ["cvt", "cvt_maps", "torque_model"]
-notes = "Colt Z27W CVT; most-decoded CVT (torque model + CVT/PSST/LPSD flash maps, RAM globals from mmc-research singa_map + description.ld). No function table."
+features = ["cvt", "torque_model"]
+notes = "Colt Z27W CVT"
 
 [[reference]]
 id = "c7280010"
@@ -50,7 +50,7 @@ family = "cu2w"
 variant = "fp8000"
 priority = 35
 features = ["4g63t", "karman_vortex_maf", "turbo"]
-notes = "Outlander CU2W turbo; 4G63T with Karman-Vortex MAF (period/frequency-based: flash_maf_fault_revolution_period_limit, update_vehicle_speed_frequency). No driver cruise control. Simpler chassis integration (closer to Lancer CS7 than the Colt family). Built from mmc-research out_map + out_original.S + description.ld (id c7280010 at 0x222); the dir's colt_flash.txt is a stray Colt file and is NOT used."
+notes = "Outlander CU2W turbo; 4G63T with Karman-Vortex MAF. Simpler chassis integration (closer to Lancer CS7 than the Colt family). "
 
 [[reference]]
 id = "e5090011"
@@ -60,4 +60,4 @@ family = "cs7a"
 variant = "fp8000"
 priority = 30
 features = ["cruise_control", "map_sensor", "returnless_fuel", "na", "4g69"]
-notes = "Lancer Ralliart CS7A USDM 4AT; 4G69 2.4L NA SOHC-MIVEC, MPI. Cruise control + MAP/MDP returnless-fuel compensation decoded (from mmc-research said_map + said_art.S). Reference ROM is a modified read-as-colt 768KB dump (id e5090011 at 0x222); supply roms/e5090011.bin locally (gitignored) to enable at runtime."
+notes = "Lancer Ralliart CS7A USDM 4AT; 4G69 2.4L NA SOHC-MIVEC, MPI. Cruise control + MAP/MDP returnless-fuel compensation. Reference ROM is a modified read-as-colt 768KB dump (id e5090011 at 0x222);"

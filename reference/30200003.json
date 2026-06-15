@@ -10371,10 +10371,10 @@
       "return_type": "void"
     },
     {
-      "name": "reset_call1bf28",
+      "name": "engine_reset_state",
       "entry_point": "0x1bf4c",
-      "confidence": "medium",
-      "source": "xref:33520003",
+      "confidence": "high",
+      "source": "propagated",
       "session": "",
       "timestamp": ""
     },
@@ -15202,10 +15202,10 @@
       "timestamp": ""
     },
     {
-      "name": "unused_call3a368",
+      "name": "cvt_calc_torque_loss_map",
       "entry_point": "0x3a368",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
@@ -21071,10 +21071,10 @@
       "return_type": "void"
     },
     {
-      "name": "call8d1d0_update_off0_off2",
+      "name": "cvt_calc_torque_limit",
       "entry_point": "0x8d1d0",
       "confidence": "high",
-      "source": "colt_s",
+      "source": "llm:agent",
       "session": "",
       "timestamp": "",
       "return_type": "void",
@@ -21087,7 +21087,7 @@
         {
           "name": "ptr",
           "storage": "R1",
-          "type": " *"
+          "type": "uint16_t *"
         }
       ]
     },
@@ -21363,6 +21363,14 @@
       "session": "",
       "timestamp": "",
       "return_type": "void"
+    },
+    {
+      "name": "tc_lock_calc_targets",
+      "entry_point": "0x92dc0",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
     },
     {
       "name": "indirect_call938a4",
@@ -21661,6 +21669,14 @@
       "return_type": "void"
     },
     {
+      "name": "tc_calc_target_line_pressure",
+      "entry_point": "0x9b158",
+      "confidence": "high",
+      "source": "llm:agent",
+      "session": "",
+      "timestamp": ""
+    },
+    {
       "name": "half_limp_line_pressure_duty_calculations",
       "entry_point": "0x9b408",
       "confidence": "high",
@@ -21739,7 +21755,7 @@
         {
           "name": "p1",
           "storage": "R1",
-          "type": " *"
+          "type": "smooth_state *"
         }
       ]
     },
@@ -22704,7 +22720,7 @@
         {
           "name": "p0",
           "storage": "R0",
-          "type": " *"
+          "type": "uint8_t *"
         },
         {
           "name": "p1",
@@ -22722,6 +22738,28 @@
       "timestamp": ""
     }
   ],
-  "struct_definitions": [],
+  "struct_definitions": [
+    {
+      "name": "smooth_state",
+      "size": 8,
+      "members": [
+        {
+          "name": "value",
+          "offset": 0,
+          "type": "uint32_t"
+        },
+        {
+          "name": "rate_a",
+          "offset": 4,
+          "type": "uint16_t"
+        },
+        {
+          "name": "rate_b",
+          "offset": 6,
+          "type": "uint16_t"
+        }
+      ]
+    }
+  ],
   "comments": []
 }

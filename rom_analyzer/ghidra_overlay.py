@@ -173,22 +173,30 @@ def _create_struct_types(program, store: "AnnotationStore") -> None:
 # Register storage helper
 # ---------------------------------------------------------------------------
 
-def _register_storage(program, reg_name: str) -> object | None:
-    """Map a register name ("R0"–"R3") to a Ghidra VariableStorage.
+def _register_storage(program, reg_name: str, stack_offset: int = 0,
+                      dt_size: int = 4) -> object | None:
+    """Map a register name or "stack" to a Ghidra VariableStorage.
 
-    Returns None for "stack" or unrecognised names; the caller then constructs
-    a ParameterImpl without explicit storage (Ghidra assigns automatically).
+    For stack parameters pass the current stack_offset (starts at 0 for the
+    first stack arg) and the actual data-type size in bytes.
     """
     from ghidra.program.model.listing import VariableStorage  # type: ignore[import]
 
     if reg_name == "stack":
-        return None
+        try:
+            return VariableStorage(program, stack_offset, dt_size)
+        except Exception as e:
+            print(f"    [warn] stack VariableStorage(offset={stack_offset}, size={dt_size}): {e}")
+            return None
     reg = program.getLanguage().getRegister(reg_name)
     if reg is None:
+        print(f"    [warn] register not found: {reg_name}")
         return None
     try:
-        return VariableStorage(program, reg, reg.getBitLength() // 8)
-    except Exception:
+        # VariableStorage(ProgramArchitecture, Register[]) — Program implements ProgramArchitecture
+        return VariableStorage(program, [reg])
+    except Exception as e:
+        print(f"    [warn] register VariableStorage({reg_name}): {e}")
         return None
 
 
@@ -208,36 +216,45 @@ def _apply_function_signature(
         if dt is not None:
             try:
                 func_obj.setReturnType(dt, SourceType.IMPORTED)
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"    [warn] setReturnType for {fn.name}: {e}")
 
     if not fn.params:
         return
 
     params = []
+    stack_offset = 0
     for p in fn.params:
         dt = _resolve_type(p.type, program)
         if dt is None:
             continue
-        storage = _register_storage(program, p.storage)
+        dt_size = dt.getLength()
+        storage = _register_storage(program, p.storage, stack_offset, dt_size)
+        if p.storage == "stack":
+            # M32R ABI pads each stack arg to a 4-byte slot
+            stack_offset += max(4, (dt_size + 3) & ~3)
         try:
             if storage is not None:
                 params.append(ParameterImpl(p.name, dt, storage, program))
             else:
                 params.append(ParameterImpl(p.name, dt, program))
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"    [warn] ParameterImpl({p.name}, {p.type}, {p.storage}): {e}")
 
     if params:
         try:
+            from java.util import ArrayList  # type: ignore[import]
+            java_params = ArrayList()
+            for p in params:
+                java_params.add(p)
             func_obj.replaceParameters(
-                params,
-                Function.FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS,
+                java_params,
+                Function.FunctionUpdateType.CUSTOM_STORAGE,
                 True,
                 SourceType.IMPORTED,
             )
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"    [warn] replaceParameters for {fn.name}: {e}")
 
 
 # ---------------------------------------------------------------------------

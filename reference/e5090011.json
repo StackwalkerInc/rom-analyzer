@@ -6649,10 +6649,10 @@
       "timestamp": ""
     },
     {
-      "name": "knock_mf_sync_call45768",
+      "name": "knock_schedule_sync_edges",
       "entry_point": "0x4972c",
-      "confidence": "medium",
-      "source": "xref:39670016",
+      "confidence": "high",
+      "source": "llm:agent",
       "session": "",
       "timestamp": ""
     },
