@@ -74,6 +74,7 @@ class ReconcileItem:
     source: str
     evidence: str
     verdict: str       # "proposed" | "keep" | "drop" | <custom-name>
+    corroborated_by: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -160,10 +161,12 @@ def build_reconcile_items(review: list[LabelCandidate],
     items: list[ReconcileItem] = []
     for c in review:
         proposed, verdict = auto_resolve(c, priority)
+        corroborated_by = [s for s in c.corroborating_sources if s != c.source]
         items.append(ReconcileItem(
             target=c.target, direction=c.direction, address=c.address,
             category=c.category, current=c.current, proposed=proposed,
             source=c.source, evidence=c.evidence, verdict=verdict,
+            corroborated_by=corroborated_by,
         ))
     # group by target then address for readable review
     items.sort(key=lambda i: (i.target, i.address))
@@ -171,12 +174,17 @@ def build_reconcile_items(review: list[LabelCandidate],
 
 
 def write_reconcile(path: Path, items: list[ReconcileItem]) -> None:
-    rows = [{
-        "target": i.target, "direction": i.direction,
-        "address": f"0x{i.address:x}", "category": i.category,
-        "current": i.current or "", "proposed": i.proposed,
-        "source": i.source, "evidence": i.evidence, "verdict": i.verdict,
-    } for i in items]
+    rows = []
+    for i in items:
+        row = {
+            "target": i.target, "direction": i.direction,
+            "address": f"0x{i.address:x}", "category": i.category,
+            "current": i.current or "", "proposed": i.proposed,
+            "source": i.source, "evidence": i.evidence, "verdict": i.verdict,
+        }
+        if i.corroborated_by:
+            row["corroborated_by"] = i.corroborated_by
+        rows.append(row)
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(tomli_w.dumps({"item": rows}))
 
@@ -191,6 +199,7 @@ def read_reconcile(path: Path) -> list[ReconcileItem]:
             current=r["current"] or None, proposed=r["proposed"],
             source=r["source"], evidence=r.get("evidence", ""),
             verdict=r["verdict"],
+            corroborated_by=r.get("corroborated_by", []),
         ))
     return out
 

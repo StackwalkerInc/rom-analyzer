@@ -158,6 +158,13 @@ def test_build_items_fills_proposed_and_verdict():
     assert items[0].verdict == "proposed" and items[0].proposed == "real_fn"
 
 
+def test_reconcile_item_corroborated_by_defaults_empty():
+    it = ReconcileItem(target="X", direction="forward", address=0x100,
+                       category="function", current=None, proposed="fn",
+                       source="33520003", evidence="", verdict="proposed")
+    assert it.corroborated_by == []
+
+
 def test_reconcile_roundtrip(tmp_path):
     items = [ReconcileItem(target="33520003", direction="back", address=0x804d5e,
                            category="ram_global", current="fp12962_u16",
@@ -169,6 +176,46 @@ def test_reconcile_roundtrip(tmp_path):
     assert data["item"][0]["address"] == "0x804d5e"
     back = read_reconcile(p)
     assert back[0].address == 0x804d5e and back[0].verdict == "proposed"
+    assert back[0].corroborated_by == []
+
+
+def test_reconcile_roundtrip_with_corroboration(tmp_path):
+    items = [ReconcileItem(target="33520003", direction="back", address=0x804d5e,
+                           category="ram_global", current="fp12962_u16",
+                           proposed="tacho_output_state", source="e5090011",
+                           evidence="usage-equiv", verdict="proposed",
+                           corroborated_by=["39670016", "30200003"])]
+    p = tmp_path / "r.toml"
+    write_reconcile(p, items)
+    data = tomllib.loads(p.read_text())
+    assert data["item"][0]["corroborated_by"] == ["39670016", "30200003"]
+    back = read_reconcile(p)
+    assert back[0].corroborated_by == ["39670016", "30200003"]
+
+
+def test_reconcile_roundtrip_no_corroboration_not_emitted(tmp_path):
+    items = [ReconcileItem(target="33520003", direction="back", address=0x804d5e,
+                           category="ram_global", current="fp12962_u16",
+                           proposed="tacho_output_state", source="e5090011",
+                           evidence="usage-equiv", verdict="proposed")]
+    p = tmp_path / "r.toml"
+    write_reconcile(p, items)
+    data = tomllib.loads(p.read_text())
+    assert "corroborated_by" not in data["item"][0]
+    back = read_reconcile(p)
+    assert back[0].corroborated_by == []
+
+
+def test_reconcile_backward_compat_missing_field(tmp_path):
+    old_toml = (
+        '[[item]]\ntarget = "33520003"\ndirection = "back"\naddress = "0x804d5e"\n'
+        'category = "ram_global"\ncurrent = "fp12962_u16"\nproposed = "tacho_output_state"\n'
+        'source = "e5090011"\nevidence = "usage-equiv"\nverdict = "proposed"\n'
+    )
+    p = tmp_path / "old.toml"
+    p.write_text(old_toml)
+    items = read_reconcile(p)
+    assert items[0].corroborated_by == []
 
 
 def test_apply_verdicts_rename_keep_drop_custom():
