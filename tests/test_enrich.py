@@ -387,3 +387,7 @@ def test_merge_different_targets_not_collapsed():
     ]
     result = merge_candidates(cands, prio)
     assert len(result) == 2
+
+
+def test_merge_empty_input():
+    assert merge_candidates([], priority={}) == []

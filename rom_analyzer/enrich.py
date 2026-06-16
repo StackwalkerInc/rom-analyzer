@@ -325,9 +325,9 @@ def merge_candidates(
             votes[c.proposed].append(c.source)
 
         # Winner: most votes; tie-break by highest priority among backing sources
-        def _score(item: tuple[str, list[str]]) -> tuple[int, int]:
-            _, sources = item
-            return (len(sources), max(priority.get(s, 0) for s in sources))
+        def _score(item: tuple[str, list[str]]) -> tuple[int, int, str]:
+            name, sources = item
+            return (len(sources), max(priority.get(s, 0) for s in sources), name)
 
         winning_name, agreeing_sources = max(votes.items(), key=_score)
 
