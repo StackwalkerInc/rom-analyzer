@@ -451,7 +451,9 @@ def test_classify_authority_rule_skipped_for_ram_global():
     assert len(out.review) == 1
 
 
-def test_classify_authority_rule_skipped_for_erased():
+def test_classify_erased_address_drops_before_authority_rule():
+    # Candidate is dropped entirely when its address is in erased,
+    # before any rule fires (including authority rule).
     prio = {"33520003": 100}
     c = LabelCandidate(
         target="X", direction="forward", address=0x100,
