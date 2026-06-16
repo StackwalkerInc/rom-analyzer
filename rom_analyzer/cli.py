@@ -984,7 +984,7 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
             click.echo(f"   {len(cands)} candidates from {ref.id}")
 
         all_candidates = merge_candidates(all_candidates, priority)
-        click.echo(f"Merged: {len(all_candidates)} unique (target, address) candidates")
+        click.echo(f"Merged: {len(all_candidates)} unique (target, address, category) candidates")
 
         # Compute erased-address sets per target ROM (keyed by target id)
         target_ids = {c.target for c in all_candidates}
