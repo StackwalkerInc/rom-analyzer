@@ -55,8 +55,8 @@ from rom_analyzer.annotations_io import (
 )
 from rom_analyzer.types import DataTypeDefinition
 from rom_analyzer.enrich import (
-    LabelCandidate, gather_candidates, classify, build_reconcile_items, write_reconcile,
-    read_reconcile, apply_verdicts,
+    LabelCandidate, gather_candidates, merge_candidates, classify,
+    build_reconcile_items, write_reconcile, read_reconcile, apply_verdicts,
 )
 from rom_analyzer.scripts.build_reference_from_txt import (
     drop_imprecise_s_duplicates, drop_erased_flash_entries, dedup_symbol_names,
@@ -983,6 +983,9 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
             all_candidates.extend(cands)
             click.echo(f"   {len(cands)} candidates from {ref.id}")
 
+        all_candidates = merge_candidates(all_candidates, priority)
+        click.echo(f"Merged: {len(all_candidates)} unique (target, address) candidates")
+
         # Compute erased-address sets per target ROM (keyed by target id)
         target_ids = {c.target for c in all_candidates}
         erased_by_target: dict[str, set[int]] = {}
@@ -1002,7 +1005,8 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
             by_target.setdefault(c.target, []).append(c)
 
         for tid, group in by_target.items():
-            classified = classify(group, erased=erased_by_target.get(tid, set()))
+            classified = classify(group, erased=erased_by_target.get(tid, set()),
+                                  priority=priority)
             auto_all.extend(classified.auto)
             review_all.extend(classified.review)
 
