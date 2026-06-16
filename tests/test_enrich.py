@@ -391,3 +391,84 @@ def test_merge_different_targets_not_collapsed():
 
 def test_merge_empty_input():
     assert merge_candidates([], priority={}) == []
+
+
+from rom_analyzer.enrich import _authority_agrees
+
+
+def test_authority_agrees_top_in_sources():
+    prio = {"33520003": 100, "39670016": 90, "30200003": 40}
+    assert _authority_agrees(["33520003", "30200003"], prio) is True
+
+
+def test_authority_agrees_top_not_in_sources():
+    prio = {"33520003": 100, "39670016": 90, "30200003": 40}
+    assert _authority_agrees(["30200003", "39670016"], prio) is False
+
+
+def test_authority_agrees_empty_sources_returns_false():
+    assert _authority_agrees([], {"33520003": 100}) is False
+
+
+def test_authority_agrees_empty_priority_returns_false():
+    assert _authority_agrees(["33520003"], {}) is False
+
+
+def test_classify_authority_backed_conflict_auto_applied():
+    prio = {"33520003": 100, "30200003": 40}
+    c = LabelCandidate(
+        target="X", direction="forward", address=0x100,
+        category="function", current="call100", proposed="real_fn",
+        source="33520003", corroborating_sources=["33520003", "30200003"],
+    )
+    out = classify([c], erased=set(), priority=prio)
+    assert len(out.auto) == 1 and out.auto[0].proposed == "real_fn"
+    assert out.review == []
+
+
+def test_classify_conflict_without_authority_stays_review():
+    prio = {"33520003": 100, "30200003": 40}
+    c = LabelCandidate(
+        target="X", direction="forward", address=0x100,
+        category="function", current="call100", proposed="other_fn",
+        source="30200003", corroborating_sources=["30200003"],
+    )
+    out = classify([c], erased=set(), priority=prio)
+    assert out.auto == []
+    assert len(out.review) == 1
+
+
+def test_classify_authority_rule_skipped_for_ram_global():
+    # Authority rule only fires for functions; RAM/data always go to review
+    prio = {"33520003": 100}
+    c = LabelCandidate(
+        target="X", direction="forward", address=0x100,
+        category="ram_global", current="fp100", proposed="real_var",
+        source="33520003", corroborating_sources=["33520003"],
+    )
+    out = classify([c], erased=set(), priority=prio)
+    assert out.auto == []
+    assert len(out.review) == 1
+
+
+def test_classify_authority_rule_skipped_for_erased():
+    prio = {"33520003": 100}
+    c = LabelCandidate(
+        target="X", direction="forward", address=0x100,
+        category="function", current="call100", proposed="real_fn",
+        source="33520003", corroborating_sources=["33520003"],
+    )
+    out = classify([c], erased={0x100}, priority=prio)
+    assert out.auto == [] and out.review == []
+
+
+def test_classify_no_priority_arg_authority_rule_inactive():
+    # Backward compat: callers that don't pass priority still work
+    c = LabelCandidate(
+        target="X", direction="forward", address=0x100,
+        category="function", current="call100", proposed="real_fn",
+        source="33520003", corroborating_sources=["33520003"],
+    )
+    out = classify([c], erased=set())  # no priority kwarg
+    assert out.auto == []
+    assert len(out.review) == 1

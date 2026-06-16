@@ -83,15 +83,23 @@ class Classified:
     review: list[LabelCandidate]  # conflicts + RAM/data, need verdicts
 
 
-def classify(candidates: list[LabelCandidate], erased: set[int]) -> Classified:
+def _authority_agrees(sources: list[str], priority: dict[str, int]) -> bool:
+    """True if the globally highest-priority reference is among the sources."""
+    if not priority or not sources:
+        return False
+    top = max(priority, key=priority.get)
+    return top in sources
+
+
+def classify(candidates: list[LabelCandidate], erased: set[int],
+             priority: dict[str, int] | None = None) -> Classified:
     """Split candidates into auto-apply / review / drop.
 
     AUTO  : a new function (gap, current is None), real non-generic name, entry
-            not erased.
+            not erased; OR a conflict where the highest-priority reference endorses
+            the proposed name.
     DROP  : auto-names anywhere; functions whose entry is in erased flash.
-    REVIEW: name conflicts (current set and differs from proposed); all RAM/data
-            candidates (raw-offset data is filtered upstream; what arrives here
-            already passed usage-equivalence).
+    REVIEW: name conflicts without authority endorsement; all RAM/data candidates.
     Agreement (current == proposed) is neither auto nor review.
     """
     auto: list[LabelCandidate] = []
@@ -104,6 +112,13 @@ def classify(candidates: list[LabelCandidate], erased: set[int]) -> Classified:
         if c.category == "function":
             if c.address in erased:
                 continue  # typo landing in 0xFF
+            # Authority-backed conflict: highest-priority ref endorses proposed name
+            if (c.current is not None
+                    and not is_generic(c.proposed)
+                    and priority is not None
+                    and _authority_agrees(c.corroborating_sources, priority)):
+                auto.append(c)
+                continue
             if c.current is None:
                 if is_generic(c.proposed):
                     review.append(c)   # too generic to auto-apply — review it
