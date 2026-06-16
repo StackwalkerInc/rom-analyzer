@@ -12,8 +12,14 @@ _SLOPPY_SOURCES = {"colt_s", "z27ag_s"}
 def drop_imprecise_s_duplicates(store: AnnotationStore, tol: int = 4) -> int:
     """Remove .S-derived entries that merely duplicate a precise-source label.
 
-    When a .S entry shares a name with a precise-source entry within `tol`
-    bytes, the .S one is dropped. Returns the number removed.
+    Objdump shows data at disassembly-line boundaries, so a /*name*/ comment for
+    an object at a non-line-aligned address (e.g. flash_..._ac_off at 0x2d72)
+    attaches to the next line (0x2d74), producing a spurious second entry a few
+    bytes off the colt_flash/colt_map/xml address. When a .S (colt_s/z27ag_s)
+    entry shares a name with a precise-source entry within `tol` bytes, drop the
+    .S one — the precise source owns both the name and the exact address.
+    Genuine same-name objects far apart (mirrored code, name reuse) are left for
+    dedup_symbol_names to disambiguate. Returns the number removed.
     """
     precise: dict[str, list[int]] = defaultdict(list)
     for f in store.functions:
@@ -40,8 +46,11 @@ def drop_erased_flash_entries(
 ) -> list[str]:
     """Remove FUNCTION entries whose entry point lands in erased flash (0xFF).
 
-    Data labels are not checked — a real table can legitimately live in blank
-    flash. Returns the function names removed.
+    A function in erased flash is a typo: it matches no code block (e.g. a
+    colt_flash can0_slot11_rx_update mistyped as 0x49ef0, which is 0xFF padding,
+    vs the real 0x48ef0). Only functions are checked — data labels are NOT, since
+    a real table can legitimately live in an erased/blank area (e.g.
+    flash_specific_area_init_data). Returns the function names removed.
     """
     def _erased(addr: int) -> bool:
         return (addr + window <= len(rom_bytes)
@@ -61,8 +70,12 @@ def drop_erased_flash_entries(
 def dedup_symbol_names(store: AnnotationStore) -> int:
     """Make every symbol/function name unique across the whole store.
 
-    Lowest-address object keeps the canonical name; later collisions get a
-    hex-address suffix. Returns the number renamed.
+    Linker fragments share one symbol namespace, so two objects with the same
+    name (at different addresses — e.g. a function mirrored across code regions,
+    or a label repeated in colt_flash/.S) would emit a duplicate `name = addr;`
+    and break the link. The lowest-address object keeps the canonical name;
+    later collisions are suffixed with their address (name_<hexaddr>). Returns
+    the number of objects renamed.
     """
     objs = [(f.entry_point, f) for f in store.functions]
     objs += [(s.address, s) for s in store.symbols]
