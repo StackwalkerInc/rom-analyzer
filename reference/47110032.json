@@ -1611,16 +1611,6 @@
       "timestamp": ""
     },
     {
-      "name": "way",
-      "address": "0x4e130",
-      "category": "data",
-      "data_type": "main_loop(), entered in soft reset",
-      "confidence": "high",
-      "source": "colt_s",
-      "session": "",
-      "timestamp": ""
-    },
-    {
       "name": "flash4e94c_u16",
       "address": "0x4e94c",
       "category": "data",

@@ -296,20 +296,29 @@ def gather_candidates(
     are appended as-is.
     """
     out: list[LabelCandidate] = []
+    # Reverse maps for duplicate-name collision checks: name → address
+    new_name_to_addr: dict[str, int] = {v: k for k, v in new_fn_names.items()}
+    ref_name_to_addr: dict[str, int] = {v: k for k, v in ref_fn_names.items()}
     for m in matches:
         ref_name = ref_fn_names.get(m.ref_address, m.ref_name)
         new_name = new_fn_names.get(m.new_address)
         if ref_name:
-            out.append(LabelCandidate(
-                target=new_id, direction="forward", address=m.new_address,
-                category="function", current=new_name, proposed=ref_name,
-                source=ref_id, evidence=f"bytecode match sim={m.similarity:.2f}"))
+            # Skip if the target already owns this name at a different address
+            clash = new_name_to_addr.get(ref_name)
+            if clash is None or clash == m.new_address:
+                out.append(LabelCandidate(
+                    target=new_id, direction="forward", address=m.new_address,
+                    category="function", current=new_name, proposed=ref_name,
+                    source=ref_id, evidence=f"bytecode match sim={m.similarity:.2f}"))
         if new_name:
-            out.append(LabelCandidate(
-                target=ref_id, direction="back", address=m.ref_address,
-                category="function", current=ref_fn_names.get(m.ref_address),
-                proposed=new_name, source=new_id,
-                evidence=f"bytecode match sim={m.similarity:.2f}"))
+            # Skip if the target already owns this name at a different address
+            clash = ref_name_to_addr.get(new_name)
+            if clash is None or clash == m.ref_address:
+                out.append(LabelCandidate(
+                    target=ref_id, direction="back", address=m.ref_address,
+                    category="function", current=ref_fn_names.get(m.ref_address),
+                    proposed=new_name, source=new_id,
+                    evidence=f"bytecode match sim={m.similarity:.2f}"))
     if ram_data_candidates:
         out.extend(ram_data_candidates)
     return out

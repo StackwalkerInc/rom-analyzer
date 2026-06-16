@@ -270,6 +270,35 @@ def test_gather_forward_and_back_function_candidates():
     assert back[0].current == "sio_dma_reset" and back[0].address == 0x10000
 
 
+def test_gather_skips_back_candidate_when_name_already_exists_in_target():
+    # 47110032 already has main_loop at 0x4e130; a VTSession match that pairs
+    # 47110032:0xa54 with 39670016:main_loop should NOT produce a back candidate
+    # that would rename reset_interrupt_handler_helper to main_loop.
+    matches = [MatchedFunction(ref_name="reset_interrupt_handler_helper",
+                               ref_address=0xa54, new_address=0x1000, similarity=0.90)]
+    new_fns = {0x1000: "main_loop", 0x9000: "something_else"}
+    ref_fns = {0xa54: "reset_interrupt_handler_helper", 0x4e130: "main_loop"}
+    cands = gather_candidates(
+        new_id="39670016", ref_id="47110032", matches=matches,
+        new_fn_names=new_fns, ref_fn_names=ref_fns)
+    back = [c for c in cands if c.direction == "back"]
+    assert not back, "back candidate must be suppressed: main_loop already exists in 47110032 at 0x4e130"
+
+
+def test_gather_skips_forward_candidate_when_name_already_exists_in_target():
+    # Mirror of the back test: if the ref's proposed name already lives in the
+    # new ROM at a different address, don't forward it.
+    matches = [MatchedFunction(ref_name="main_loop", ref_address=0x4e130,
+                               new_address=0x5000, similarity=0.85)]
+    new_fns = {0x5000: "something", 0x1000: "main_loop"}  # main_loop already at 0x1000
+    ref_fns = {0x4e130: "main_loop"}
+    cands = gather_candidates(
+        new_id="39670016", ref_id="47110032", matches=matches,
+        new_fn_names=new_fns, ref_fn_names=ref_fns)
+    fwd = [c for c in cands if c.direction == "forward"]
+    assert not fwd, "forward candidate must be suppressed: main_loop already exists in 39670016 at 0x1000"
+
+
 from rom_analyzer.enrich import is_generic
 
 
