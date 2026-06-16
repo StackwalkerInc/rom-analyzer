@@ -5,6 +5,7 @@ remain importable from here.
 """
 
 from rom_analyzer.ghidra.session import (  # noqa: F401
+    GhidraSession,
     HeadlessRun,
     apply_data_types,
     apply_labels,

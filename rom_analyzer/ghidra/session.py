@@ -494,3 +494,104 @@ def decompile_function(project, prog_name: str, address: int) -> str:
         if result is None or not result.decompileCompleted():
             raise ValueError(f"Decompilation failed for function at {address:#x}")
         return result.getDecompiledFunction().getC()
+
+
+class GhidraSession:
+    """Owns the PyGhidra JVM lifecycle and project handle.
+
+    Use as a context manager:
+        with GhidraSession.open(project_path, name, ghidra_home) as session:
+            run = session.import_rom(...)
+    """
+
+    def __init__(self, project, project_name: str,
+                 inline_source_annotations: bool = False) -> None:
+        self.project = project
+        self.project_name = project_name
+        self.inline_source_annotations = inline_source_annotations
+
+    # --- lifecycle ---
+
+    @classmethod
+    def open(
+        cls,
+        project_path: Path,
+        project_name: str,
+        ghidra_home: Path,
+        *,
+        clean: bool = False,
+        inline_source_annotations: bool = False,
+    ) -> "GhidraSession":
+        """setup_environment + pyghidra.start() + open_project."""
+        setup_environment(ghidra_home)
+        import pyghidra
+        pyghidra.start()
+        if clean and project_path.exists():
+            import shutil
+            shutil.rmtree(project_path)
+        project_path.mkdir(parents=True, exist_ok=True)
+        project = pyghidra.open_project(project_path, project_name, create=True)
+        return cls(project=project, project_name=project_name,
+                   inline_source_annotations=inline_source_annotations)
+
+    def close(self) -> None:
+        self.project.close()
+
+    def __enter__(self) -> "GhidraSession":
+        return self
+
+    def __exit__(self, *_) -> None:
+        self.close()
+
+    # --- program name ---
+
+    def prog_name_for(self, rom_path: Path) -> str:
+        """Return the Ghidra program name for a ROM path (filename + sha1 prefix)."""
+        return ghidriff_program_name(rom_path)
+
+    # --- import / dump ---
+
+    def import_rom(
+        self,
+        rom_path: Path,
+        language_id: str,
+        *,
+        crc_step_address: int | None = None,
+        ref_symbols: "list[ReferenceSymbol] | None" = None,
+        annotations_path: Path | None = None,
+        collect_data_refs: bool = False,
+    ) -> HeadlessRun:
+        """Import ROM if not already in project; return HeadlessRun."""
+        return import_and_dump(
+            self.project,
+            rom_path,
+            language_id,
+            crc_step_address=crc_step_address,
+            ref_symbols_for_overlay=ref_symbols,
+            annotations_path=annotations_path,
+            collect_data_refs_flag=collect_data_refs,
+        )
+
+    # --- write-back ---
+
+    def apply_labels(
+        self, rom_path: Path, symbols: "list[PropagatedSymbol]"
+    ) -> int:
+        return apply_labels(
+            self.project,
+            self.prog_name_for(rom_path),
+            symbols,
+            add_comments=self.inline_source_annotations,
+        )
+
+    def apply_data_types(
+        self, rom_path: Path, data_defs: "list[DataTypeDefinition]"
+    ) -> int:
+        return apply_data_types(
+            self.project, self.prog_name_for(rom_path), data_defs
+        )
+
+    def apply_mut_table(self, rom_path: Path, result: "MutTableResult") -> None:
+        apply_mut_table_in_ghidra(
+            self.project, self.prog_name_for(rom_path), result
+        )

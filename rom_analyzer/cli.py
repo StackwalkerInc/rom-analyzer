@@ -28,6 +28,7 @@ from rom_analyzer.emit_ld import (
 )
 from rom_analyzer.flash_space import find_free_blocks
 from rom_analyzer.ghidra import (
+    GhidraSession,
     apply_data_types, apply_labels, apply_mut_table_in_ghidra,
     fetch_function_entry, fetch_callers_of, fetch_data_read_sites,
     fetch_dtc_helpers_structural,
@@ -357,12 +358,6 @@ def analyze(rom_path, variant, reference, reference_rom, ghidra_home,
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     project_dir = Path(project_dir)
-    if clean_project and project_dir.exists():
-        import shutil
-        nested = project_dir / project_name
-        if nested.exists():
-            click.echo(f"--clean-project: removing {nested}")
-            shutil.rmtree(nested)
 
     language_id = VARIANT_TO_LANGUAGE[variant]
 
@@ -400,14 +395,12 @@ def analyze(rom_path, variant, reference, reference_rom, ghidra_home,
     ]
 
     # Start Ghidra JVM and open the project once for the full run.
-    setup_environment(ghidra_home)
-    import pyghidra
-    pyghidra.start()
-
-    project_path = project_dir / project_name
-    project_path.mkdir(parents=True, exist_ok=True)
-    project = pyghidra.open_project(project_path, project_name, create=True)
-    try:
+    with GhidraSession.open(
+        project_dir / project_name, project_name, ghidra_home,
+        clean=clean_project,
+        inline_source_annotations=inline_source_annotations,
+    ) as session:
+        project = session.project   # keep existing calls working for now
         new_prog_name = ghidriff_program_name(rom_path)
 
         # [3/7] Import new ROM into Ghidra (once, shared across all references)
@@ -826,8 +819,6 @@ def analyze(rom_path, variant, reference, reference_rom, ghidra_home,
             if data_type_defs:
                 m = apply_data_types(project, new_prog_name, data_type_defs)
                 click.echo(f"    Applied {m} data type definition(s)")
-    finally:
-        project.close()
 
 
 # ---------------------------------------------------------------------------
@@ -922,15 +913,10 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
     if language_id is None:
         raise click.ClickException(f"Unknown variant {new_entry.variant!r} for {new_id}")
 
-    setup_environment(ghidra_home)
-    import pyghidra
-    pyghidra.start()
-
-    project_path = Path(project_dir) / project_name
-    project_path.mkdir(parents=True, exist_ok=True)
-    project = pyghidra.open_project(project_path, project_name, create=True)
-
-    try:
+    with GhidraSession.open(
+        Path(project_dir) / project_name, project_name, ghidra_home,
+    ) as session:
+        project = session.project   # keep existing calls working for now
         new_prog_name = ghidriff_program_name(new_entry.rom_path)
         rom_bytes = new_entry.rom_path.read_bytes()
 
@@ -1069,9 +1055,6 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
             f"Review items: {len(items)}. "
             f"Reconcile: {reconcile_path}"
         )
-
-    finally:
-        project.close()
 
 
 @cli.command("apply-enrichment")
