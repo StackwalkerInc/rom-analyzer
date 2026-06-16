@@ -176,6 +176,8 @@ def build_reconcile_items(review: list[LabelCandidate],
     items: list[ReconcileItem] = []
     for c in review:
         proposed, verdict = auto_resolve(c, priority)
+        if proposed == (c.current or ""):
+            continue  # resolved name equals current — nothing to decide
         corroborated_by = [s for s in c.corroborating_sources if s != c.source]
         items.append(ReconcileItem(
             target=c.target, direction=c.direction, address=c.address,

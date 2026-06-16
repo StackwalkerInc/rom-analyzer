@@ -474,3 +474,44 @@ def test_classify_no_priority_arg_authority_rule_inactive():
     out = classify([c], erased=set())  # no priority kwarg
     assert out.auto == []
     assert len(out.review) == 1
+
+
+def test_build_items_noop_keep_filtered():
+    # auto_resolve: current="real_existing_name" (not placeholder),
+    # proposed="call100" (placeholder from low-priority source)
+    # → descriptive beats placeholder → keep current → proposed becomes "real_existing_name"
+    # → proposed == current → filtered out
+    prio = {"33520003": 100, "e5090011": 30}
+    rev = [LabelCandidate(
+        target="33520003", direction="back", address=0x100,
+        category="function", current="real_existing_name",
+        proposed="call100",   # placeholder from low-priority source
+        source="e5090011",
+    )]
+    items = build_reconcile_items(rev, prio)
+    assert items == []
+
+
+def test_build_items_genuine_conflict_not_filtered():
+    prio = {"33520003": 100, "e5090011": 30}
+    rev = [LabelCandidate(
+        target="39670016", direction="forward", address=0x100,
+        category="function", current="old_name",
+        proposed="new_name", source="33520003",
+    )]
+    items = build_reconcile_items(rev, prio)
+    assert len(items) == 1
+    assert items[0].proposed == "new_name"
+
+
+def test_build_items_corroborated_by_populated():
+    prio = {"33520003": 100, "30200003": 40}
+    c = LabelCandidate(
+        target="X", direction="forward", address=0x100,
+        category="function", current="call100", proposed="real_fn",
+        source="33520003", corroborating_sources=["33520003", "30200003"],
+    )
+    items = build_reconcile_items([c], prio)
+    assert len(items) == 1
+    assert items[0].corroborated_by == ["30200003"]
+    assert items[0].source == "33520003"
