@@ -8,7 +8,7 @@ LabelCandidate lists.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # Ghidra auto-generated names (no human meaning) — never propagate these.
 _AUTO_RE = re.compile(r"^(FUN|LAB|DAT|SUB)_[0-9a-fA-F]+$|^(icu_isr|isr_vector)_\d+$")
@@ -56,6 +56,11 @@ class LabelCandidate:
     proposed: str      # candidate name from the source reference
     source: str        # source reference id (provenance)
     evidence: str = ""
+    corroborating_sources: list[str] = field(default_factory=list)
+
+    def __post_init__(self):
+        if not self.corroborating_sources:
+            self.corroborating_sources = [self.source]
 
 
 @dataclass

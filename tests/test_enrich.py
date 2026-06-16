@@ -20,13 +20,31 @@ def test_is_placeholder():
         assert not is_placeholder(n), n
 
 
+def test_label_candidate_corroborating_sources_defaults_to_source():
+    c = LabelCandidate(target="X", direction="forward", address=0x100,
+                       category="function", current=None, proposed="my_fn",
+                       source="33520003")
+    assert c.corroborating_sources == ["33520003"]
+
+
+def test_label_candidate_explicit_corroborating_sources():
+    c = LabelCandidate(target="X", direction="forward", address=0x100,
+                       category="function", current=None, proposed="my_fn",
+                       source="33520003",
+                       corroborating_sources=["33520003", "30200003"])
+    assert c.corroborating_sources == ["33520003", "30200003"]
+
+
 def test_label_candidate_and_reconcile_item_construct():
     c = LabelCandidate(target="33520003", direction="back", address=0x804d5e,
                        category="ram_global", current="fp12962_u16",
                        proposed="tacho_output_state", source="e5090011",
                        evidence="usage-equiv: written in matched fn 0x14ed8")
     assert c.address == 0x804d5e and c.direction == "back"
-    it = ReconcileItem(**vars(c), verdict="proposed")
+    assert c.corroborating_sources == ["e5090011"]
+    it = ReconcileItem(target=c.target, direction=c.direction, address=c.address,
+                       category=c.category, current=c.current, proposed=c.proposed,
+                       source=c.source, evidence=c.evidence, verdict="proposed")
     assert it.verdict == "proposed" and it.target == "33520003"
 
 
