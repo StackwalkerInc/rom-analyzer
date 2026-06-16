@@ -290,3 +290,100 @@ def test_classify_generic_gap_goes_to_review_not_auto():
     out = classify(cands, erased=set())
     assert [c.proposed for c in out.auto] == ["sio_dma_reset"]
     assert [c.proposed for c in out.review] == ["out"]
+
+
+from rom_analyzer.enrich import merge_candidates
+
+
+def _mc(target, address, proposed, source, category="function",
+        current=None, direction="forward", evidence=""):
+    return LabelCandidate(target=target, direction=direction, address=address,
+                          category=category, current=current, proposed=proposed,
+                          source=source, evidence=evidence)
+
+
+def test_merge_single_source_passthrough():
+    c = _mc("X", 0x100, "my_fn", "33520003", evidence="sim=0.90")
+    result = merge_candidates([c], priority={"33520003": 100})
+    assert len(result) == 1
+    assert result[0].proposed == "my_fn"
+    assert result[0].corroborating_sources == ["33520003"]
+
+
+def test_merge_same_name_consensus_collapses():
+    prio = {"33520003": 100, "30200003": 40, "c7280010": 35}
+    cands = [
+        _mc("X", 0x100, "real_fn", "33520003", evidence="sim=0.90"),
+        _mc("X", 0x100, "real_fn", "30200003", evidence="sim=0.80"),
+        _mc("X", 0x100, "real_fn", "c7280010", evidence="sim=0.82"),
+    ]
+    result = merge_candidates(cands, prio)
+    assert len(result) == 1
+    r = result[0]
+    assert r.proposed == "real_fn"
+    assert r.source == "33520003"
+    assert set(r.corroborating_sources) == {"33520003", "30200003", "c7280010"}
+    assert "sim=0.90" in r.evidence and "sim=0.80" in r.evidence
+
+
+def test_merge_conflict_authority_wins():
+    prio = {"33520003": 100, "30200003": 40}
+    cands = [
+        _mc("X", 0x100, "authority_name", "33520003"),
+        _mc("X", 0x100, "other_name", "30200003"),
+    ]
+    result = merge_candidates(cands, prio)
+    assert len(result) == 1
+    assert result[0].proposed == "authority_name"
+    assert result[0].source == "33520003"
+    # 30200003 voted for the losing name — not in corroborating_sources
+    assert result[0].corroborating_sources == ["33520003"]
+
+
+def test_merge_conflict_majority_beats_authority():
+    # 3 votes vs 1: majority wins even if the single vote is from the top authority
+    prio = {"33520003": 100, "a": 30, "b": 35, "c": 40}
+    cands = [
+        _mc("X", 0x100, "authority_name", "33520003"),
+        _mc("X", 0x100, "majority_name", "a"),
+        _mc("X", 0x100, "majority_name", "b"),
+        _mc("X", 0x100, "majority_name", "c"),
+    ]
+    result = merge_candidates(cands, prio)
+    assert result[0].proposed == "majority_name"
+    # 33520003 voted for loser — NOT in corroborating_sources
+    assert "33520003" not in result[0].corroborating_sources
+    assert set(result[0].corroborating_sources) == {"a", "b", "c"}
+
+
+def test_merge_tie_broken_by_priority():
+    # 1 vote each; higher-priority source wins
+    prio = {"33520003": 100, "30200003": 40}
+    cands = [
+        _mc("X", 0x100, "high_prio_name", "33520003"),
+        _mc("X", 0x100, "low_prio_name", "30200003"),
+    ]
+    result = merge_candidates(cands, prio)
+    assert result[0].proposed == "high_prio_name"
+
+
+def test_merge_preserves_different_addresses():
+    prio = {"33520003": 100, "30200003": 40}
+    cands = [
+        _mc("X", 0x100, "fn_a", "33520003"),
+        _mc("X", 0x200, "fn_b", "30200003"),
+    ]
+    result = merge_candidates(cands, prio)
+    assert len(result) == 2
+    addrs = {r.address for r in result}
+    assert addrs == {0x100, 0x200}
+
+
+def test_merge_different_targets_not_collapsed():
+    prio = {"33520003": 100, "30200003": 40}
+    cands = [
+        _mc("A", 0x100, "fn_a", "33520003"),
+        _mc("B", 0x100, "fn_b", "30200003"),
+    ]
+    result = merge_candidates(cands, prio)
+    assert len(result) == 2

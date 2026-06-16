@@ -295,3 +295,57 @@ def gather_candidates(
     if ram_data_candidates:
         out.extend(ram_data_candidates)
     return out
+
+
+def merge_candidates(
+    candidates: list[LabelCandidate],
+    priority: dict[str, int],
+) -> list[LabelCandidate]:
+    """Collapse candidates with the same (target, address, category) into one.
+
+    Name selection: majority vote; ties broken by highest-priority source.
+    corroborating_sources contains only sources that voted for the winning name.
+    Sources that voted for losing names contribute only to evidence.
+    """
+    from collections import defaultdict
+
+    groups: dict[tuple, list[LabelCandidate]] = defaultdict(list)
+    for c in candidates:
+        groups[(c.target, c.address, c.category)].append(c)
+
+    result: list[LabelCandidate] = []
+    for group in groups.values():
+        if len(group) == 1:
+            result.append(group[0])
+            continue
+
+        # Tally votes: name → list of sources that proposed it
+        votes: dict[str, list[str]] = defaultdict(list)
+        for c in group:
+            votes[c.proposed].append(c.source)
+
+        # Winner: most votes; tie-break by highest priority among backing sources
+        def _score(item: tuple[str, list[str]]) -> tuple[int, int]:
+            _, sources = item
+            return (len(sources), max(priority.get(s, 0) for s in sources))
+
+        winning_name, agreeing_sources = max(votes.items(), key=_score)
+
+        # Primary source = highest-priority source among those backing the winner
+        winning_source = max(agreeing_sources, key=lambda s: priority.get(s, 0))
+
+        combined_evidence = "; ".join(c.evidence for c in group if c.evidence)
+
+        result.append(LabelCandidate(
+            target=group[0].target,
+            direction=group[0].direction,
+            address=group[0].address,
+            category=group[0].category,
+            current=group[0].current,
+            proposed=winning_name,
+            source=winning_source,
+            evidence=combined_evidence,
+            corroborating_sources=list(agreeing_sources),
+        ))
+
+    return result
