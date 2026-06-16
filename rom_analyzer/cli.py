@@ -1,19 +1,12 @@
 """CLI entry point for rom-analyzer."""
 
 import os
-import sys
-from dataclasses import dataclass, replace
 from io import StringIO
 from pathlib import Path
 
 import click
 
-from rom_analyzer.callgraph import (
-    bootstrap_anchors, bfs_preseed, gap_fill, bytecode_identity_match,
-)
 from rom_analyzer.crc import Instruction, extract_crc_region
-from rom_analyzer.data_refs import propagate_data_labels, propagate_ram_labels
-from rom_analyzer.diff import run_vt_diff
 from rom_analyzer.emit_ld import (
     emit_crc_region_toml,
     emit_description_ld,
@@ -33,10 +26,10 @@ from rom_analyzer.ghidra import (
     fetch_function_entry, fetch_callers_of, fetch_data_read_sites,
     fetch_dtc_helpers_structural,
     fetch_instructions_at, fetch_r0_imm_before,
-    ghidriff_program_name, import_and_dump, setup_environment,
+    ghidriff_program_name,
 )
 from rom_analyzer.merge import (
-    match_rank, merge_matches, arbitrate_symbols,
+    merge_matches, arbitrate_symbols,
 )
 from rom_analyzer.mode23_bindings import (
     resolve_nearest_site,
@@ -44,15 +37,13 @@ from rom_analyzer.mode23_bindings import (
     decode_ldi_r0_before,
 )
 from rom_analyzer.mut_table import find_mut_table_in_run, mut_table_to_propagated_symbol
-from rom_analyzer.propagate import propagate_function_labels, apply_reference_provenance
-from rom_analyzer.ram_signature import build_ram_signatures, match_by_ram_signature
 from rom_analyzer.ram_space import find_free_ram_blocks
 from rom_analyzer.registry import (
     ReferenceEntry, load_registry, select_references, partition_available,
 )
-from rom_analyzer.types import CrcRegion, MatchedFunction, PropagatedSymbol
+from rom_analyzer.types import CrcRegion
 from rom_analyzer.annotations_io import (
-    AnnotationFunction, load_annotations, load_reference_symbols, save_annotations,
+    AnnotationFunction, load_annotations, save_annotations,
 )
 from rom_analyzer.types import DataTypeDefinition
 from rom_analyzer.enrich import (
@@ -62,6 +53,8 @@ from rom_analyzer.enrich import (
 from rom_analyzer.cleanup import (
     drop_imprecise_s_duplicates, drop_erased_flash_entries, dedup_symbol_names,
 )
+from rom_analyzer.pipeline.reference import import_stage, match_reference
+from rom_analyzer.pipeline.types import RomContext, ReferenceMatchResult
 
 
 VARIANT_TO_LANGUAGE = {
@@ -70,232 +63,6 @@ VARIANT_TO_LANGUAGE = {
 }
 
 _REFERENCE_DIR = Path(__file__).parent.parent / "reference"
-
-
-@dataclass
-class ReferenceResult:
-    entry: ReferenceEntry
-    matches: list          # list[MatchedFunction], tagged with reference=entry.id
-    propagated: list       # list[PropagatedSymbol], tagged + family-gated
-    ref_run: object        # ImportRun handle (for single-source passes), may be None
-    ref_symbols: list      # list[ReferenceSymbol] for this reference
-    # Detail fields for the match-report (primary reference only)
-    data_labels: list      # list[PropagatedSymbol]
-    ram_labels: list       # list[PropagatedSymbol]
-    sig_matches: list      # list[MatchedFunction]
-    ram_labels_p2: list    # list[PropagatedSymbol]
-    data_labels_p2: list   # list[PropagatedSymbol]
-
-
-def analyze_against_reference(project, entry, language_id, rom_path, rom_bytes,
-                              new_run, new_prog_name, target_family,
-                              inline_source_annotations):
-    """Run the full matching + propagation pipeline for ONE reference against
-    the already-imported target. Returns reference-tagged, family-gated results."""
-
-    reference_rom = entry.rom_path
-    reference = entry.json_path
-
-    is_self_diff = rom_path.resolve() == reference_rom.resolve()
-
-    # [1/7] Load enriched reference symbols
-    click.echo(f"[1/7] Loading reference symbols from {reference}")
-    ref_symbols = load_reference_symbols(reference)
-    ref_symbols_by_addr = {s.address: s for s in ref_symbols}
-
-    crc_step_addr = next(
-        (s.address for s in ref_symbols if s.name == "rom_crc_check_step"),
-        None,
-    )
-    if crc_step_addr is None:
-        click.echo("   warning: rom_crc_check_step not in reference symbols; CRC detection skipped")
-
-    # [2/7] Import reference ROM into Ghidra + apply symbol overlay
-    click.echo(f"[2/7] Importing reference ROM into Ghidra: {reference_rom}")
-    if not reference_rom.exists():
-        click.echo(f"   warning: reference ROM not found at {reference_rom}; skipping reference import")
-        ref_run = None
-    else:
-        ref_run = import_and_dump(
-            project,
-            reference_rom, language_id,
-            crc_step_address=crc_step_addr,
-            ref_symbols_for_overlay=ref_symbols,
-            collect_data_refs_flag=(not is_self_diff),
-        )
-
-    # Call-graph bootstrap + BFS pre-seed (cross-ROM only)
-    anchors: list[MatchedFunction] = []
-    bfs_matches: list[MatchedFunction] = []
-    if not is_self_diff and ref_run is not None:
-        ref_bytes = reference_rom.read_bytes()
-        ref_symbols_by_name = {s.name: s for s in ref_symbols}
-        anchors = bootstrap_anchors(ref_bytes, rom_bytes, ref_run, new_run,
-                                    ref_symbols_by_name, ref_symbols_by_addr)
-        bfs_overlays, bfs_matches = bfs_preseed(anchors, ref_run, new_run,
-                                                 ref_symbols_by_addr,
-                                                 ref_bytes=ref_bytes,
-                                                 new_bytes=rom_bytes)
-        by_src: dict[str, int] = {}
-        for a in anchors:
-            by_src[a.source] = by_src.get(a.source, 0) + 1
-        src_str = ", ".join(f"{s}: {n}" for s, n in sorted(by_src.items()))
-        click.echo(f"   call-graph anchors: {len(anchors)} ({src_str})")
-        click.echo(f"   call-graph BFS overlays: {len(bfs_overlays)}")
-        if bfs_overlays:
-            # Deduplicate by new-ROM address: multiple BFS paths can converge on the
-            # same target; writing all of them as Ghidra labels creates spurious
-            # multi-label clutter that persists across runs.
-            seen_bfs: set[int] = set()
-            unique_bfs = []
-            for s in bfs_overlays:
-                if s.address not in seen_bfs:
-                    seen_bfs.add(s.address)
-                    unique_bfs.append(s)
-            bfs_propagated = [
-                PropagatedSymbol(s.name, 0, s.address, s.category, "medium",
-                                 source="callgraph_bfs", score=1.0)
-                for s in unique_bfs
-            ]
-            apply_labels(project, new_prog_name, bfs_propagated,
-                         add_comments=inline_source_annotations)
-
-    # [4/7] Diff (identity or VTSession)
-    if is_self_diff:
-        click.echo(f"[4/7] Self-diff detected; using identity matches")
-        matches = [
-            MatchedFunction(ref_name=s.name, ref_address=s.address,
-                            new_address=s.address, similarity=1.0,
-                            source="identity")
-            for s in ref_symbols if s.category == "function"
-        ]
-    elif ref_run is None:
-        click.echo("[4/7] Skipping diff — reference ROM unavailable")
-        matches = []
-    else:
-        click.echo(f"[4/7] Diffing via Ghidra VTSession")
-        ref_prog_name = ghidriff_program_name(reference_rom)
-        matches = run_vt_diff(project, ref_prog_name, new_prog_name)
-        gap_matches = gap_fill(ref_run, new_run, matches + anchors + bfs_matches,
-                               ref_bytes=ref_bytes, new_bytes=rom_bytes)
-        click.echo(f"   call-graph gap-fill: {len(gap_matches)} additional matches")
-        all_matches = matches + anchors + bfs_matches + gap_matches
-
-        identity_matches = bytecode_identity_match(
-            ref_bytes, rom_bytes, ref_run, new_run,
-            all_matches, ref_symbols_by_addr,
-        )
-        click.echo(f"   bytecode identity: {len(identity_matches)} additional matches")
-        matches = all_matches + identity_matches
-
-    # Deduplicate by ref_address — when multiple phases claimed the same
-    # reference function, keep the highest-ranked match.
-    # Within one reference, the reference-priority component is constant so {} is fine.
-    best_by_ref: dict[int, MatchedFunction] = {}
-    for m in matches:
-        if m.ref_address not in best_by_ref or match_rank(m, {}) > match_rank(best_by_ref[m.ref_address], {}):
-            best_by_ref[m.ref_address] = m
-    matches = list(best_by_ref.values())
-
-    # Deduplicate by new_address — when two different ref functions map to
-    # the same new address, keep only the highest-ranked match.
-    best_by_new: dict[int, MatchedFunction] = {}
-    for m in matches:
-        if m.new_address not in best_by_new or match_rank(m, {}) > match_rank(best_by_new[m.new_address], {}):
-            best_by_new[m.new_address] = m
-    matches = list(best_by_new.values())
-
-    # [5/7] Propagate symbols
-    click.echo("[5/7] Propagating symbols")
-    propagated_fns = propagate_function_labels(ref_symbols, matches)
-
-    new_ram_refs = set(new_run.ram_refs)
-    # Ram-global propagation by absolute address is only valid for same-ECU ROMs
-    # (identical RAM layout).  Cross-family analysis (e.g. Z27AG vs Outlander)
-    # must not copy reference RAM labels: a given fp-offset may hold a completely
-    # different variable in the target ECU.  For cross-ROM analysis, per-function
-    # RAM ref tracking would be required — that is not yet implemented.
-    if is_self_diff:
-        ram_globals = [
-            PropagatedSymbol(s.name, s.address, s.address, "ram_global", "high",
-                             source="ram_global", score=1.0)
-            for s in ref_symbols
-            if s.category == "ram_global" and s.address in new_ram_refs
-        ]
-    else:
-        ram_globals = []
-
-    if not is_self_diff and ref_run is not None and ref_run.data_refs and new_run.data_refs:
-        data_labels = propagate_data_labels(
-            ref_run.data_refs, new_run.data_refs, matches, ref_symbols_by_addr
-        )
-        click.echo(f"   data labels propagated: {len(data_labels)}")
-    elif is_self_diff:
-        data_labels = [
-            PropagatedSymbol(s.name, s.address, s.address, "data", "high",
-                             source="identity", score=1.0)
-            for s in ref_symbols if s.category == "data"
-        ]
-    else:
-        data_labels = []
-
-    if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs:
-        ram_labels = propagate_ram_labels(
-            ref_run.ram_data_refs, new_run.ram_data_refs, matches, ref_symbols_by_addr
-        )
-        click.echo(f"   ram labels propagated: {len(ram_labels)}")
-    else:
-        ram_labels = []  # self-diff: ram_globals covers RAM vars by identity address
-
-    propagated_all = propagated_fns + ram_globals + data_labels + ram_labels
-
-    # [5.25/7] RAM-signature match + second propagation pass
-    sig_matches: list[MatchedFunction] = []
-    ram_labels_p2: list[PropagatedSymbol] = []
-    data_labels_p2: list[PropagatedSymbol] = []
-    if not is_self_diff and ref_run is not None and ref_run.ram_data_refs and new_run.ram_data_refs and ram_labels:
-        click.echo("[5.25/7] RAM-signature matching")
-        ref_label_map = {s.address: s.name for s in ref_symbols if s.category == "ram_global"}
-        new_label_map = {ps.new_address: ps.name for ps in ram_labels}
-        ref_sigs = build_ram_signatures(ref_run.ram_data_refs, ref_label_map)
-        new_sigs = build_ram_signatures(new_run.ram_data_refs, new_label_map)
-        sig_matches = match_by_ram_signature(ref_sigs, new_sigs, matches, ref_symbols_by_addr)
-        click.echo(f"   ram-signature matches: {len(sig_matches)}")
-        if sig_matches:
-            extended_matches = matches + sig_matches
-            fn_labels_p2 = propagate_function_labels(ref_symbols, sig_matches)
-            ram_labels_p2 = propagate_ram_labels(
-                ref_run.ram_data_refs, new_run.ram_data_refs,
-                extended_matches, ref_symbols_by_addr,
-            )
-            if ref_run.data_refs and new_run.data_refs:
-                data_labels_p2 = propagate_data_labels(
-                    ref_run.data_refs, new_run.data_refs,
-                    extended_matches, ref_symbols_by_addr,
-                )
-            click.echo(f"   ram labels (p2): {len(ram_labels_p2)}")
-            click.echo(f"   data labels (p2): {len(data_labels_p2)}")
-            propagated_all += fn_labels_p2 + ram_labels_p2 + data_labels_p2
-            matches = extended_matches
-
-    # Tag matches and propagated symbols with origin reference id, apply family gating
-    matches = [replace(m, reference=entry.id) for m in matches]
-    family_match = (entry.family == target_family)
-    propagated_all = apply_reference_provenance(
-        propagated_all, reference=entry.id, family_match=family_match)
-
-    return ReferenceResult(
-        entry=entry,
-        matches=matches,
-        propagated=propagated_all,
-        ref_run=ref_run,
-        ref_symbols=ref_symbols,
-        data_labels=data_labels,
-        ram_labels=ram_labels,
-        sig_matches=sig_matches,
-        ram_labels_p2=ram_labels_p2,
-        data_labels_p2=data_labels_p2,
-    )
 
 
 @click.command("analyze")
@@ -401,35 +168,28 @@ def analyze(rom_path, variant, reference, reference_rom, ghidra_home,
         inline_source_annotations=inline_source_annotations,
     ) as session:
         project = session.project   # keep existing calls working for now
-        new_prog_name = ghidriff_program_name(rom_path)
 
-        # [3/7] Import new ROM into Ghidra (once, shared across all references)
-        click.echo(f"[3/7] Importing new ROM into Ghidra: {rom_path}")
-        # Use the primary reference's crc_step_addr for the target import.
-        # The primary drives single-source passes anyway, so this is consistent.
-        _primary_ref_symbols_preview = load_reference_symbols(primary.json_path)
-        _primary_crc_step_addr = next(
-            (s.address for s in _primary_ref_symbols_preview if s.name == "rom_crc_check_step"),
-            None,
-        )
         _primary_is_self_diff = rom_path.resolve() == primary.rom_path.resolve()
-        new_run = import_and_dump(
-            project,
-            rom_path, language_id,
-            crc_step_address=_primary_crc_step_addr,
-            collect_data_refs_flag=(not _primary_is_self_diff),
-        )
-
         # Read ROM bytes now — used by call-graph bootstrap and CRC scan
         rom_bytes = rom_path.read_bytes()
 
+        ctx = RomContext(
+            rom_path=rom_path, rom_bytes=rom_bytes, language_id=language_id,
+            out_dir=out_dir, target_family=primary.family,
+            is_self_diff=_primary_is_self_diff,
+            emit_mode23=emit_mode23, emit_obd=emit_obd, emit_can_slots=emit_can_slots,
+            enrich_project=enrich_project,
+            min_flash_block=min_flash_block, min_ram_block=min_ram_block,
+        )
+        imported = import_stage(session, ctx, primary)
+        new_run = imported.new_run
+        new_prog_name = imported.new_prog_name
+
         # Run the full matching + propagation pipeline for each reference
-        results: list[ReferenceResult] = []
+        results: list[ReferenceMatchResult] = []
         for entry in selected:
             click.echo(f"[ref {entry.id}] matching")
-            results.append(analyze_against_reference(
-                project, entry, language_id, rom_path, rom_bytes,
-                new_run, new_prog_name, target_family, inline_source_annotations))
+            results.append(match_reference(session, ctx, imported, entry))
 
         # Merge matches and arbitrate symbols across all references
         matches = merge_matches([r.matches for r in results], priority)
@@ -917,26 +677,24 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
         Path(project_dir) / project_name, project_name, ghidra_home,
     ) as session:
         project = session.project   # keep existing calls working for now
-        new_prog_name = ghidriff_program_name(new_entry.rom_path)
         rom_bytes = new_entry.rom_path.read_bytes()
 
         # Load the new entry's store once; build fn-name lookup
         new_store = load_annotations(new_entry.json_path)
         new_fn_names: dict[int, str] = {f.entry_point: f.name for f in new_store.functions}
 
-        # Import new ROM into Ghidra once (shared across all cross-matches)
-        _new_ref_symbols_preview = load_reference_symbols(new_entry.json_path)
-        _new_crc_step_addr = next(
-            (s.address for s in _new_ref_symbols_preview if s.name == "rom_crc_check_step"),
-            None,
+        ctx = RomContext(
+            rom_path=new_entry.rom_path, rom_bytes=rom_bytes,
+            language_id=language_id, out_dir=Path(out_dir),
+            target_family=new_entry.family,
+            is_self_diff=False,
+            emit_mode23=False, emit_obd=False, emit_can_slots=False,
+            enrich_project=False,
+            min_flash_block=64, min_ram_block=4,
         )
         click.echo(f"[import] Importing new ROM {new_id}: {new_entry.rom_path}")
-        new_run = import_and_dump(
-            project,
-            new_entry.rom_path, language_id,
-            crc_step_address=_new_crc_step_addr,
-            collect_data_refs_flag=True,
-        )
+        imported = import_stage(session, ctx, new_entry)
+        new_prog_name = imported.new_prog_name
 
         all_candidates: list[LabelCandidate] = []
 
@@ -949,13 +707,7 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
                 continue
 
             click.echo(f"[cross-match] {new_id} vs {ref.id}")
-            result = analyze_against_reference(
-                project, ref, language_id,
-                new_entry.rom_path, rom_bytes,
-                new_run, new_prog_name,
-                target_family=new_entry.family,
-                inline_source_annotations=inline_source_annotations,
-            )
+            result = match_reference(session, ctx, imported, ref)
 
             ref_store = load_annotations(ref.json_path)
             ref_fn_names: dict[int, str] = {f.entry_point: f.name for f in ref_store.functions}
