@@ -55,7 +55,7 @@ from rom_analyzer.annotations_io import (
 )
 from rom_analyzer.types import DataTypeDefinition
 from rom_analyzer.enrich import (
-    LabelCandidate, gather_candidates, merge_candidates, classify,
+    LabelCandidate, ReconcileItem, gather_candidates, merge_candidates, classify,
     build_reconcile_items, write_reconcile, read_reconcile, apply_verdicts,
 )
 from rom_analyzer.scripts.build_reference_from_txt import (
@@ -1010,7 +1010,7 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
             auto_all.extend(classified.auto)
             review_all.extend(classified.review)
 
-        # Auto-apply: new function gaps only
+        # Auto-apply: new function gaps and authority-backed renames
         # Group auto candidates by target
         auto_by_target: dict[str, list[LabelCandidate]] = {}
         for c in auto_all:
@@ -1025,8 +1025,23 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
                 continue
             target_entry = by_id[tid]
             st = load_annotations(target_entry.json_path)
-            n_appended = _append_functions(st, cands)
-            if n_appended:
+
+            gap_cands = [c for c in cands if c.current is None]
+            rename_cands = [c for c in cands if c.current is not None]
+
+            n_appended = _append_functions(st, gap_cands)
+
+            if rename_cands:
+                rename_items = [ReconcileItem(
+                    target=tid, direction=c.direction, address=c.address,
+                    category=c.category, current=c.current, proposed=c.proposed,
+                    source=c.source, evidence=c.evidence, verdict="proposed",
+                ) for c in rename_cands]
+                n_renamed = apply_verdicts(st, rename_items, target=tid)
+            else:
+                n_renamed = 0
+
+            if n_appended + n_renamed:
                 target_rom_bytes = (
                     rom_bytes if tid == new_id
                     else _rom_bytes_cached(target_entry)
@@ -1035,8 +1050,11 @@ def enrich(new_id, ghidra_home, project_dir, project_name, out_dir, inline_sourc
                 drop_erased_flash_entries(st, target_rom_bytes)
                 dedup_symbol_names(st)
                 save_annotations(target_entry.json_path, st)
-                click.echo(f"   [auto] {tid}: applied {n_appended} new function(s)")
-            total_auto_applied += n_appended
+                click.echo(
+                    f"   [auto] {tid}: applied {n_appended} new function(s), "
+                    f"{n_renamed} rename(s)"
+                )
+            total_auto_applied += n_appended + n_renamed
 
         # Build reconcile items from review candidates
         items = build_reconcile_items(review_all, priority)

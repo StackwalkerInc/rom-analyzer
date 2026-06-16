@@ -8,6 +8,7 @@ LabelCandidate lists.
 from __future__ import annotations
 
 import re
+from collections import defaultdict
 from dataclasses import dataclass, field
 
 # Ghidra auto-generated names (no human meaning) — never propagate these.
@@ -324,8 +325,6 @@ def merge_candidates(
     corroborating_sources contains only sources that voted for the winning name.
     Sources that voted for losing names contribute only to evidence.
     """
-    from collections import defaultdict
-
     groups: dict[tuple, list[LabelCandidate]] = defaultdict(list)
     for c in candidates:
         groups[(c.target, c.address, c.category)].append(c)
