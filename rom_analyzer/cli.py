@@ -58,7 +58,7 @@ from rom_analyzer.enrich import (
     LabelCandidate, ReconcileItem, gather_candidates, merge_candidates, classify,
     build_reconcile_items, write_reconcile, read_reconcile, apply_verdicts,
 )
-from rom_analyzer.scripts.build_reference_from_txt import (
+from rom_analyzer.cleanup import (
     drop_imprecise_s_duplicates, drop_erased_flash_entries, dedup_symbol_names,
 )
 

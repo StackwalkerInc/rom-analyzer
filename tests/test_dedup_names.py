@@ -3,7 +3,11 @@
 from rom_analyzer.annotations_io import (
     AnnotationFunction, AnnotationStore, AnnotationSymbol,
 )
-from rom_analyzer.scripts.build_reference_from_txt import dedup_symbol_names
+from rom_analyzer.cleanup import (
+    dedup_symbol_names,
+    drop_erased_flash_entries,
+    drop_imprecise_s_duplicates,
+)
 
 
 def _store(functions=(), symbols=()):
@@ -57,7 +61,6 @@ def test_no_change_when_already_unique():
 
 
 def test_drop_imprecise_s_duplicates_removes_rounded_artifact():
-    from rom_analyzer.scripts.build_reference_from_txt import drop_imprecise_s_duplicates
     st = _store(symbols=[
         AnnotationSymbol(name="flash_x", address=0x2d72, category="data", source="colt_flash"),
         AnnotationSymbol(name="flash_x", address=0x2d74, category="data", source="z27ag_s"),
@@ -68,7 +71,6 @@ def test_drop_imprecise_s_duplicates_removes_rounded_artifact():
 
 
 def test_drop_keeps_far_apart_same_name():
-    from rom_analyzer.scripts.build_reference_from_txt import drop_imprecise_s_duplicates
     st = _store(functions=[
         AnnotationFunction(name="h", entry_point=0x48ef0, source="z27ag_s"),
         AnnotationFunction(name="h", entry_point=0x49ef0, source="colt_flash"),  # 0x1000 apart
@@ -77,7 +79,6 @@ def test_drop_keeps_far_apart_same_name():
 
 
 def test_drop_erased_flash_entries():
-    from rom_analyzer.scripts.build_reference_from_txt import drop_erased_flash_entries
     rom = bytearray(0x200)
     rom[0x100:0x110] = b"\xff" * 16            # erased region
     rom[0x40:0x50] = b"\x2e\x7f" * 8           # real code bytes
