@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Initialize the variable candidate queue for agent-enrich.
 
-Requires a Ghidra project already created by agent_enrich_init.py.
+Requires a Ghidra project already created by enrich_init.py.
 Enumerates unnamed DAT_* symbols in RAM (0x804000–0x80FFFF) and flash data
 (0x0–0x7FFFF) regions, scores each by named-function xref count plus named
 annotation-symbol sibling proximity, and writes agent_enrich_state/queue_vars.json.
 
 Usage:
-    .venv/bin/python scripts/agent_enrich_init_vars.py [--force] [--sibling-window 64]
+    .venv/bin/python scripts/enrich_init_vars.py [--force] [--sibling-window 64]
 """
 from __future__ import annotations
 

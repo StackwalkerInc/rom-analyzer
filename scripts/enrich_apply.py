@@ -6,7 +6,7 @@ to the Ghidra project and reference JSONs, routes medium/low to reconcile.toml.
 Writes agent_enrich_state/applied_this_round.json with addresses confirmed this round.
 
 Usage:
-    .venv/bin/python scripts/agent_enrich_apply.py
+    .venv/bin/python scripts/enrich_apply.py
         [--state-dir agent_enrich_state]
         [--reference-dir reference]
         [--project-dir ~/rom-analyzer-projects]

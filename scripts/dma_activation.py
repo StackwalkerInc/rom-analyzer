@@ -5,7 +5,7 @@ Drives headless Ghidra (PyGhidra) over the reference Z27AG ROM. Emits:
   - decompiled C for the activation/driver functions
   - caller sites (with containing function) for each DMA primitive
 
-Run with the project venv:  .venv/bin/python scripts/dma_activation_analysis.py
+Run with the project venv:  .venv/bin/python scripts/dma_activation.py
 """
 import os
 import sys

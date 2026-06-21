@@ -14,6 +14,6 @@ repos:
     hooks:
       - id: check-reference-name-uniqueness
         name: Check reference JSON name uniqueness
-        entry: python3 scripts/check_reference_name_uniqueness.py
+        entry: python3 scripts/check_reference_names.py
         language: system
         files: ^reference/.*\.json$

@@ -7,7 +7,7 @@ functions), scores each by named-neighbor count, and writes
 agent_enrich_state/queue.json.
 
 Usage:
-    .venv/bin/python scripts/agent_enrich_init.py [--force]
+    .venv/bin/python scripts/enrich_init.py [--force]
 """
 from __future__ import annotations
 

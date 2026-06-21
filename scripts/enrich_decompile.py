@@ -10,7 +10,7 @@ each entry:
 Writes ctx_{rom}_{addr}.json files to the output directory.
 
 Usage:
-    .venv/bin/python scripts/agent_enrich_decompile.py
+    .venv/bin/python scripts/enrich_decompile.py
         [--batch agent_enrich_state/batch.json]
         [--out-dir agent_enrich_state]
         [--reference-dir reference]
